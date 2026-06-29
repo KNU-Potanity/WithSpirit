@@ -35,6 +35,10 @@ namespace BasePlatformer.Player
         [Tooltip("최고 속도 -> 0까지 걸리는 시간(초). 방향 전환 시에도 동일하게 적용")]
         [SerializeField] private float decelerationTime = 0.10f;
 
+        [Header("이동 경계")]
+        [Tooltip("플레이어가 이 X 좌표 왼쪽으로는 이동할 수 없음 (레벨 왼쪽 끝, CameraBounds 기준)")]
+        [SerializeField] private float leftBoundX = -0.5f;
+
         private Rigidbody2D rb;
         private InputAction moveAction;
 
@@ -94,6 +98,13 @@ namespace BasePlatformer.Player
             CurrentSpeed = Mathf.MoveTowards(CurrentSpeed, targetSpeed, rate * Time.fixedDeltaTime);
 
             rb.linearVelocity = new Vector2(CurrentSpeed, rb.linearVelocity.y);
+
+            // 왼쪽 경계 클램프: leftBoundX 이하로는 이동 불가
+            if (rb.position.x < leftBoundX)
+            {
+                rb.position = new Vector2(leftBoundX, rb.position.y);
+                if (CurrentSpeed < 0f) CurrentSpeed = 0f;
+            }
         }
     }
 }
