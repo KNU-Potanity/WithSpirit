@@ -18,15 +18,15 @@
 - [x] Unity 프로젝트 생성 및 폴더 구조 세팅
 - [x] GitHub 저장소 연결 및 Git 설정 (Force Text, Visible Meta Files, .gitignore)
 - [x] 좌우 이동 구현
-- [x] 기본 점프 구현
-- [x] 가변 점프 구현
-- [x] 코요테 타임 구현
-- [x] 캐릭터 애니메이션 클립 제작(대기/이동/점프 상승/낙하) 및 Animator Controller 연결 (`기술기획서_MVP_Unity.md` 4.7절 에셋 경로 참고 — 그림은 이미 제공되어 있어 신규 작업이 아니라 연결 작업)
-- [x] 일반 발판 충돌 처리
-- [x] 즉사 장애물 판정 + 리스폰 트리거 연결
-- [x] 리스폰 시스템
-- [x] 목표 지점(도착) 구현
-- [x] 카메라 추적 (플레이어 추적형, 경계에서 멈춤)
+- [x] 기본 점프 구현 (`PlayerJump.cs` — 역산 공식으로 점프 속도/중력 계산)
+- [x] 가변 점프 구현 (`PlayerJump.cs` — 버튼 뗄 때 50% 감쇠, 최소 1.2타일 보장)
+- [x] 코요테 타임 구현 (`PlayerJump.cs` — 0.12초, 발판 이탈 후 점프 허용)
+- [x] 캐릭터 애니메이션 클립 제작(대기/이동/점프 상승/낙하) 및 Animator Controller 연결 (`기술기획서_ver6.md` 4.7절 에셋 경로 참고 — 그림은 이미 제공되어 있어 신규 작업이 아니라 연결 작업)
+- [x] 일반 발판 충돌 처리 (`PlayerGroundDetector.cs` — 물리 충돌 이벤트 + 법선 벡터 기반 접지 판정)
+- [x] 즉사 장애물 판정 + 리스폰 트리거 연결 (`HazardTrigger.cs` — OnTriggerEnter/Stay2D + 쿨다운)
+- [x] 리스폰 시스템 (`RespawnManager.cs` — 씬 리로드, `FallRespawnDetector.cs` — 낙사 감지)
+- [x] 목표 지점(도착) 구현 (`GoalTrigger.cs` — 접촉 시 Debug.Log("Clear"))
+- [x] 카메라 추적 (`CM_PlayerCamera`: CinemachineCamera + CinemachinePositionComposer + CinemachineConfiner2D, `CameraBounds`: BoxCollider2D 61×52.91)
 - [x] 플레이스홀더 스프라이트 색상 규칙 적용 — 실제 CraftPix 에셋을 직접 사용하므로 해당 없음 (에셋 자체에 색상 이미 포함)
 - [x] 레벨디자인 문서의 구간①~⑤ 배치를 실제 Tilemap으로 구현 (`레벨디자인_MVP_스테이지_ver4.md` 기준 좌표로 구현 완료)
 - [x] 시작~도착까지 끊김/오류 없이 동작하는지 기능적으로 1회 플레이
