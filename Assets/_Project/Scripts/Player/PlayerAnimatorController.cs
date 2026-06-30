@@ -47,7 +47,9 @@ namespace BasePlatformer.Player
                 return;
             }
 
-            float speed = Mathf.Abs(playerMovement.CurrentSpeed);
+            // 경계 클램프로 실제 속도가 0이 되어도 입력이 있으면 Run 애니메이션을 유지한다.
+            // CurrentSpeed(실제 이동 속도) 대신 MoveInput(입력 의도)의 절댓값을 사용.
+            float speed = Mathf.Abs(playerMovement.MoveInput);
             animator.SetFloat("Speed", speed);
             animator.SetBool("Grounded", playerJump.IsGrounded);
             animator.SetFloat("VerticalVelocity", rb.linearVelocity.y);

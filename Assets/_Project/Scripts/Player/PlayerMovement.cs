@@ -38,6 +38,8 @@ namespace BasePlatformer.Player
         [Header("이동 경계")]
         [Tooltip("플레이어가 이 X 좌표 왼쪽으로는 이동할 수 없음 (레벨 왼쪽 끝, CameraBounds 기준)")]
         [SerializeField] private float leftBoundX = -0.5f;
+        [Tooltip("플레이어가 이 X 좌표 오른쪽으로는 이동할 수 없음")]
+        [SerializeField] private float rightBoundX = 60.5f;
 
         private Rigidbody2D rb;
         private InputAction moveAction;
@@ -104,6 +106,13 @@ namespace BasePlatformer.Player
             {
                 rb.position = new Vector2(leftBoundX, rb.position.y);
                 if (CurrentSpeed < 0f) CurrentSpeed = 0f;
+            }
+
+            // 오른쪽 경계 클램프: rightBoundX 이상으로는 이동 불가
+            if (rb.position.x > rightBoundX)
+            {
+                rb.position = new Vector2(rightBoundX, rb.position.y);
+                if (CurrentSpeed > 0f) CurrentSpeed = 0f;
             }
         }
     }
