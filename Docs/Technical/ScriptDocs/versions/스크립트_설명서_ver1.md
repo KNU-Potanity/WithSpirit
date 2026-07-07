@@ -1,0 +1,340 @@
+﻿# BasePlatformer 스크립트 설명서
+
+동아리원 배포용 | 2026
+
+---
+
+## 문서 개요
+
+이 문서는 BasePlatformer 프로젝트에서 구현한 스크립트 10개를 동아리원들이 읽고 이해할 수 있도록 정리한 설명서입니다.
+각 스크립트마다 역할, 핵심 동작 원리, Inspector 조정 가능 항목, 의존 관계를 설명합니다.
+
+---
+
+## 스크립트 목록
+
+| 분류 | 파일명 | 역할 요약 |
+|---|---|---|
+| Player | `PlayerMovement.cs` | 플레이어 좌우 이동 + 이동 경계 처리 |
+| Player | `PlayerJump.cs` | 기본 점프 + 가변 점프 + 코요테 타임 |
+| Player | `PlayerGroundDetector.cs` | 발판 위에 서있는지 판정 (접지 감지) |
+| Player | `PlayerAnimatorController.cs` | 애니메이션 상태 전환 + 좌우 반전 처리 |
+| Terrain | `TerrainType.cs` | 지형 타입 구분 열거형 (enum) |
+| Terrain | `Ground.cs` | 일반 발판 마커 컴포넌트 |
+| Terrain | `HazardTrigger.cs` | 즉사 장애물(가시) 트리거 — 플레이어 접촉 시 리스폰 |
+| Respawn | `RespawnManager.cs` | 리스폰(재시작) 실행 관리자 |
+| Respawn | `FallRespawnDetector.cs` | 낭떠러지 추락 감지 — Y 좌표 기준 리스폰 |
+| Goal | `GoalTrigger.cs` | 목표 지점(트로피) 도달 감지 — 스테이지 클리어 처리 |
+
+---
+
+## 스크립트 상세 설명
+
+---
+
+### PlayerMovement.cs
+
+```
+경로: Assets/_Project/Scripts/Player/PlayerMovement.cs
+부착: PlayerStartMarker (루트 오브젝트)
+```
+
+#### 역할
+
+- A/D 키 또는 좌우 화살표를 누르면 캐릭터가 좌우로 이동합니다.
+- 속도가 즉시 최대치로 뛰는 것이 아니라 가속/감속 곡선이 있어 자연스럽게 움직입니다.
+- 방향을 바꾸면 먼저 감속한 뒤 반대 방향으로 재가속합니다.
+- 스테이지 왼쪽 끝(x=0)과 오른쪽 끝(x=60) 밖으로는 이동하지 못합니다.
+
+#### 동작 원리
+
+- 매 `Update`에서 입력값(`MoveInput`)을 읽어두고, `FixedUpdate`에서 `Rigidbody2D` 속도에 반영합니다.
+- Unity 기본 물리의 X축 속도만 덮어쓰며, Y축(중력/점프)은 건드리지 않습니다.
+- `Mathf.MoveTowards`로 가속/감속을 표현합니다.
+- 경계 초과 시 `rb.position`을 직접 클램프하고 속도를 0으로 초기화합니다.
+
+#### Inspector 항목
+
+| 필드명 | 타입 | 기본값 | 설명 |
+|---|---|---|---|
+| `maxMoveSpeed` | float | 6.0 | 최고 이동 속도 (유닛/초) |
+| `accelerationTime` | float | 0.15 | 0 → 최대 속도까지 걸리는 시간(초) |
+| `decelerationTime` | float | 0.10 | 최대 속도 → 0까지 걸리는 시간(초) |
+| `leftBoundX` | float | 0 | 왼쪽 이동 한계 X 좌표 |
+| `rightBoundX` | float | 60 | 오른쪽 이동 한계 X 좌표 |
+
+> **참고:** 이 스크립트는 Y축 속도를 건드리지 않습니다. 점프/중력은 `PlayerJump`가 담당합니다.
+
+---
+
+### PlayerJump.cs
+
+```
+경로: Assets/_Project/Scripts/Player/PlayerJump.cs
+부착: PlayerStartMarker (루트 오브젝트)
+```
+
+#### 역할
+
+- Space / W / 위쪽 화살표를 누르면 캐릭터가 점프합니다.
+- 버튼을 오래 누를수록 높이 뜨고(최대 3타일), 짧게 탭하면 낮게 뜹니다(최소 1.2타일). — **가변 점프**
+- 발판 끝에서 걸어 나간 직후 0.12초 안에 점프하면 점프가 됩니다. — **코요테 타임**
+- Unity의 기본 중력 대신 스크립트에서 직접 중력을 계산합니다 (스펙 수치를 정확히 맞추기 위해).
+
+#### 동작 원리
+
+- `WasPressedThisFrame` / `WasReleasedThisFrame`은 `Update`에서 버퍼링한 후 `FixedUpdate`에서 소비합니다.
+  - `FixedUpdate`에서 직접 읽으면 프레임 타이밍 차이로 입력 누락 버그가 발생하기 때문입니다.
+- 점프 초기 속도와 중력은 목표 높이·시간으로부터 역산합니다: `v0 = 2h/t`, `g = 2h/t²`
+- **가변 점프:** 버튼을 뗄 때 현재 속도를 50%로 즉시 감쇠. 단, 최소 높이(1.2타일) 미만이면 최소 높이까지 올라갈 수 있는 속도를 보장합니다.
+- **코요테 타임:** 땅 위에 있는 동안 타이머를 항상 0.12초로 채워두고, 공중에서 줄어들게 합니다. 점프 순간 타이머를 0으로 소진하여 이중 점프를 방지합니다.
+
+#### Inspector 항목
+
+| 필드명 | 타입 | 기본값 | 설명 |
+|---|---|---|---|
+| `maxJumpHeight` | float | 3.0 | 최대 점프 높이 (타일) |
+| `timeToApex` | float | 0.35 | 최고점 도달 시간(초) |
+| `minJumpHeight` | float | 1.2 | 탭 시 최소 보장 점프 높이(타일) |
+| `jumpCutMultiplier` | float | 0.5 | 버튼 뗄 때 속도 감쇠 비율 |
+| `coyoteTime` | float | 0.12 | 코요테 타임 허용 시간(초) |
+
+#### 의존 컴포넌트
+
+`PlayerGroundDetector` (같은 오브젝트에 함께 있어야 합니다)
+
+> **참고:** `Rigidbody2D.gravityScale`은 0으로 설정되어 있으며, 이 스크립트가 중력 역할을 직접 수행합니다.
+
+---
+
+### PlayerGroundDetector.cs
+
+```
+경로: Assets/_Project/Scripts/Player/PlayerGroundDetector.cs
+부착: PlayerStartMarker (루트 오브젝트)
+```
+
+#### 역할
+
+- 플레이어가 발판 위에 서있는지를 판정하는 전용 컴포넌트입니다.
+- `OnCollision` 이벤트(물리 충돌 이벤트)를 사용해 접촉점의 법선 방향을 검사합니다.
+- 법선이 거의 수직 위(0.9 이상)인 경우만 '바닥'으로 인정합니다. 벽 옆면에 닿아도 접지로 오인하지 않습니다.
+- `PlayerJump.IsGrounded` 속성이 이 컴포넌트의 결과를 그대로 사용합니다.
+
+#### 동작 원리
+
+- 동시에 여러 타일 콜라이더에 닿을 수 있으므로, 접지 중인 콜라이더를 `HashSet`으로 관리합니다.
+- `OnCollisionExit2D` 시 해당 콜라이더를 Set에서 제거하고, Set이 비어있으면 공중 상태로 판정합니다.
+
+#### Inspector 항목
+
+| 필드명 | 타입 | 기본값 | 설명 |
+|---|---|---|---|
+| `minUpwardNormalY` | float | 0.9 | 바닥으로 인정하는 법선 최솟값 (0~1). 0.9 ≈ 약 26° 이내 |
+
+> **참고:** 가시(Hazard)는 트리거 콜라이더라 `OnCollision` 이벤트가 발생하지 않으므로 이 컴포넌트가 자동으로 무시합니다.
+
+---
+
+### PlayerAnimatorController.cs
+
+```
+경로: Assets/_Project/Scripts/Player/PlayerAnimatorController.cs
+부착: PlayerStartMarker/Visual (자식 오브젝트)
+```
+
+#### 역할
+
+- 이동 속도·접지 여부·수직 속도를 읽어서 Animator의 파라미터에 매 프레임 넘겨줍니다.
+- Idle(대기) / Run(이동) / Jump(점프 상승) / Fall(낙하) 4가지 상태를 자동으로 전환합니다.
+- 왼쪽으로 이동 시 `SpriteRenderer.flipX`로 스프라이트를 좌우 반전합니다.
+
+#### 동작 원리
+
+- 물리 컴포넌트들은 부모(루트) 오브젝트에 있고, 이 스크립트는 자식(`Visual`)에 있으므로 `GetComponentInParent`로 참조합니다.
+- `Speed` 파라미터는 실제 이동 속도(`CurrentSpeed`) 대신 입력값(`MoveInput`)으로 구동합니다.
+  - 경계에서 속도가 0이 되어도 입력이 있으면 달리는 애니메이션이 유지됩니다.
+- 정지 시에는 마지막으로 바라보던 방향을 유지합니다 (입력이 있을 때만 `flipX`를 갱신).
+
+#### 의존 컴포넌트
+
+`PlayerMovement`, `PlayerJump`, `Rigidbody2D` (부모에), `Animator`, `SpriteRenderer` (자신에)
+
+> **참고:** Animator Controller 파라미터: `Speed`(float), `Grounded`(bool), `VerticalVelocity`(float)
+
+---
+
+### TerrainType.cs
+
+```
+경로: Assets/_Project/Scripts/Terrain/TerrainType.cs
+부착: 없음 (코드 정의만, 오브젝트에 붙지 않음)
+```
+
+#### 역할
+
+- 발판 종류를 코드에서 구분하기 위한 `enum`(열거형)입니다.
+- `Normal`(일반 발판)과 `Hazard`(즉사 장애물) 두 종류가 있습니다.
+
+#### 동작 원리
+
+- `Ground.cs`, `HazardTrigger.cs` 등에서 지형 타입을 참조할 때 사용합니다.
+- 나중에 이동 발판이나 스프링 등을 추가할 때 이 enum에 값만 추가하면 됩니다.
+
+---
+
+### Ground.cs
+
+```
+경로: Assets/_Project/Scripts/Terrain/Ground.cs
+부착: Ground (Tilemap 오브젝트)
+```
+
+#### 역할
+
+- Ground Tilemap 오브젝트가 '일반 발판'임을 코드에서 식별할 수 있도록 붙여두는 마커입니다.
+- 현재는 `TerrainType.Normal`로 고정되어 있고, 나중에 이동 발판 등을 추가할 때 활용합니다.
+
+#### Inspector 항목
+
+| 필드명 | 타입 | 기본값 | 설명 |
+|---|---|---|---|
+| `type` | TerrainType | Normal | 이 지형의 타입 (현재는 Normal 고정) |
+
+---
+
+### HazardTrigger.cs
+
+```
+경로: Assets/_Project/Scripts/Terrain/HazardTrigger.cs
+부착: Hazard_Trigger_25 ~ Hazard_Trigger_46 (가시 트리거 오브젝트 6개)
+```
+
+#### 역할
+
+- 플레이어가 가시에 닿으면 `RespawnManager`를 호출해 게임을 처음부터 다시 시작합니다.
+- 닿자마자(Enter) 또는 닿은 채로 있을 때(Stay) 모두 감지합니다.
+- 리스폰 직후 같은 트리거가 연속으로 반응하지 않도록 쿨다운이 있습니다.
+
+#### 동작 원리
+
+- `OnTriggerEnter2D` / `OnTriggerStay2D` 이벤트를 사용합니다.
+- 트리거 이벤트가 발생하려면 오브젝트에 `Rigidbody2D(Kinematic)`가 필요합니다. (Unity 물리 규칙)
+- 플레이어 여부는 `PlayerMovement` 컴포넌트 존재 여부로 확인합니다.
+- `Awake`에서 씬 전체에서 `RespawnManager`를 자동으로 찾습니다.
+
+#### Inspector 항목
+
+| 필드명 | 타입 | 기본값 | 설명 |
+|---|---|---|---|
+| `respawnCooldown` | float | 0.5 | 리스폰 후 중복 반응 방지 쿨다운(초) |
+
+#### 의존 컴포넌트
+
+`RespawnManager` (씬 어딘가에 존재해야 합니다)
+
+> **참고:** 레이어 매트릭스: Hazard 레이어는 Player 레이어하고만 충돌하도록 설정되어 있습니다.
+
+---
+
+### RespawnManager.cs
+
+```
+경로: Assets/_Project/Scripts/Respawn/RespawnManager.cs
+부착: RespawnManager (씬의 빈 오브젝트)
+```
+
+#### 역할
+
+- `HazardTrigger`나 `FallRespawnDetector`가 리스폰이 필요하다고 판단했을 때 이 스크립트의 `RespawnPlayer()`를 호출합니다.
+- 현재 MVP에서는 씬 전체를 다시 로드해서 게임을 처음 상태로 되돌립니다.
+
+#### 동작 원리
+
+- `SceneManager.LoadScene`으로 현재 씬을 리로드합니다.
+- 나중에 체크포인트를 추가할 때는 이 메서드 내부만 바꾸면 됩니다. (`HazardTrigger`, `FallRespawnDetector`는 수정 불필요)
+
+---
+
+### FallRespawnDetector.cs
+
+```
+경로: Assets/_Project/Scripts/Respawn/FallRespawnDetector.cs
+부착: PlayerStartMarker (루트 오브젝트)
+```
+
+#### 역할
+
+- 플레이어가 발판 사이 구멍으로 떨어져 화면 아래로 사라지면 리스폰을 실행합니다.
+- 카메라 화면 하단보다 조금 더 아래의 Y 좌표를 기준선으로 사용합니다.
+
+#### 동작 원리
+
+- 매 `Update`마다 자신의 Y 좌표를 `killPlaneY`와 비교합니다.
+- 중복 호출 방지를 위한 쿨다운이 있습니다 (`HazardTrigger`와 동일한 패턴).
+
+#### Inspector 항목
+
+| 필드명 | 타입 | 기본값 | 설명 |
+|---|---|---|---|
+| `killPlaneY` | float | -3.5 | 이 Y 좌표 이하로 내려가면 리스폰 (카메라 하단 -2.91보다 아래) |
+| `respawnCooldown` | float | 0.5 | 중복 호출 방지 쿨다운(초) |
+
+#### 의존 컴포넌트
+
+`RespawnManager` (씬 어딘가에 존재해야 합니다)
+
+---
+
+### GoalTrigger.cs
+
+```
+경로: Assets/_Project/Scripts/Goal/GoalTrigger.cs
+부착: GoalPoint
+```
+
+#### 역할
+
+- 플레이어가 스테이지 끝의 트로피에 닿으면 클리어 판정을 내립니다.
+- 현재 MVP에서는 콘솔에 `"Clear"`를 출력합니다.
+- 한 번 클리어된 후엔 중복 감지를 하지 않습니다.
+
+#### 동작 원리
+
+- `OnTriggerEnter2D`로 플레이어 접촉을 감지합니다.
+- `cleared` 플래그로 중복 호출을 방지합니다.
+- `OnClear()` 메서드 내부만 교체하면 클리어 UI, 다음 씬 전환 등으로 확장할 수 있습니다.
+
+> **참고:** 나중에 클리어 화면이나 다음 레벨 전환을 추가할 때는 `OnClear()` 메서드 안만 수정하면 됩니다.
+
+---
+
+## 스크립트 관계도
+
+### 플레이어 제어 흐름
+
+```
+PlayerMovement        →  Rigidbody2D.velocity.x      (X축 이동)
+PlayerJump            →  Rigidbody2D.velocity.y      (Y축 이동 + 중력)
+PlayerGroundDetector  →  PlayerJump.IsGrounded        (접지 정보 제공)
+PlayerAnimatorController → Animator 파라미터         (PlayerMovement, PlayerJump, Rigidbody2D 읽기)
+```
+
+### 지형 / 위험 요소 흐름
+
+```
+Ground            →  TerrainType.Normal 마커         (Tilemap 오브젝트에 부착)
+HazardTrigger     →  RespawnManager.RespawnPlayer()  (가시 오브젝트에 부착)
+FallRespawnDetector → RespawnManager.RespawnPlayer() (플레이어에 부착)
+RespawnManager    →  SceneManager.LoadScene()        (씬 전체 리셋)
+```
+
+### 클리어 흐름
+
+```
+GoalTrigger  →  Debug.Log("Clear")  (트로피에 부착)
+```
+
+---
+
+*문서 끝*
