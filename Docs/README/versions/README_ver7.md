@@ -22,6 +22,7 @@
 ### Technical (기술)
 - [기술 기획서 (Unity)](Docs/Technical/TechnicalPlan/기술기획서.md) — 엔진 구현 방식, GitHub 협업 규칙
 - [에셋 네이밍/관리 규칙](Docs/Technical/AssetNaming/에셋_네이밍_관리규칙.md) — 파일명, 폴더 구조 규칙
+- [스크립트 설명서](Docs/Technical/ScriptDocs/스크립트_설명서.md) — 10개 스크립트 역할·동작 원리·Inspector 항목 정리 (동아리원 배포용)
 - [에셋 출처/라이선스 관리](Docs/Technical/License/에셋_출처_라이선스_관리.md) — 외부 에셋 소스, 라이선스 기록표
 
 ### Art (아트)

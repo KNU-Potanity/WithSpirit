@@ -1,4 +1,4 @@
-﻿# ToDo List
+# ToDo List
 
 ## 0. 문서 목적
 
