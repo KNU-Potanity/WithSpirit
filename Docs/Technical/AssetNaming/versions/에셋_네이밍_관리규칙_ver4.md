@@ -5,9 +5,8 @@
 이 문서는 이미지, 사운드, 프리팹, 씬 등 **에셋 파일의 이름을 어떻게 지을지, 어디에 둘지**를 정리합니다.
 
 - 부원이 여러 명이 되면 각자 다른 이름 규칙으로 파일을 만들어서 같은 종류의 에셋이 중복되거나, 어떤 파일이 최신인지 헷갈리는 문제가 자주 생겨요.
-- `기술기획서.md`의 폴더 구조, `아트스타일_가이드.md`의 분류를 기준으로 통일된 이름 규칙을 정합니다.
+- `기술기획서_MVP_Unity.md`의 폴더 구조, `아트스타일_가이드_MVP.md`의 분류를 기준으로 통일된 이름 규칙을 정합니다.
 - 외부에서 에셋을 가져올 때의 출처/라이선스 기록은 `에셋_출처_라이선스_관리.md`에서 별도로 관리합니다.
-- 2026-07-09 개정: 정령 시스템 채택에 따라 정령/몬스터 관련 접두사를 3.1, 3.3절에 추가했습니다.
 
 ---
 
@@ -25,14 +24,12 @@
 
 ## 2. 폴더 구조 (재확인)
 
-`기술기획서.md`의 구조를 기준으로, 에셋은 아래 위치에 둡니다.
+`기술기획서_MVP_Unity.md`의 구조를 기준으로, 에셋은 아래 위치에 둡니다.
 
 ```
 Assets/_Project/
  ├─ Art/
  │   ├─ Characters/
- │   ├─ Spirits/       (신규, 정령 7종)
- │   ├─ Monsters/       (신규)
  │   ├─ Environment/
  │   └─ Effects/
  ├─ Audio/
@@ -40,8 +37,6 @@ Assets/_Project/
  │   └─ BGM/
  ├─ Prefabs/
  │   ├─ Player/
- │   ├─ Spirits/       (신규)
- │   ├─ Monsters/       (신규)
  │   ├─ Terrain/
  │   └─ UI/
  ├─ Tilemaps/
@@ -60,34 +55,28 @@ Assets/_Project/
 | 분류 접두사 | 의미 | 예시 |
 |---|---|---|
 | `char_` | 캐릭터 | `char_player_idle_01.png`, `char_player_jump_01.png` |
-| `spirit_` | 정령 (신규) | `spirit_base_idle_01.png`, `spirit_atk_explosion_01.png`, `spirit_plat_doublejump_01.png` |
-| `monster_` | 몬스터 (신규) | `monster_slime_idle_01.png`, `monster_skeleton_attack_01.png`, `monster_boss_treant_01.png` |
-| `env_` | 지형/환경 (일반 발판, 이동 발판, 무너지는 발판, 스탯 변화 발판 포함) | `env_platform_normal_01.png`, `env_platform_moving_01.png`, `env_platform_collapse_01.png`, `env_hazard_spike_01.png` |
-| `obj_` | 오브젝트 (목표 지점, 설치 장소 등) | `obj_goal_flag_01.png`, `obj_spawnpoint_marker_01.png` |
+| `enemy_` | 적 (확장 기능) | `enemy_slime_walk_01.png` |
+| `env_` | 지형/환경 | `env_platform_normal_01.png`, `env_hazard_spike_01.png` |
+| `obj_` | 오브젝트 (목표 지점 등) | `obj_goal_flag_01.png` |
 | `bg_` | 배경 | `bg_sky_layer1.png` |
-| `ui_` | UI 요소 (하트, 마커, 정령 선택 UI 포함) | `ui_button_pause.png`, `ui_heart_full.png`, `ui_marker_interact.png` |
+| `ui_` | UI 요소 (확장 기능) | `ui_button_pause.png` |
 | `fx_` | 이펙트 | `fx_jump_dust_01.png` |
 
 ### 3.2 애니메이션 / 애니메이터
 형식: `anim_캐릭터또는오브젝트_동작.anim`
-- 예: `anim_player_idle.anim`, `anim_player_jump.anim`, `anim_player_fall.anim`, `anim_spirit_base_idle.anim`, `anim_monster_slime_move.anim`
+- 예: `anim_player_idle.anim`, `anim_player_jump.anim`, `anim_player_fall.anim`
 
 ### 3.3 프리팹
 형식: `PF_이름` (필요시 `_세부` 추가)
 - 예: `PF_Player`, `PF_Platform_Normal`, `PF_Hazard_Spike`, `PF_Goal`, `PF_Camera`
-- 신규: `PF_Spirit_Base`, `PF_Spirit_Atk_Explosion`, `PF_Spirit_Atk_Stun`, `PF_Spirit_Atk_Chain`, `PF_Spirit_Plat_SpeedUp`, `PF_Spirit_Plat_DoubleJump`, `PF_Spirit_Plat_DamageOverTime`
-- 신규: `PF_Monster_Slime`, `PF_Monster_DustBlob`, `PF_Monster_Mushroom`, `PF_Monster_TreeGolem`, `PF_Monster_Skeleton`, `PF_Monster_Bush`, `PF_Monster_Boss_Treant`
-- 신규: `PF_Platform_Moving`, `PF_Platform_Collapse`, `PF_Platform_StatChange`, `PF_SpawnPoint`(설치 장소)
 
 ### 3.4 사운드
 형식: `분류_이름.확장자`
 
 | 분류 접두사 | 의미 | 예시 |
 |---|---|---|
-| `sfx_` | 효과음 | `sfx_jump.wav`, `sfx_hit.wav`, `sfx_clear.wav`, `sfx_spirit_explosion.wav`, `sfx_monster_defeat.wav` |
-| `bgm_` | 배경음악 | `bgm_stage1.mp3`, `bgm_boss.mp3` |
-
-> 확장 단계 사운드 목록 전체는 `사운드_큐_리스트.md` 참고.
+| `sfx_` | 효과음 | `sfx_jump.wav`, `sfx_hit.wav`, `sfx_clear.wav` |
+| `bgm_` | 배경음악 | `bgm_stage1.mp3` |
 
 ### 3.5 씬 / 타일맵
 - 씬: `Stage1`, `Stage2`, `MainMenu` (확장 기능), `TestScene_이름` (테스트용은 `TestScene_` 접두사로 구분)
@@ -115,15 +104,15 @@ Assets/_Project/
 
 ## 6. Git / LFS 관련 주의점
 
-- 이미지(`.png`, `.psd`), 오디오(`.wav`, `.mp3`) 파일을 추가하기 전에 `기술기획서.md`에서 안내한 **Git LFS 설정**이 되어 있는지 먼저 확인합니다.
-- 같은 파일을 여러 명이 동시에 수정하면 충돌이 발생하므로, 작업 전 해당 파일을 누가 수정 중인지 간단히 공유합니다 (예: 동아리 채팅방에 지금 player 스프라이트 작업 중 정도로 공유).
+- 이미지(`.png`, `.psd`), 오디오(`.wav`, `.mp3`) 파일을 추가하기 전에 `기술기획서_MVP_Unity.md`에서 안내한 **Git LFS 설정**이 되어 있는지 먼저 확인합니다.
+- 같은 파일을 여러 명이 동시에 수정하면 충돌이 발생하므로, 작업 전 해당 파일을 누가 수정 중인지 간단히 공유합니다 (예: 동아리 채팅방에 "지금 player 스프라이트 작업 중" 정도로 공유).
 
 ---
 
 ## 7. 체크리스트 (에셋 추가 전 확인)
 
-- [ ] 올바른 폴더(`Art/Characters`, `Art/Spirits`, `Art/Monsters`, `Audio/SFX` 등)에 넣었는가
-- [ ] 분류 접두사(`char_`, `spirit_`, `monster_`, `env_`, `sfx_` 등)를 붙였는가
+- [ ] 올바른 폴더(`Art/Characters`, `Audio/SFX` 등)에 넣었는가
+- [ ] 분류 접두사(`char_`, `env_`, `sfx_` 등)를 붙였는가
 - [ ] 띄어쓰기, 한글, 대문자/소문자 혼용 없이 규칙을 지켰는가
 - [ ] 임시 에셋이면 `_temp`를 붙였는가
 - [ ] Git LFS 추적 대상 확장자에 포함되어 있는가

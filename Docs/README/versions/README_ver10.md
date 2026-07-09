@@ -4,7 +4,7 @@
 
 - **엔진**: Unity
 - **협업 툴**: GitHub
-- **현재 상태**: 핵심 기능(MVP) 1인 제작 및 플레이 테스트(T-01~T-09) **완료** — 정령 시스템 중심의 확장 단계 설계 진행 중
+- **현재 상태**: 핵심 기능(MVP) 1인 제작 및 플레이 테스트(T-01~T-09) **완료** — 동아리 부원 확장 기능 단계 준비 중
 
 ---
 
@@ -14,17 +14,10 @@
 
 ### Design (기획)
 - [핵심 기능 기획서 (MVP)](Docs/Design/Core/플랫포머_게임_기획서.md) — 반드시 구현해야 하는 핵심 기능 정의
-- [확장 기능 기획서](Docs/Design/PlusContents/플랫포머_게임_기획서_확장기능.md) — 확장 기능 후보/채택 현황
+- [확장 기능 기획서](Docs/Design/PlusContents/플랫포머_게임_기획서_확장기능.md) — 동아리 부원이 자율적으로 선택해 추가하는 기능 목록
 - [레벨 디자인 문서](Docs/Design/LevelDesign/레벨디자인_MVP_스테이지.md) — MVP 스테이지의 구간별 레이아웃
-- [캐릭터 컨트롤 스펙](Docs/Design/CharacterControls/캐릭터컨트롤_스펙.md) — 이동/점프/코요테 타임 수치, 조작키
+- [캐릭터 컨트롤 스펙](Docs/Design/CharacterControls/캐릭터컨트롤_스펙.md) — 이동/점프/코요테 타임 수치
 - [사운드 큐 리스트](Docs/Design/SoundQueue/사운드_큐_리스트.md) — 어떤 상황에 어떤 사운드가 필요한지 정리
-
-### Design — 확장 설계 (정령 시스템)
-- [정령 시스템 기획서](Docs/Design/Spirits/정령_시스템_기획서.md) — 기본/추가 정령 종류, 상호작용 방식, 세계관
-- [몬스터 기획서](Docs/Design/Monsters/몬스터_기획서.md) — 몬스터 분류, 테마별 배치
-- [발판 확장 기획서](Docs/Design/Platforms/발판_확장_기획서.md) — 이동/무너짐/스탯변화 발판
-- [스탯 기획서](Docs/Design/Stats/스탯_기획서.md) — 플레이어/정령/몬스터 스탯 항목
-- [월드/스테이지 구성 기획서](Docs/Design/WorldStages/월드_스테이지_구성.md) — 테마, 스토리 개요, 클리어/게임오버 조건
 
 ### Technical (기술)
 - [기술 기획서 (Unity)](Docs/Technical/TechnicalPlan/기술기획서.md) — 엔진 구현 방식, GitHub 협업 규칙
@@ -53,8 +46,6 @@
 - [캐릭터컨트롤 스펙](Docs/Design/CharacterControls/캐릭터컨트롤_스펙.md) — 이동/점프/코요테 타임 등 기존 조작 수치
 - [레벨디자인 문서](Docs/Design/LevelDesign/레벨디자인_MVP_스테이지.md) — 기존 스테이지 구조
 - [기술기획서](Docs/Technical/TechnicalPlan/기술기획서.md) — 기존 코드/폴더 구조
-
-정령 시스템을 포함한 확장 단계 설계는 이미 위 [확장 설계(정령 시스템)](#design--확장-설계-정령-시스템) 문서들로 정리되어 있으니, 확장 기능 작업에 합류하는 부원은 해당 문서부터 확인해 주세요.
 
 ---
 

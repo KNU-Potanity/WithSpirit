@@ -1,4 +1,4 @@
-# BasePlatformer 스크립트 설명서
+﻿# BasePlatformer 스크립트 설명서
 
 동아리원 배포용 | 2026
 
@@ -334,24 +334,6 @@ RespawnManager    →  SceneManager.LoadScene()        (씬 전체 리셋)
 ```
 GoalTrigger  →  Debug.Log("Clear")  (트로피에 부착)
 ```
-
----
-
-
-## 확장 시스템 스크립트 (예정, 2026-07-09 추가)
-
-정령/몬스터/신규 발판 시스템은 아직 구현되지 않았습니다. 이 문서는 실제로 구현이 완료된 스크립트만 다루는 as-built 문서이므로, 위 10개 항목에는 포함하지 않았습니다.
-
-구현이 시작되면 아래 스크립트들이 이 문서에 추가될 예정입니다 (설계 근거는 `정령_시스템_기획서.md`, `몬스터_기획서.md`, `발판_확장_기획서.md`, `기술기획서.md` 4.8절 참고).
-
-| 분류 | 예정 스크립트 | 역할(예정) |
-|---|---|---|
-| Spirits | `SpiritInteractionController.cs` | 마우스 위치 기반 마커 표시, 클릭 상호작용 처리 |
-| Spirits | `SpiritBase.cs` / `Spirit_*.cs` | 기본 정령 및 추가 정령 6종의 공격/플랫폼 생성 로직 |
-| Monsters | `MonsterBase.cs` | 몬스터 공통 스탯(체력/이동속도/공격력/쿨타임) |
-| Monsters | `Monster_*.cs` | 근거리/원거리/디버프형/보스 개별 동작 |
-| Terrain | `MovingPlatform.cs`, `CollapsingPlatform.cs`, `StatChangePlatform.cs` | 이동/무너짐/스탯 변화 발판 |
-| Player | `PlayerHealth.cs` | 하트 기반 체력, 게임오버 처리 |
 
 ---
 
