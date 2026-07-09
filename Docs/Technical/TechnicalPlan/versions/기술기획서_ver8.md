@@ -5,7 +5,7 @@
 
 ## 0. 문서 목적
 
-이 문서는 `플랫포머_게임_기획서.md`, `레벨디자인_MVP_스테이지.md`, `캐릭터컨트롤_스펙.md`에서 정의한 내용을 **Unity 엔진으로 어떻게 구현했는지**, 그리고 **GitHub로 어떻게 협업할지**를 정리합니다.
+이 문서는 `플랫포머_게임_기획서_MVP.md`, `레벨디자인_MVP_스테이지_ver4.md`, `캐릭터컨트롤_스펙_ver1.md`에서 정의한 내용을 **Unity 엔진으로 어떻게 구현했는지**, 그리고 **GitHub로 어떻게 협업할지**를 정리합니다.
 
 - 사용 엔진: **Unity (고정)**
 - 협업 툴: **GitHub (고정)**
@@ -101,7 +101,7 @@ Assets/
 | `PlayerAnimatorController.cs` | Visual (자식) | PlayerMovement/Jump 상태 → Animator 파라미터 연결, flipX 처리 |
 | `FallRespawnDetector.cs` | PlayerStartMarker | 낙사 감지 (killPlaneY 이하 시 리스폰) |
 
-- 구현 방식: `캐릭터컨트롤_스펙.md` 수치(속도/가속/감속/점프 높이/코요테 타임)를 역산 공식으로 직접 계산 (`h = 0.5 * v0 * t` → `v0 = 2h/t`, `g = 2h/t²`)
+- 구현 방식: `캐릭터컨트롤_스펙_ver1.md` 수치(속도/가속/감속/점프 높이/코요테 타임)를 역산 공식으로 직접 계산 (`h = 0.5 * v0 * t` → `v0 = 2h/t`, `g = 2h/t²`)
 - 입력: Unity Input System 패키지 직접 사용 (Move: A/D/화살표, Jump: Space/W/위 화살표)
 - `Rigidbody2D.gravityScale = 0` — 물리 중력을 끄고 스크립트에서 직접 수직 속도를 제어
 
@@ -124,7 +124,7 @@ Assets/
 
 ### 4.4 레벨 데이터 관리 (구현 완료)
 
-- 레벨 레이아웃: `SampleScene.unity` 안의 `Level_Stage1_ver2` 오브젝트 (좌표: `레벨디자인_MVP_스테이지.md` 기준)
+- 레벨 레이아웃: `SampleScene.unity` 안의 `Level_Stage1_ver2` 오브젝트 (좌표: `레벨디자인_MVP_스테이지_ver4.md` 기준)
 - 시작 지점: `PlayerStartMarker` (0, 0.75, 0)
 - 도착 지점: `GoalPoint` (60, 0.60, 0) — `GoalTrigger.cs` 부착, `End_Idle_0` 스프라이트 표시
 
@@ -142,7 +142,7 @@ Assets/
 
 - 현재 이벤트는 스크립트 직접 호출(예: `respawnManager.RespawnPlayer()`, `Debug.Log("Clear")`) 방식으로 처리
 - 추후 사운드/UI가 추가될 때를 대비해 이벤트를 `C# event` 또는 `UnityEvent`로 공식 분리하는 것을 권장
-- 각 이벤트에 필요한 사운드는 `사운드_큐_리스트.md` 참고
+- 각 이벤트에 필요한 사운드는 `사운드_큐_리스트_ver2.md` 참고
 
 ### 4.7 사용 에셋 매핑
 
@@ -183,7 +183,7 @@ Assets/
 | 변수명 | camelCase (예: `moveSpeed`) |
 | 네임스페이스 | `BasePlatformer.Player`, `BasePlatformer.Terrain`, `BasePlatformer.Respawn`, `BasePlatformer.Goal` |
 | 상수/설정값 | `[SerializeField]`로 Inspector에 노출 |
-| 주석 | 핵심 수치는 `캐릭터컨트롤_스펙.md`의 어느 항목에 해당하는지 표기 |
+| 주석 | 핵심 수치는 `캐릭터컨트롤_스펙_ver1.md`의 어느 항목에 해당하는지 표기 |
 
 ---
 
@@ -200,7 +200,7 @@ Assets/
 ## 8. 다음 단계
 
 1. ~~GitHub 저장소 생성 + Git 설정 적용~~ → 완료
-2. ~~Tilemap 레벨 배치~~ → 완료 (`레벨디자인_MVP_스테이지.md` 기준)
+2. ~~Tilemap 레벨 배치~~ → 완료 (`레벨디자인_MVP_스테이지_ver4.md` 기준)
 3. ~~PlayerController(이동/점프/코요테 타임) 구현~~ → 완료 (PlayerMovement + PlayerJump + PlayerGroundDetector)
 4. ~~카메라(Cinemachine) 연결~~ → 완료 (CM_PlayerCamera, CameraBounds)
 5. ~~가시 충돌 시 리스폰 이벤트 연결~~ → 완료 (HazardTrigger + RespawnManager)

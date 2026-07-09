@@ -12,7 +12,7 @@
 
 ## 1. 지금 당장 — 핵심 기능 (혼자, 내일까지)
 
-> 출처: `일정_마일스톤.md`, `플랫포머_게임_기획서.md`
+> 출처: `일정_마일스톤_ver2.md`, `플랫포머_게임_기획서_MVP.md`
 
 **프로그래밍**
 - [x] Unity 프로젝트 생성 및 폴더 구조 세팅
@@ -21,14 +21,14 @@
 - [x] 기본 점프 구현 (`PlayerJump.cs` — 역산 공식으로 점프 속도/중력 계산)
 - [x] 가변 점프 구현 (`PlayerJump.cs` — 버튼 뗄 때 50% 감쇠, 최소 1.2타일 보장)
 - [x] 코요테 타임 구현 (`PlayerJump.cs` — 0.12초, 발판 이탈 후 점프 허용)
-- [x] 캐릭터 애니메이션 클립 제작(대기/이동/점프 상승/낙하) 및 Animator Controller 연결 (`기술기획서.md` 4.7절 에셋 경로 참고 — 그림은 이미 제공되어 있어 신규 작업이 아니라 연결 작업)
+- [x] 캐릭터 애니메이션 클립 제작(대기/이동/점프 상승/낙하) 및 Animator Controller 연결 (`기술기획서_ver6.md` 4.7절 에셋 경로 참고 — 그림은 이미 제공되어 있어 신규 작업이 아니라 연결 작업)
 - [x] 일반 발판 충돌 처리 (`PlayerGroundDetector.cs` — 물리 충돌 이벤트 + 법선 벡터 기반 접지 판정)
 - [x] 즉사 장애물 판정 + 리스폰 트리거 연결 (`HazardTrigger.cs` — OnTriggerEnter/Stay2D + 쿨다운)
 - [x] 리스폰 시스템 (`RespawnManager.cs` — 씬 리로드, `FallRespawnDetector.cs` — 낙사 감지)
 - [x] 목표 지점(도착) 구현 (`GoalTrigger.cs` — 접촉 시 Debug.Log("Clear"))
 - [x] 카메라 추적 (`CM_PlayerCamera`: CinemachineCamera + CinemachinePositionComposer + CinemachineConfiner2D, `CameraBounds`: BoxCollider2D 61×52.91)
 - [x] 플레이스홀더 스프라이트 색상 규칙 적용 — 실제 CraftPix 에셋을 직접 사용하므로 해당 없음 (에셋 자체에 색상 이미 포함)
-- [x] 레벨디자인 문서의 구간①~⑤ 배치를 실제 Tilemap으로 구현 (`레벨디자인_MVP_스테이지.md` 기준 좌표로 구현 완료)
+- [x] 레벨디자인 문서의 구간①~⑤ 배치를 실제 Tilemap으로 구현 (`레벨디자인_MVP_스테이지_ver4.md` 기준 좌표로 구현 완료)
 - [x] 시작~도착까지 끊김/오류 없이 동작하는지 기능적으로 1회 플레이
 - [x] 작업 중간중간 `git add/commit/push` 수행 후 **GitHub 저장소에서 실제로 반영됐는지 확인** (커밋 시간/메시지로 확인)
 
@@ -40,11 +40,11 @@
 
 ## 2. 핵심 기능 완료 후 확인할 것
 
-> 출처: `QA_테스트_계획서.md` (T-01~T-09), `레벨디자인_MVP_스테이지.md` (6장)
+> 출처: `QA_테스트_계획서_ver3.md` (T-01~T-09), `레벨디자인_MVP_스테이지_ver5.md` (6장)
 
 **프로그래밍**
 - [x] T-01~T-09 항목이 스펙대로 동작하는지 기능 확인 (영상 6종으로 기록 — `Assets/Videos/`)
-- [x] 결정된 수치를 코드에 반영하고 `캐릭터컨트롤_스펙.md` 갱신
+- [x] 결정된 수치를 코드에 반영하고 `캐릭터컨트롤_스펙_ver1.md` 갱신
 - [x] Windows 빌드 1회 진행, 해상도(1920x1080) 기준 정상 출력 확인
 
 **기획**
