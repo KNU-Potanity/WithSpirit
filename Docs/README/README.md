@@ -10,7 +10,7 @@
 
 ## 📂 문서 목록
 
-모든 기획/기술 문서는 `Docs/` 폴더 아래에 역할별로 정리되어 있습니다. 아래 링크는 각 문서의 **최신 안정본**(버전 번호 없는 파일)이며, 변경 이력은 같은 폴더의 `versions/` 하위에 버전별로 보관되어 있습니다.
+모든 기획/기술 문서는 `Docs/` 폴더 아래에 역할별로 정리되어 있습니다. 아래 링크는 각 문서의 **최신 안정본**이며, 변경 이력은 같은 폴더의 `versions/` 하위에 버전별로 보관되어 있습니다.
 
 ### Design (기획)
 - [핵심 기능 기획서 (MVP)](Docs/Design/Core/플랫포머_게임_기획서.md) — 반드시 구현해야 하는 핵심 기능 정의
@@ -22,17 +22,30 @@
 ### Technical (기술)
 - [기술 기획서 (Unity)](Docs/Technical/TechnicalPlan/기술기획서.md) — 엔진 구현 방식, GitHub 협업 규칙
 - [에셋 네이밍/관리 규칙](Docs/Technical/AssetNaming/에셋_네이밍_관리규칙.md) — 파일명, 폴더 구조 규칙
-- [스크립트 설명서](Docs/Technical/ScriptDocs/스크립트_설명서.md) — 10개 스크립트 역할·동작 원리·Inspector 항목 정리 (동아리원 배포용)
 - [에셋 출처/라이선스 관리](Docs/Technical/License/에셋_출처_라이선스_관리.md) — 외부 에셋 소스, 라이선스 기록표
+- [스크립트 설명서](Docs/Technical/ScriptDocs/스크립트_설명서.md) — 각 스크립트의 역할과 동작 방식 설명
 
 ### Art (아트)
 - [아트 스타일 가이드](Docs/Art/ArtStyle/아트스타일_가이드.md) — 색상, 해상도, 캐릭터/지형 디자인 기준
 
 ### Production (운영)
 - [일정/마일스톤](Docs/Production/Milestone/일정_마일스톤.md) — 핵심 기능 제작 일정
-- [역할 분담 문서](Docs/Production/DivisionOfRoles/역할분담_문서.md) — 프로그래밍/기획/아트 역할별 가이드
+- [역할 분담 문서](Docs/Production/DivisionOfRoles/역할분담_문서.md) — PM/프로그래밍/기획/아트 역할별 가이드
 - [QA/테스트 계획서](Docs/Production/QATest/QA_테스트_계획서.md) — 테스트 케이스, 버그 리포트 양식
 - [ToDoList](Docs/Production/ToDoList/ToDoList.md) — 현재 해야 할 일을 단계별/역할별로 모아 추적
+- [문서 작성 가이드라인](Docs/Production/DocGuideline/문서작성_가이드라인.md) — 문서 폴더 구조, 버전 관리, 네이밍 규칙 (PM 소유)
+
+---
+
+## 📌 새 기능 기획 전 참고 문서
+
+아래 문서들은 회장(PM)이 **혼자 구현한 MVP(핵심 기능) 단계**의 산출물입니다.
+동아리 부원들과 새로운 기능을 논의하기 전에, 먼저 아래 문서를 읽고 기존에 어떤 수치/구조가 이미 정해져 있는지 파악해 주세요.
+
+- [게임 기획서](Docs/Design/Core/플랫포머_게임_기획서.md) — 전체 게임 방향성과 핵심 기능 정의
+- [캐릭터컨트롤 스펙](Docs/Design/CharacterControls/캐릭터컨트롤_스펙.md) — 이동/점프/코요테 타임 등 기존 조작 수치
+- [레벨디자인 문서](Docs/Design/LevelDesign/레벨디자인_MVP_스테이지.md) — 기존 스테이지 구조
+- [기술기획서](Docs/Technical/TechnicalPlan/기술기획서.md) — 기존 코드/폴더 구조
 
 ---
 

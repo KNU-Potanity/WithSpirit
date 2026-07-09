@@ -33,6 +33,7 @@
 - [역할 분담 문서](Docs/Production/DivisionOfRoles/역할분담_문서.md) — 프로그래밍/기획/아트 역할별 가이드
 - [QA/테스트 계획서](Docs/Production/QATest/QA_테스트_계획서.md) — 테스트 케이스, 버그 리포트 양식
 - [ToDoList](Docs/Production/ToDoList/ToDoList.md) — 현재 해야 할 일을 단계별/역할별로 모아 추적
+- [문서 작성 가이드라인](Docs/Production/DocGuideline/문서작성_가이드라인.md) — 문서 폴더 구조, 버전 관리, 네이밍 규칙 (PM 소유)
 
 ---
 
