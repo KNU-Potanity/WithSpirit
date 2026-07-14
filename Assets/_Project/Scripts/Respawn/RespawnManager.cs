@@ -18,6 +18,19 @@ namespace BasePlatformer.Respawn
     /// </summary>
     public class RespawnManager : MonoBehaviour
     {
+        private Vector3 startPos;
+        private Transform playerTransform;
+
+        private void Start()
+        {
+            var player = FindAnyObjectByType<Player.PlayerMovement>();
+            if (player != null)
+            {
+                playerTransform = player.transform;
+                startPos = playerTransform.position;
+            }
+        }
+
         public void RespawnPlayer()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

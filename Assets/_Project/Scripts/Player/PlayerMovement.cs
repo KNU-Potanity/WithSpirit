@@ -25,9 +25,10 @@ namespace BasePlatformer.Player
     [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerMovement : MonoBehaviour
     {
+        [SerializeField] private PlayerData playerData;
         [Header("이동 스펙 (캐릭터컨트롤_스펙_ver1.md 2장)")]
-        [Tooltip("최고 이동 속도 (타일/초 = Unity Unit/초)")]
-        [SerializeField] private float maxMoveSpeed = 6.0f;
+        //[Tooltip("최고 이동 속도 (타일/초 = Unity Unit/초)")]
+        private float maxMoveSpeed => playerData != null ? playerData.MoveSpeed : 6f;
 
         [Tooltip("0 -> 최고 속도까지 걸리는 시간(초)")]
         [SerializeField] private float accelerationTime = 0.15f;
@@ -79,14 +80,28 @@ namespace BasePlatformer.Player
             MoveInput = moveAction.ReadValue<float>();
         }
 
+        private float knockbackTimer = 0f;
+
+        public void ApplyKnockback(Vector2 force, float duration)
+        {
+            knockbackTimer = duration;
+            CurrentSpeed = 0f; // 기존 이동 속도 초기화
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(force, ForceMode2D.Impulse);
+        }
+
         private void FixedUpdate()
         {
+            if (knockbackTimer > 0f)
+            {
+                knockbackTimer -= Time.fixedDeltaTime;
+                ApplyBoundaries();
+                return;
+            }
+
             float targetSpeed = MoveInput * maxMoveSpeed;
 
             // 가속 중인지 판정:
-            //  - 정지 상태(0)에서 입력이 들어와 출발하는 경우, 또는
-            //  - 이미 이동 중인 방향과 같은 방향으로 더 빨라지려는 경우
-            // 그 외(방향 전환, 입력 없음/감소)는 감속 시간 기준으로 0을 향해 줄어든다.
             bool startingFromRest = Mathf.Approximately(CurrentSpeed, 0f) && !Mathf.Approximately(targetSpeed, 0f);
             bool sameDirectionSpeedUp =
                 Mathf.Sign(CurrentSpeed) == Mathf.Sign(targetSpeed) &&
@@ -101,6 +116,11 @@ namespace BasePlatformer.Player
 
             rb.linearVelocity = new Vector2(CurrentSpeed, rb.linearVelocity.y);
 
+            ApplyBoundaries();
+        }
+
+        private void ApplyBoundaries()
+        {
             // 왼쪽 경계 클램프: leftBoundX 이하로는 이동 불가
             if (rb.position.x < leftBoundX)
             {

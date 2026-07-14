@@ -48,16 +48,18 @@ namespace BasePlatformer.Player
     [RequireComponent(typeof(PlayerGroundDetector))]
     public class PlayerJump : MonoBehaviour
     {
+        [SerializeField] private PlayerData playerData;
+        private float jumpMultiplyer => playerData != null ? playerData.JumpPower : 1f;
         [Header("기본 점프 스펙 (캐릭터컨트롤_스펙_ver1.md 3.1장)")]
-        [Tooltip("최대 점프 높이 (타일 = Unity Unit)")]
-        [SerializeField] private float maxJumpHeight = 3.0f;
+        //[Tooltip("최대 점프 높이 (타일 = Unity Unit)")]
+        private float maxJumpHeight => 3.0f * jumpMultiplyer;
 
         [Tooltip("최대 점프 높이까지 도달하는 시간(초)")]
         [SerializeField] private float timeToApex = 0.35f;
 
         [Header("가변 점프 스펙 (캐릭터컨트롤_스펙_ver1.md 3.2장)")]
-        [Tooltip("짧게 탭(최소 입력) 했을 때 보장되는 최소 점프 높이 (타일)")]
-        [SerializeField] private float minJumpHeight = 1.2f;
+        //[Tooltip("짧게 탭(최소 입력) 했을 때 보장되는 최소 점프 높이 (타일)")]
+        private float minJumpHeight => 1.2f * jumpMultiplyer;
 
         [Tooltip("점프 버튼을 떼는 순간, 상승 속도에 곱해지는 비율 (50% 감소 = 0.5배로 남김)")]
         [SerializeField] private float jumpCutMultiplier = 0.5f;
