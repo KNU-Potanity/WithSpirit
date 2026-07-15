@@ -44,7 +44,11 @@ namespace BasePlatformer.Respawn
             if (transform.position.y < killPlaneY)
             {
                 cooldownTimer = respawnCooldown;
-                respawnManager?.RespawnPlayer();
+                var playerHealth = GetComponent<Player.PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    playerHealth.SetHealth(0);
+                }
             }
         }
     }
