@@ -11,7 +11,6 @@
 - **ver7 변경 사항**: 하트 채우기(흰색) 레이어(`heart_fill.png`)를 파생 에셋으로 추가 — 원본과 동일한 출처 표기 의무 명시.
 - **ver8 변경 사항**: 몬스터/보스 에셋 경로(3개 팩: 100 Top Down Monsters Vol 1, craftpix-284465, craftpix-838021) 추가 — 출처·라이선스는 확인 필요 상태로 표기.
 - **ver9 변경 사항**: CraftPix 2팩(craftpix-284465, craftpix-838021)은 PM 확인에 따라 출처 표기 불필요로 갱신.
-- **ver10 변경 사항**: "100 Top Down Monsters - Pixel Art - Vol 1" 팩의 라이선스를 Unity 에셋스토어 Single Entity License로 확정 (동아리 내 사용·배포 가능, 원본 재배포 금지, 출처 표기 불필요).
 - **2026-07-09 참고**: 정령/몬스터/신규 발판용 에셋은 아직 출처가 확정되지 않았습니다. 확보되는 대로 아래 4장 표에 행을 추가합니다 (`에셋_네이밍_관리규칙.md`의 `spirit_`, `monster_` 접두사 규칙 적용).
 
 ---
@@ -58,11 +57,11 @@
 | 체력 하트 아이콘 (UI) | Flaticon (제작자: meaicon) | https://www.flaticon.com/free-icons/pixel | Flaticon Free License | **필요** | `Assets/UI/Icons/Heart/` | 체력 UI(좌측 상단 하트 4개)용 아이콘. 6장의 출처 표기 문구를 반드시 크레딧에 포함 |
 | 체력 하트 아이콘 — 채우기 레이어 (파생) | Flaticon (제작자: meaicon)의 `heart.png`를 침식(erode)·흰색화하여 제작한 파생 이미지 | https://www.flaticon.com/free-icons/pixel | Flaticon Free License (수정 사용 허용, 출처 표기 유지) | **필요** (원본과 동일 출처 표기) | `Assets/UI/Icons/Heart/heart_fill.png` | `SpriteRenderer.color` 틴트용. 원본이 검정이라 색이 먹지 않아 흰색 채우기 레이어로 분리 제작 (`월드_스테이지_구성.md` 6.1절 참고) |
 
-| 몬스터 (슬라임/벌/버섯/나무 골렘/스켈레톤) | "100 Top Down Monsters - Pixel Art - Vol 1" 에셋 팩 (Unity Asset Store 구매) | Unity Asset Store | Single Entity License | 불필요 (일반적으로 유료 구매 에셋은 표기 의무 없음) | `Assets/100 Top Down Monsters - Pixel Art - Vol 1/Monsters/` | 몬스터_기획서.md 4장 참고. 단일 단체(동아리) 내 사용·배포는 가능, 에셋 원본 파일을 동아리 밖으로 재배포하는 것은 금지 |
+| 몬스터 (슬라임/벌/버섯/나무 골렘/스켈레톤) | "100 Top Down Monsters - Pixel Art - Vol 1" 에셋 팩 | 확인 필요 | 확인 필요 | 확인 필요 | `Assets/100 Top Down Monsters - Pixel Art - Vol 1/Monsters/` | 몬스터_기획서.md 4장 참고. 정확한 다운로드 출처·라이선스 조건 확인 필요 |
 | 몬스터 (식충식물) | craftpix-net-284465 (Free Predator Plant Mobs Pixel Art Pack) | https://craftpix.net/ (정확한 상품 페이지 확인 필요) | CraftPix Royalty-Free (무료) | 불필요 (권장) | `Assets/craftpix-net-284465-free-predator-plant-mobs-pixel-art-pack/PNG/Plant1/Without_shadow` | 몬스터_기획서.md 4장 참고. PM 확인: 출처 표기 불필요 |
 | 보스 (밤 나무) | craftpix-net-838021 (Top Down Pixel Ent Character Sprites) | https://craftpix.net/ (정확한 상품 페이지 확인 필요) | CraftPix Royalty-Free (무료) | 불필요 (권장) | `Assets/craftpix-net-838021-top-down-pixel-ent-character-sprites/PNG/Ent3/Without_shadow` | 몬스터_기획서.md 4장 참고. PM 확인: 출처 표기 불필요 |
 
-> CraftPix 2팩(craftpix-net-284465, craftpix-net-838021)은 PM 확인 결과 출처 표기가 불필요합니다. "100 Top Down Monsters - Pixel Art - Vol 1" 팩은 Unity 에셋스토어에서 구매한 Single Entity License로, 동아리(단일 단체) 내 사용·배포는 가능하나 원본 파일 재배포는 금지됩니다.
+> CraftPix 2팩(craftpix-net-284465, craftpix-net-838021)은 PM 확인 결과 출처 표기가 불필요합니다. "100 Top Down Monsters - Pixel Art - Vol 1" 팩은 아직 출처·라이선스 확인 전입니다 (`ToDoList.md` 참고).
 > 신규 발판(이동·무너짐·스탯변화) 에셋은 아직 이 표에 없습니다 — 소스가 정해지는 대로 행을 추가합니다.
 
 ### 사용 중인 구체적인 에셋 목록 (SimplePlatformer2D 내)

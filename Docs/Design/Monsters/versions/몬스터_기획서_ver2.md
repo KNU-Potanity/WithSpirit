@@ -2,7 +2,7 @@
 
 ## 0. 문서 목적
 
-> 마지막 수정일: 2026-07-16 (4장에 몬스터별 에셋 경로 추가 — ver3)
+> 마지막 수정일: 2026-07-16 (먼지뭉탱이 → 벌(공중, 근거리형), 덤불 → 식충식물(근접, 근거리형)로 변경 — ver2)
 
 확장 단계에서 추가되는 몬스터의 종류, 분류, 테마별 배치를 정리합니다. 스탯 항목은 `스탯_기획서.md`를 참고하세요.
 
@@ -42,23 +42,7 @@
 
 ---
 
-## 4. 에셋 경로
-
-| 몬스터 | 에셋 경로 |
-|---|---|
-| 슬라임 | `Assets/100 Top Down Monsters - Pixel Art - Vol 1/Monsters/Slime` |
-| 벌 | `Assets/100 Top Down Monsters - Pixel Art - Vol 1/Monsters/Bee` |
-| 버섯 | `Assets/100 Top Down Monsters - Pixel Art - Vol 1/Monsters/Mushroom` |
-| 나무 골렘 | `Assets/100 Top Down Monsters - Pixel Art - Vol 1/Monsters/Plant Treant` |
-| 스켈레톤 | `Assets/100 Top Down Monsters - Pixel Art - Vol 1/Monsters/Skeleton Archer` |
-| 식충식물 | `Assets/craftpix-net-284465-free-predator-plant-mobs-pixel-art-pack/PNG/Plant1/Without_shadow` |
-| 밤 나무 | `Assets/craftpix-net-838021-top-down-pixel-ent-character-sprites/PNG/Ent3/Without_shadow` |
-
-> 위 3개 에셋 팩(`100 Top Down Monsters - Pixel Art - Vol 1`, `craftpix-net-284465-...`, `craftpix-net-838021-...`)의 출처·라이선스는 `에셋_출처_라이선스_관리.md`에 별도로 기록합니다.
-
----
-
-## 5. 다음 단계
+## 4. 다음 단계
 
 - 각 몬스터의 세부 수치(체력, 이동 속도, 공격력, 쿨타임 등)는 `스탯_기획서.md` 3장을 채워 확정
 - 몬스터별 공격 패턴·모션은 아트·기획 협업으로 추후 구체화
