@@ -7842,6 +7842,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   minHorizontalNormalX: 0.9
+  detectionRangeX: 8
+  attackRange: 1.2
+  obstacleCheckDistance: 8
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  attackCooldown: 1.5
 --- !u!50 &1225544266
 Rigidbody2D:
   serializedVersion: 5
@@ -7924,7 +7934,7 @@ Transform:
   m_GameObject: {fileID: 1225544264}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.85, y: 0.84, z: 0}
+  m_LocalPosition: {x: 31.69, y: 0.84, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

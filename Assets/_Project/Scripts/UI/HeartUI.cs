@@ -12,11 +12,11 @@ namespace BasePlatformer.UI
         [Tooltip("생성할 하트 아이콘 프리팹 (Image 컴포넌트 포함)")]
         [SerializeField] private GameObject heartPrefab;
         
-        [Header("Sprites")]
-        [Tooltip("빨간색 채우기 + 검정색 외곽선 이미지 (체력 있음)")]
-        [SerializeField] private Sprite fullHeartSprite;
-        [Tooltip("검정색 단색 빈 하트 이미지 (체력 없음)")]
-        [SerializeField] private Sprite emptyHeartSprite;
+        [Header("Color Settings")]
+        [Tooltip("체력이 있을 때의 하트 색상")]
+        [SerializeField] private Color fullColor = Color.white;
+        [Tooltip("체력이 없을 때의 빈 하트 색상 (예: 검정색, 흑백, 반투명 등)")]
+        [SerializeField] private Color emptyColor = new Color(0.2f, 0.2f, 0.2f, 1f); // 기본값: 어두운 회색
 
         private PlayerHealth playerHealth;
         private Image[] heartImages;
@@ -74,14 +74,14 @@ namespace BasePlatformer.UI
 
             for (int i = 0; i < heartImages.Length; i++)
             {
-                // 현재 체력보다 인덱스가 작으면 채워진 하트, 아니면 빈 하트
+                // 현재 체력보다 인덱스가 작으면 채워진 색상, 아니면 빈 색상
                 if (i < currentHearts)
                 {
-                    heartImages[i].sprite = fullHeartSprite;
+                    heartImages[i].color = fullColor;
                 }
                 else
                 {
-                    heartImages[i].sprite = emptyHeartSprite;
+                    heartImages[i].color = emptyColor;
                 }
             }
         }
