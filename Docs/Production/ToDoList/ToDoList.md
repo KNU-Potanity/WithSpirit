@@ -85,10 +85,19 @@
 - [ ] 부원별로 `feature/` 브랜치 생성 안내
 - [ ] 정령 상호작용(마커 표시, 마우스 클릭 처리) 프로토타입 구현
 - [ ] 정령 선택/전환 로직(마우스 오른쪽 클릭) 구현
-- [ ] 기본 정령(공격+플랫폼) 구현 → 이후 추가 정령 6종으로 확장
+- [ ] 기본 정령(공격+플랫폼) 구현 → 이후 추가 정령 6종으로 확장 (이동 추적은 `FairyMovement.cs`로 구현 완료, 공격/플랫폼 생성 로직만 남음)
 - [ ] `TerrainType`을 이동/무너짐/스탯변화 발판까지 포함하도록 확장
-- [ ] 하트(체력) 시스템 및 게임오버 로직 구현
-- [ ] 몬스터 공통 스탯/AI 베이스 구현 → 근거리/원거리/디버프/보스로 확장
+- [x] 하트(체력) 시스템 및 게임오버 로직 구현 (`PlayerHealth.cs`+`HeartUI.cs`로 구현 완료)
+- [x] 무적 시간/깜빡임 값 확인 — Inspector 실측값은 0.5초/0.15초로, 스크립트 필드 초기값(10초/0.1초)과 다름을 확인. 문서는 Inspector 실측값 기준으로 유지 (2026-07-16, `캐릭터컨트롤_스펙.md` ver9)
+- [x] 하트 UI 방식 — 문서를 실제 코드(단일 스프라이트 교체) 방식에 맞게 수정 완료 (2026-07-16, `월드_스테이지_구성.md` ver5)
+- [ ] `HeartUI.cs`의 `fullHeartSprite`/`emptyHeartSprite`(`ui_heart_full.png`/`ui_heart_empty.png`)는 Unity 기능으로 만든 임시 플레이스홀더 — 정식 아트로 교체 필요 (2026-07-21 확인, `월드_스테이지_구성.md` 6.1절 참고)
+- [ ] 미사용 상태인 `Assets/UI/Icons/Heart/heart.png`, `heart_fill.png`(Flaticon 기반) 처리 방향 결정 — 정식 아트로 채택하거나, 아니면 정리
+- [ ] 몬스터 공통 스탯/AI 베이스 구현 → 근거리/원거리/디버프/보스로 확장 (부분 진행: 버섯 이동 스크립트(`GroundMonsterMovement.cs`) 애니메이션 연동 완료, 나머지 몬스터는 미착수)
+- [x] 버섯(`GroundMonsterMovement.cs`) Animator 연동 — Speed/Attack 파라미터 반영, 공격 중 Kinematic 고정, 방향전환 판정 순서 수정 (2026-07-16, `몬스터_기획서.md` 6.2절 참고)
+- [ ] 나머지 지상 근접몹(나무 골렘, 식충식물)에도 동일한 Speed/Attack/Kinematic 패턴 적용
+- [ ] `MonsterHealth.cs` / `MonsterFacing.cs`를 실제 몬스터 오브젝트(MushroomMarker 등)에 부착
+- [ ] 빈 껍데기 상태인 enum 3개에 실제 값 채우기: `RangedMonsterData.ProjectileTypes`, `DebuffMonsterData.DebuffTypes`, `Enum/PlatformTypes.cs` (`스탯_기획서.md`/`발판_확장_기획서.md` 참고)
+- [ ] 몬스터/정령별 실제 데이터 에셋(.asset) 인스턴스 생성 (현재 `PlayerData.asset` 1개만 존재, 몬스터 7종·정령 7종 데이터 에셋은 아직 없음)
 
 **아트**
 - [ ] 정령 7종 색상 팔레트(HEX) 확정 (`아트스타일_가이드.md` 9.1절)
@@ -96,6 +105,8 @@
 - [ ] 기본 정령 공격/상호작용(변신 효과)/이동 애니메이션 제작 (`정령_시스템_기획서.md` 5장 스펙 참고)
 - [ ] 추가 정령(6종) 스프라이트/애니메이션 제작
 - [x] 몬스터 6종 + 보스 스프라이트/애니메이션 확보 (2026-07-16, 자체 제작 대신 구매/무료 에셋 팩 사용 — `몬스터_기획서.md` 4장 에셋 경로 참고. 스프라이트+애니메이션 클립 모두 포함된 상태로 Assets에 존재)
+- [x] 몬스터 Animator Controller 7종 생성 (2026-07-16, `Assets/_Project/Animators/Monsters/AC_Monster_이름.controller` — Slime만 클립 연결 완료, 나머지 6개는 구조만 있고 클립은 비어있음)
+- [ ] 나머지 6개 몬스터 Animator Controller에 실제 클립 채워넣기
 - [ ] 신규 발판 3종 타일/오브젝트 아트 제작 (`아트스타일_가이드.md` 9.3절)
 - [x] 하트 UI 아이콘 제작 (2026-07-16, `heart.png` 외곽선 + `heart_fill.png` 채우기 2-레이어 — `Assets/UI/Icons/Heart/`, `월드_스테이지_구성.md` 6.1절 참고)
 - [ ] 마커 UI 목업 제작 (`아트스타일_가이드.md` 9.4절)

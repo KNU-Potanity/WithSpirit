@@ -9,9 +9,9 @@ namespace BasePlatformer.Player
     {
         [SerializeField] private PlayerData playerData;
         [Tooltip("데미지 입은 후 무적 시간(초)")]
-        [SerializeField] private float invincibilityDuration = 10f;
+        [SerializeField] private float invincibilityDuration = 0.5f;
         [Tooltip("무적 깜빡임 주기")]
-        [SerializeField] private float blinkInterval = 0.1f;
+        [SerializeField] private float blinkInterval = 0.15f;
 
         private RespawnManager respawnManager;
         private SpriteRenderer spriteRenderer;

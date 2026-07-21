@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -23,12 +24,18 @@ public class GroundMonsterMovement : MonoBehaviour
 
     private Rigidbody2D rb;
     private Collider2D col;
+    private Animator animator;
     private float flipCooldown = 0f;
+
+    // 공격 애니메이션이 재생되는 동안 true — 이동/재트리거를 막습니다.
+    private bool isAttacking = false;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
+        // Animator는 자식 오브젝트(예: Mushroom_Move_0)에 붙어있으므로 GetComponentInChildren로 찾습니다.
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void FixedUpdate()
@@ -38,13 +45,27 @@ public class GroundMonsterMovement : MonoBehaviour
             flipCooldown -= Time.fixedDeltaTime;
         }
 
-        // X축 이동 적용 (Y축은 중력 유지)
-        rb.linearVelocity = new Vector2(movingRight ? moveSpeed : -moveSpeed, rb.linearVelocity.y);
-
-        // 낭떠러지 감지
-        if (IsLedgeAhead())
+        if (isAttacking)
         {
-            Flip();
+            // 공격 애니메이션 재생 중에는 제자리에 멈춥니다 (X축 이동 정지, Y축 중력은 유지).
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        }
+        else
+        {
+            // X축 이동 적용 (Y축은 중력 유지)
+            rb.linearVelocity = new Vector2(movingRight ? moveSpeed : -moveSpeed, rb.linearVelocity.y);
+
+            // 낭떠러지 감지
+            if (IsLedgeAhead())
+            {
+                Flip();
+            }
+        }
+
+        // Animator의 Speed 파라미터 갱신 (Idle <-> Walk 전환용). 공격 중에는 0으로 고정합니다.
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", isAttacking ? 0f : Mathf.Abs(rb.linearVelocity.x));
         }
     }
 
@@ -69,16 +90,28 @@ public class GroundMonsterMovement : MonoBehaviour
     }
 
     // PlayerGroundDetector 방식을 참고한 벽/장애물 충돌 처리
-    private void OnCollisionEnter2D(Collision2D collision)
+private void OnCollisionEnter2D(Collision2D collision)
     {
-        CheckWallCollision(collision);
+        // 데미지/공격 판정을 먼저 처리해 isAttacking이 이번 프레임에 바로 반영되도록 합니다.
         ApplyDamage(collision.gameObject);
+
+        // 공격 애니메이션 재생 중에는 방향 전환 없이 가만히 서서 공격만 합니다.
+        if (!isAttacking)
+        {
+            CheckWallCollision(collision);
+        }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+private void OnCollisionStay2D(Collision2D collision)
     {
-        CheckWallCollision(collision);
+        // 데미지/공격 판정을 먼저 처리해 isAttacking이 이번 프레임에 바로 반영되도록 합니다.
         ApplyDamage(collision.gameObject);
+
+        // 공격 애니메이션 재생 중에는 방향 전환 없이 가만히 서서 공격만 합니다.
+        if (!isAttacking)
+        {
+            CheckWallCollision(collision);
+        }
     }
 
     private void CheckWallCollision(Collision2D collision)
@@ -110,15 +143,16 @@ public class GroundMonsterMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Hazard 레이어에 포함된 Trigger와 닿았을 때 방향 전환
-        if (((1 << collision.gameObject.layer) & hazardLayer) != 0)
+        // 데미지/공격 판정을 먼저 처리해 isAttacking이 이번 프레임에 바로 반영되도록 합니다.
+        ApplyDamage(collision.gameObject);
+
+        // 공격 애니메이션 재생 중에는 방향 전환 없이 가만히 서서 공격만 합니다.
+        if (!isAttacking && ((1 << collision.gameObject.layer) & hazardLayer) != 0)
         {
             Flip();
         }
-
-        ApplyDamage(collision.gameObject);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -132,14 +166,49 @@ public class GroundMonsterMovement : MonoBehaviour
         if (other.GetComponent<BasePlatformer.Player.PlayerMovement>() == null) return;
 
         var playerHealth = other.GetComponent<BasePlatformer.Player.PlayerHealth>();
-        if (playerHealth != null)
+        if (playerHealth == null) return;
+
+        // 이미 공격 애니메이션이 재생 중이면 다시 트리거하지 않음 (애니메이션이 끝날 때까지 대기)
+        if (isAttacking) return;
+
+        // 플레이어가 몬스터의 어느 쪽에 있는지에 따라 넉백 방향 결정
+        float dirX = (other.transform.position.x > transform.position.x) ? 1f : -1f;
+        Vector2 knockbackDir = new Vector2(dirX, 1f).normalized;
+
+        playerHealth.TakeDamage(1, knockbackDir);
+
+        StartCoroutine(DoAttack());
+    }
+
+private IEnumerator DoAttack()
+    {
+        isAttacking = true;
+
+        // 물리적으로도 완전히 멈추도록 Kinematic으로 전환 — 플레이어와 겹쳐도 밀려나지 않습니다.
+        rb.linearVelocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+
+        if (animator != null)
         {
-            // 플레이어가 몬스터의 어느 쪽에 있는지에 따라 넉백 방향 결정
-            float dirX = (other.transform.position.x > transform.position.x) ? 1f : -1f;
-            Vector2 knockbackDir = new Vector2(dirX, 1f).normalized;
-            
-            playerHealth.TakeDamage(1, knockbackDir);
+            animator.SetTrigger("Attack");
         }
+
+        // 트리거 직후 한 프레임 대기 — Animator가 Attack 상태로 실제 전환될 시간을 줍니다.
+        yield return null;
+
+        if (animator != null)
+        {
+            // Attack 상태(State 이름 "Attack")의 재생이 끝날 때까지 대기
+            while (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") &&
+                   animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+            {
+                yield return null;
+            }
+        }
+
+        // 원래대로 Dynamic으로 복귀 (중력/충돌 반응 다시 적용)
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        isAttacking = false;
     }
 
     private void Flip()
