@@ -190,7 +190,7 @@ Transform:
   m_GameObject: {fileID: 110715471}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 46, y: 0.5, z: 0}
+  m_LocalPosition: {x: 5.14, y: 0.5, z: 0}
   m_LocalScale: {x: 2.0833335, y: 2.0833335, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6158,8 +6158,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BasePlatformer.UI.HeartUI
   heartContainer: {fileID: 446600764}
   heartPrefab: {fileID: 2648308719537429464, guid: 0884741d982bad444b63868cb68db46c, type: 3}
-  fullHeartSprite: {fileID: 5807918280135480581, guid: f574c889276562342a483d45830360e8, type: 3}
-  emptyHeartSprite: {fileID: 6904753154541963983, guid: 7e7bb76d025bada4f86a74c2e2d74e5b, type: 3}
+  fullColor: {r: 1, g: 0, b: 0, a: 1}
+  emptyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
 --- !u!114 &446600766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7350,7 +7350,7 @@ Transform:
   m_GameObject: {fileID: 784805225}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 46, y: 0.5, z: 0}
+  m_LocalPosition: {x: 5.1299996, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7844,14 +7844,14 @@ MonoBehaviour:
   minHorizontalNormalX: 0.9
   detectionRangeX: 8
   attackRange: 1.2
-  obstacleCheckDistance: 8
+  obstacleCheckDistance: 0
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1024
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 512
+  groundComposite: {fileID: 187186654}
+  platformYOffset: 10
   attackCooldown: 1.5
+  attackRangeY: 2
 --- !u!50 &1225544266
 Rigidbody2D:
   serializedVersion: 5
@@ -7934,7 +7934,7 @@ Transform:
   m_GameObject: {fileID: 1225544264}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31.69, y: 0.84, z: 0}
+  m_LocalPosition: {x: 11.3, y: 0.84, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
