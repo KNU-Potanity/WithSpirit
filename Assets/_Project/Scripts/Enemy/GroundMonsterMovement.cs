@@ -74,6 +74,7 @@ public class GroundMonsterMovement : MonoBehaviour
     // ─────────────────────────────────────────────
     private Rigidbody2D rb;
     private Collider2D col;
+    private Animator animator;
     private float flipCooldown = 0f;
     private float attackTimer = 0f;
     private Transform playerTransform;
@@ -91,10 +92,12 @@ public class GroundMonsterMovement : MonoBehaviour
     // ─────────────────────────────────────────────
     //  초기화
     // ─────────────────────────────────────────────
-    private void Awake()
+private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
+        // Animator는 자식 오브젝트(예: Mushroom_Move_0)에 붙어있으므로 GetComponentInChildren로 찾습니다.
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -147,7 +150,7 @@ public class GroundMonsterMovement : MonoBehaviour
     // ─────────────────────────────────────────────
     //  메인 루프
     // ─────────────────────────────────────────────
-    private void FixedUpdate()
+private void FixedUpdate()
     {
         if (flipCooldown > 0f)
             flipCooldown -= Time.fixedDeltaTime;
@@ -164,6 +167,12 @@ public class GroundMonsterMovement : MonoBehaviour
 
         UpdateState();
         ExecuteState();
+
+        // Animator의 Speed 파라미터 갱신 (Idle <-> Walk 전환용)
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
+        }
     }
 
     // ─────────────────────────────────────────────
@@ -266,12 +275,16 @@ public class GroundMonsterMovement : MonoBehaviour
     }
 
     // 정지 후 쿨타임 지나면 데미지 적용
-    private void ExecuteAttack()
+private void ExecuteAttack()
     {
         rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
         if (attackTimer <= 0f)
         {
+            if (animator != null)
+            {
+                animator.SetTrigger("Attack");
+            }
             DealDamageToPlayer();
             attackTimer = attackCooldown;
         }
