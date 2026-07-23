@@ -90,7 +90,7 @@
 - [x] 하트(체력) 시스템 및 게임오버 로직 구현 (`PlayerHealth.cs`+`HeartUI.cs`로 구현 완료)
 - [x] 무적 시간/깜빡임 값 확인 — Inspector 실측값은 0.5초/0.15초로, 스크립트 필드 초기값(10초/0.1초)과 다름을 확인. 문서는 Inspector 실측값 기준으로 유지 (2026-07-16, `캐릭터컨트롤_스펙.md` ver9)
 - [x] 하트 UI 방식 — 문서를 실제 코드(단일 스프라이트 교체) 방식에 맞게 수정 완료 (2026-07-16, `월드_스테이지_구성.md` ver5)
-- [ ] `HeartUI.cs`의 `fullHeartSprite`/`emptyHeartSprite`(`ui_heart_full.png`/`ui_heart_empty.png`)는 Unity 기능으로 만든 임시 플레이스홀더 — 정식 아트로 교체 필요 (2026-07-21 확인, `월드_스테이지_구성.md` 6.1절 참고)
+- [ ] `HeartUI.cs`의 `fullHeartSprite`/`emptyHeartSprite`(`ui_heart_full.png`/`ui_heart_empty.png`)는 Unity 기능으로 만든 임시 플레이스홀더 — 정식 아트로 교체 필요 (2026-07-21 확인, `월드_스테이지_구성.md` 6.1절 참고). 하트 UI 구조 자체(`HeartContainer`+`HeartPrefab.prefab`, `Assets/_Project/Prefabs/UI/`)는 완성되어 있어 스프라이트만 교체하면 됨 (2026-07-23 확인)
 - [ ] 미사용 상태인 `Assets/UI/Icons/Heart/heart.png`, `heart_fill.png`(Flaticon 기반) 처리 방향 결정 — 정식 아트로 채택하거나, 아니면 정리
 - [ ] 몬스터 공통 스탯/AI 베이스 구현 → 근거리/원거리/디버프/보스로 확장 (부분 진행: 버섯 이동 스크립트(`GroundMonsterMovement.cs`) 애니메이션 연동 완료, 나머지 몬스터는 미착수)
 - [x] 버섯(`GroundMonsterMovement.cs`) Animator 연동 — Speed/Attack 파라미터 반영 (2026-07-16 최초 적용 → 2026-07-23 팀원이 Patrol/Chase/Attack 상태 머신으로 전면 재작성, 병합 중 유실된 Animator 연동을 새 구조에 맞게 재적용, `몬스터_기획서.md` 5장·6.2절 참고)
@@ -111,7 +111,7 @@
 - [ ] 추가 정령(6종) 스프라이트/애니메이션 제작
 - [x] 몬스터 6종 + 보스 스프라이트/애니메이션 확보 (2026-07-16, 자체 제작 대신 구매/무료 에셋 팩 사용 — `몬스터_기획서.md` 4장 에셋 경로 참고. 스프라이트+애니메이션 클립 모두 포함된 상태로 Assets에 존재)
 - [x] 몬스터 Animator Controller 7종 생성 (2026-07-16, `Assets/_Project/Animators/Monsters/AC_Monster_이름.controller` — Slime만 클립 연결 완료, 나머지 6개는 구조만 있고 클립은 비어있음)
-- [ ] 나머지 6개 몬스터 Animator Controller에 실제 클립 채워넣기
+- [x] 나머지 6개 몬스터 Animator Controller에 실제 클립 채워넣기 완료 (2026-07-23 — Bee/Mushroom/Skeleton/TreeGolem은 에셋 팩 클립 연결, CarnivorousPlant/Boss_Ent는 클립이 없어 직접 제작해 연결, `몬스터_기획서.md` 6.1절 참고)
 - [ ] 신규 발판 3종 타일/오브젝트 아트 제작 (`아트스타일_가이드.md` 9.3절)
 - [x] 하트 UI 아이콘 초안 제작 (2026-07-16, `heart.png`+`heart_fill.png` 2-레이어로 제작했으나 **실제로는 채택되지 않음** — 현재는 `ui_heart_full.png`/`ui_heart_empty.png` 임시 플레이스홀더가 연결되어 있음, `월드_스테이지_구성.md` 6.1절 참고)
 - [ ] 마커 UI 목업 제작 (`아트스타일_가이드.md` 9.4절)
