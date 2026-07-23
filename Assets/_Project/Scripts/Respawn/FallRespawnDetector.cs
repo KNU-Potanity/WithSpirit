@@ -17,11 +17,12 @@ namespace BasePlatformer.Respawn
     /// </summary>
     public class FallRespawnDetector : MonoBehaviour
     {
-        [Tooltip("이 Y 좌표 이하로 내려가면 즉시 리스폰 (CameraBounds 하단보다 살짝 아래 권장)")]
-        [SerializeField] private float killPlaneY = -4.0f;
+        [SerializeField] private PlayerData playerData;
+        //[Tooltip("이 Y 좌표 이하로 내려가면 즉시 리스폰 (CameraBounds 하단보다 살짝 아래 권장)")]
+        private float killPlaneY => playerData.killPlaneY;
 
-        [Tooltip("리스폰 후 중복 호출 방지 쿨다운(초)")]
-        [SerializeField] private float respawnCooldown = 0.5f;
+        //[Tooltip("리스폰 후 중복 호출 방지 쿨다운(초)")]
+        private float respawnCooldown => playerData.respawnCooldown;
 
         private RespawnManager respawnManager;
         private float cooldownTimer = 0f;

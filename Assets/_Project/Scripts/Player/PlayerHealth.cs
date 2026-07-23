@@ -8,10 +8,10 @@ namespace BasePlatformer.Player
     public class PlayerHealth : MonoBehaviour
     {
         [SerializeField] private PlayerData playerData;
-        [Tooltip("데미지 입은 후 무적 시간(초)")]
-        [SerializeField] private float invincibilityDuration = 0.5f;
-        [Tooltip("무적 깜빡임 주기")]
-        [SerializeField] private float blinkInterval = 0.15f;
+        //[Tooltip("데미지 입은 후 무적 시간(초)")]
+        private float invincibilityDuration => playerData.invincibilityDuration;
+        //[Tooltip("무적 깜빡임 주기")]
+        private float blinkInterval => playerData.blinkInterval;
 
         private RespawnManager respawnManager;
         private SpriteRenderer spriteRenderer;
