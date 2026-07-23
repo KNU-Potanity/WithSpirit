@@ -104,7 +104,9 @@
 **아트**
 - [ ] 정령 7종 색상 팔레트(HEX) 확정 (`아트스타일_가이드.md` 9.1절)
 - [x] 기본 정령 멈춤(기본) 애니메이션 제작 (2026-07-14, `anim_fairy_base_idle.anim`, 01→02→03→02→01)
-- [ ] 기본 정령 공격/상호작용(변신 효과)/이동 애니메이션 제작 (`정령_시스템_기획서.md` 5장 스펙 참고)
+- [x] 기본 정령 멈춤/이동/상호작용 Animator 구성 완료 (2026-07-23, `AC_Fairy_Base.controller` — Idle/Move/InteractMove/InteractArrive/Interact 상태, `anim_fairy_base_idle`/`anim_fairy_base_interact` 클립 연결, `정령_시스템_기획서.md` 5.2절 참고)
+- [ ] 기본 정령 공격 애니메이션 제작 (현재 이동 애니메이션과 클립 공유 중 — 별도 공격 클립 필요 여부 논의)
+- [ ] `FairyInteractionController.cs`(정령 상호작용 로직, 미구현)에서 `Interact`/`Arrived` 트리거 및 `Speed` 파라미터 실제 호출 연결
 - [ ] 추가 정령(6종) 스프라이트/애니메이션 제작
 - [x] 몬스터 6종 + 보스 스프라이트/애니메이션 확보 (2026-07-16, 자체 제작 대신 구매/무료 에셋 팩 사용 — `몬스터_기획서.md` 4장 에셋 경로 참고. 스프라이트+애니메이션 클립 모두 포함된 상태로 Assets에 존재)
 - [x] 몬스터 Animator Controller 7종 생성 (2026-07-16, `Assets/_Project/Animators/Monsters/AC_Monster_이름.controller` — Slime만 클립 연결 완료, 나머지 6개는 구조만 있고 클립은 비어있음)
