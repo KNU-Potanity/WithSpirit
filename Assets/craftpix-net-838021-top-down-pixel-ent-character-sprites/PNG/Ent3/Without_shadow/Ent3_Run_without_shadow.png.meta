@@ -225,12 +225,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_0
       rect:
         serializedVersion: 2
-        x: 32
-        y: 432
-        width: 60
-        height: 72
+        x: 0
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -247,12 +247,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_1
       rect:
         serializedVersion: 2
-        x: 161
-        y: 432
-        width: 56
-        height: 70
+        x: 128
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -269,12 +269,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_2
       rect:
         serializedVersion: 2
-        x: 285
-        y: 432
-        width: 62
-        height: 70
+        x: 256
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -291,12 +291,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_3
       rect:
         serializedVersion: 2
-        x: 412
-        y: 441
-        width: 62
-        height: 66
+        x: 384
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -313,12 +313,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_4
       rect:
         serializedVersion: 2
-        x: 544
-        y: 432
-        width: 60
-        height: 72
+        x: 512
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -335,12 +335,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_5
       rect:
         serializedVersion: 2
-        x: 671
-        y: 432
-        width: 61
-        height: 70
+        x: 640
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -357,12 +357,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_6
       rect:
         serializedVersion: 2
-        x: 797
-        y: 432
-        width: 60
-        height: 70
+        x: 768
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -379,12 +379,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_7
       rect:
         serializedVersion: 2
-        x: 924
-        y: 440
-        width: 63
-        height: 67
+        x: 896
+        y: 384
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -401,12 +401,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_8
       rect:
         serializedVersion: 2
-        x: 35
-        y: 304
-        width: 59
-        height: 72
+        x: 0
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -423,12 +423,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_9
       rect:
         serializedVersion: 2
-        x: 166
-        y: 304
-        width: 55
-        height: 70
+        x: 128
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -445,12 +445,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_10
       rect:
         serializedVersion: 2
-        x: 292
-        y: 303
-        width: 61
-        height: 71
+        x: 256
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -467,12 +467,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_11
       rect:
         serializedVersion: 2
-        x: 420
-        y: 309
-        width: 62
-        height: 70
+        x: 384
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -489,12 +489,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_12
       rect:
         serializedVersion: 2
-        x: 547
-        y: 304
-        width: 59
-        height: 72
+        x: 512
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -511,12 +511,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_13
       rect:
         serializedVersion: 2
-        x: 674
-        y: 304
-        width: 61
-        height: 70
+        x: 640
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -533,12 +533,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_14
       rect:
         serializedVersion: 2
-        x: 806
-        y: 303
-        width: 59
-        height: 71
+        x: 768
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -555,12 +555,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_15
       rect:
         serializedVersion: 2
-        x: 932
-        y: 309
-        width: 62
-        height: 70
+        x: 896
+        y: 256
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -577,12 +577,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_16
       rect:
         serializedVersion: 2
-        x: 41
-        y: 176
-        width: 44
-        height: 72
+        x: 0
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -599,12 +599,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_17
       rect:
         serializedVersion: 2
-        x: 168
-        y: 175
-        width: 43
-        height: 71
+        x: 128
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -621,12 +621,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_18
       rect:
         serializedVersion: 2
-        x: 200
-        y: 220
-        width: 19
-        height: 9
+        x: 256
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -643,12 +643,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_19
       rect:
         serializedVersion: 2
-        x: 302
-        y: 176
-        width: 41
-        height: 70
+        x: 384
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -665,12 +665,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_20
       rect:
         serializedVersion: 2
-        x: 429
-        y: 182
-        width: 45
-        height: 69
+        x: 512
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -687,12 +687,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_21
       rect:
         serializedVersion: 2
-        x: 553
-        y: 176
-        width: 49
-        height: 72
+        x: 640
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -709,12 +709,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_22
       rect:
         serializedVersion: 2
-        x: 680
-        y: 176
-        width: 50
-        height: 70
+        x: 768
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -731,12 +731,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_23
       rect:
         serializedVersion: 2
-        x: 814
-        y: 176
-        width: 42
-        height: 70
+        x: 896
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -753,12 +753,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_24
       rect:
         serializedVersion: 2
-        x: 943
-        y: 179
-        width: 37
-        height: 72
+        x: 0
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -775,12 +775,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_25
       rect:
         serializedVersion: 2
-        x: 36
-        y: 48
-        width: 44
-        height: 72
+        x: 128
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -797,12 +797,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_26
       rect:
         serializedVersion: 2
-        x: 165
-        y: 47
-        width: 38
-        height: 71
+        x: 256
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -819,12 +819,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_27
       rect:
         serializedVersion: 2
-        x: 289
-        y: 48
-        width: 41
-        height: 70
+        x: 384
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -841,12 +841,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_28
       rect:
         serializedVersion: 2
-        x: 416
-        y: 54
-        width: 47
-        height: 69
+        x: 512
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -863,12 +863,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_29
       rect:
         serializedVersion: 2
-        x: 546
-        y: 48
-        width: 43
-        height: 72
+        x: 640
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -885,12 +885,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_30
       rect:
         serializedVersion: 2
-        x: 673
-        y: 48
-        width: 41
-        height: 70
+        x: 768
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -907,12 +907,12 @@ TextureImporter:
       name: Ent3_Run_without_shadow_31
       rect:
         serializedVersion: 2
-        x: 801
-        y: 48
-        width: 41
-        height: 70
+        x: 896
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -925,33 +925,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Ent3_Run_without_shadow_32
-      rect:
-        serializedVersion: 2
-        x: 928
-        y: 54
-        width: 47
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a9ad7f7cb4fd33f70800000000000000
-      internalID: 9165915183199541914
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 8955496b5a2786740b4549a151a5e2a5
     internalID: 0
     vertices: []
     indices: 
@@ -959,7 +937,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Ent3_Run_without_shadow_0: -8487862235663996259
       Ent3_Run_without_shadow_1: 8365025970873164827
@@ -987,7 +967,6 @@ TextureImporter:
       Ent3_Run_without_shadow_3: -9122494957213444751
       Ent3_Run_without_shadow_30: 6273716012336775274
       Ent3_Run_without_shadow_31: 3386345894207378690
-      Ent3_Run_without_shadow_32: 9165915183199541914
       Ent3_Run_without_shadow_4: 372336181090219436
       Ent3_Run_without_shadow_5: -3803624955368094095
       Ent3_Run_without_shadow_6: -8256224323806596970
