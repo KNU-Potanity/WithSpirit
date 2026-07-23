@@ -6726,9 +6726,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasePlatformer.Player.PlayerJump
   playerData: {fileID: 11400000, guid: 73df7f7ee7b3d234389990e77df1b899, type: 2}
-  timeToApex: 0.35
-  jumpCutMultiplier: 0.5
-  coyoteTime: 0.12
 --- !u!61 &564528739
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6787,7 +6784,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b840513fb416b24fa1999350cc9083c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasePlatformer.Player.PlayerGroundDetector
-  minUpwardNormalY: 0.9
+  playerData: {fileID: 11400000, guid: 73df7f7ee7b3d234389990e77df1b899, type: 2}
 --- !u!114 &564528741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6800,8 +6797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589d850c4d0c66e4ab18ec5d053bbff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasePlatformer.Respawn.FallRespawnDetector
-  killPlaneY: -3.5
-  respawnCooldown: 0.5
+  playerData: {fileID: 11400000, guid: 73df7f7ee7b3d234389990e77df1b899, type: 2}
 --- !u!114 &564528742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6815,8 +6811,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasePlatformer.Player.PlayerHealth
   playerData: {fileID: 11400000, guid: 73df7f7ee7b3d234389990e77df1b899, type: 2}
-  invincibilityDuration: 0.5
-  blinkInterval: 0.15
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
