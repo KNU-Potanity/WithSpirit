@@ -347,7 +347,6 @@ GoalTrigger  →  Debug.Log("Clear")  (트로피에 부착)
 | `MonsterHealth.cs` | `Assets/_Project/Scripts/Monster/MonsterHealth.cs` | 몬스터 체력/피격/사망 처리. `TakeDamage(int)` 호출 시 `SpriteRenderer.color`를 빨간색으로 잠깐 바꿨다가 복귀(피격 연출), 체력 0 이하가 되면 Collider/Animator/AI 비활성화 후 알파값 페이드 아웃하며 제거(사망 연출). Animator는 멈춤/걷기/공격만 담당하고 피격/사망은 이 스크립트가 담당하도록 역할을 분리했습니다 (`몬스터_기획서.md` 6장 참고). |
 | `MonsterFacing.cs` | `Assets/_Project/Scripts/Monster/MonsterFacing.cs` | 좌우 반전 처리. 모든 몬스터 클립이 오른쪽만 바라보므로, `Rigidbody2D`의 x축 속도를 읽어 `SpriteRenderer.flipX`로 반전(`PlayerAnimatorController.cs`와 동일 방식). 아직 실제 몬스터 오브젝트에는 부착 전 상태입니다. |
 | `GroundMonsterMovement.cs` | `Assets/_Project/Scripts/Enemy/GroundMonsterMovement.cs` | 지상 근접몹(버섯 등) 이동/공격 스크립트. **Patrol/Chase/Attack 상태 머신**으로 구현 (2026-07-23 팀원이 전면 재작성 — 이전의 충돌 기반+Kinematic 방식에서 교체됨). `CompositeCollider2D`에서 추출한 플랫폼 x/y 범위로 같은 플랫폼 여부를 판정하고, 레이캐스트로 장애물·낭떠러지를 확인해 추격 여부를 결정합니다. Animator 연동(`Speed`/`Attack`)은 병합 과정에서 유실되어 새 구조에 맞게 재적용했습니다 (`몬스터_기획서.md` 5장·6.2절 참고). |
-| `FloatingMonsterMovement.cs` | `Assets/_Project/Scripts/Enemy/FloatingMonsterMovement.cs` | 공중형(벌) 이동/공격 스크립트 (2026-07-23 팀원 작성). 지상 몹과 동일한 Patrol/Chase/Attack 상태 머신이지만, 플랫폼 개념 없이 `SmoothDamp`로 자유롭게 날아다니며 직선 레이캐스트(Line of Sight)로만 장애물을 확인합니다. 씬의 `BeeMarker`에 부착되어 있으나, 자식 `Bee_Idle_0`에 Animator는 아직 없어 애니메이션 연동은 미착수 상태입니다 (`몬스터_기획서.md` 5.1절 참고). |
 
 ### 구현 완료 — Player/UI (2026-07-16 확인 및 추가)
 

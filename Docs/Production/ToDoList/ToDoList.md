@@ -77,7 +77,7 @@
 - [x] `월드_스테이지_구성.md` 2장 스토리 구체화 → 별도 문서(`Docs/Design/Story/스토리.md`) 분리 (2026-07-14)
 - [x] 하트(체력) 최대 개수 확정 (4개, 낙사 시 체력 0, 데미지 시 1씩 감소, UI는 좌측 상단·채워짐=빨강+검정 외곽선/빈칸=검정) (2026-07-14)
 - [ ] 보스(밤 나무) 패턴 설계
-- [ ] 크레딧 화면(또는 README 하단)에 체력 하트 아이콘(Flaticon) 출처 표기 문구 반영 — `에셋_출처_라이선스_관리.md` 6장 참고
+- [ ] (보류) 크레딧 화면(또는 README 하단)에 체력 하트 아이콘(Flaticon) 출처 표기 문구 반영 — 단, 현재 실제 연결된 `ui_heart_full/empty.png`는 Flaticon과 무관한 자체 제작 임시 에셋이라 **지금은 표기 불필요**. `heart.png`/`heart_fill.png`(Flaticon 기반)를 나중에 정식 채택할 경우에만 적용 — `에셋_출처_라이선스_관리.md` 6장 참고
 - [x] 몬스터/보스 에셋 3팩(100 Top Down Monsters Vol 1, craftpix-284465, craftpix-838021)의 정확한 출처·라이선스·출처표기 필요 여부 확인 (2026-07-16, CraftPix 2팩=표기 불필요 / 100 Top Down Monsters=Unity 에셋스토어 Single Entity License) — `에셋_출처_라이선스_관리.md` 4장 참고
 - [ ] 확장 기능 기획서를 부원들에게 공유하고 관심 있는 항목 신청받기
 
@@ -93,8 +93,10 @@
 - [ ] `HeartUI.cs`의 `fullHeartSprite`/`emptyHeartSprite`(`ui_heart_full.png`/`ui_heart_empty.png`)는 Unity 기능으로 만든 임시 플레이스홀더 — 정식 아트로 교체 필요 (2026-07-21 확인, `월드_스테이지_구성.md` 6.1절 참고)
 - [ ] 미사용 상태인 `Assets/UI/Icons/Heart/heart.png`, `heart_fill.png`(Flaticon 기반) 처리 방향 결정 — 정식 아트로 채택하거나, 아니면 정리
 - [ ] 몬스터 공통 스탯/AI 베이스 구현 → 근거리/원거리/디버프/보스로 확장 (부분 진행: 버섯 이동 스크립트(`GroundMonsterMovement.cs`) 애니메이션 연동 완료, 나머지 몬스터는 미착수)
-- [x] 버섯(`GroundMonsterMovement.cs`) Animator 연동 — Speed/Attack 파라미터 반영, 공격 중 Kinematic 고정, 방향전환 판정 순서 수정 (2026-07-16, `몬스터_기획서.md` 6.2절 참고)
-- [ ] 나머지 지상 근접몹(나무 골렘, 식충식물)에도 동일한 Speed/Attack/Kinematic 패턴 적용
+- [x] 버섯(`GroundMonsterMovement.cs`) Animator 연동 — Speed/Attack 파라미터 반영 (2026-07-16 최초 적용 → 2026-07-23 팀원이 Patrol/Chase/Attack 상태 머신으로 전면 재작성, 병합 중 유실된 Animator 연동을 새 구조에 맞게 재적용, `몬스터_기획서.md` 5장·6.2절 참고)
+- [ ] 나머지 지상 근접몹(나무 골렘, 식충식물)에도 동일한 Patrol/Chase/Attack 상태 머신 + Speed/Attack Animator 연동 패턴 적용
+- [x] 공중형(벌) 이동 로직 구현 완료 (2026-07-23, 팀원 작성 `FloatingMonsterMovement.cs` — Patrol/Chase/Attack 상태 머신, `SmoothDamp` 자유 비행 + 시야 레이캐스트, 씬의 `BeeMarker`에 적용됨, `몬스터_기획서.md` 5.1절 참고)
+- [ ] 벌(`BeeMarker`/`Bee_Idle_0`)에 Animator 부착 및 `AC_Monster_Bee.controller` 연결 + Speed/Attack 연동 (다른 몬스터와 동일 패턴)
 - [ ] `MonsterHealth.cs` / `MonsterFacing.cs`를 실제 몬스터 오브젝트(MushroomMarker 등)에 부착
 - [ ] 빈 껍데기 상태인 enum 3개에 실제 값 채우기: `RangedMonsterData.ProjectileTypes`, `DebuffMonsterData.DebuffTypes`, `Enum/PlatformTypes.cs` (`스탯_기획서.md`/`발판_확장_기획서.md` 참고)
 - [ ] 몬스터/정령별 실제 데이터 에셋(.asset) 인스턴스 생성 (현재 `PlayerData.asset` 1개만 존재, 몬스터 7종·정령 7종 데이터 에셋은 아직 없음)
@@ -108,7 +110,7 @@
 - [x] 몬스터 Animator Controller 7종 생성 (2026-07-16, `Assets/_Project/Animators/Monsters/AC_Monster_이름.controller` — Slime만 클립 연결 완료, 나머지 6개는 구조만 있고 클립은 비어있음)
 - [ ] 나머지 6개 몬스터 Animator Controller에 실제 클립 채워넣기
 - [ ] 신규 발판 3종 타일/오브젝트 아트 제작 (`아트스타일_가이드.md` 9.3절)
-- [x] 하트 UI 아이콘 제작 (2026-07-16, `heart.png` 외곽선 + `heart_fill.png` 채우기 2-레이어 — `Assets/UI/Icons/Heart/`, `월드_스테이지_구성.md` 6.1절 참고)
+- [x] 하트 UI 아이콘 초안 제작 (2026-07-16, `heart.png`+`heart_fill.png` 2-레이어로 제작했으나 **실제로는 채택되지 않음** — 현재는 `ui_heart_full.png`/`ui_heart_empty.png` 임시 플레이스홀더가 연결되어 있음, `월드_스테이지_구성.md` 6.1절 참고)
 - [ ] 마커 UI 목업 제작 (`아트스타일_가이드.md` 9.4절)
 
 ---
