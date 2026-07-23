@@ -10,32 +10,70 @@ public class FloatingMonsterMovement : MonoBehaviour
         Attack
     }
 
-    [Header("State")]
-    public MonsterState currentState = MonsterState.Patrol;
-
-    [Header("Target")]
-    public Transform player;
-    public LayerMask obstacleLayer;
-
-    [Header("Ranges")]
-    public float chaseRange = 10f;
-    public float attackRangeX = 1.5f;
-    public float attackRangeY = 2f;
+    [Header("Monster Data")]
+    public FloatingMonsterData monsterData;
 
     [Header("Movement (SmoothDamp)")]
-    public float smoothTime = 0.3f;
-    public float maxSpeed = 5f;
+    // (smoothTime은 FloatingMonsterData에서 가져옴)
     private Vector3 currentVelocity;
 
     [Header("Attack Settings")]
-    public float attackCooldown = 2f;
-    public int attackDamage = 1;
-    public float knockbackForce = 5f;
+    // (attackDelay는 MonsterData에서 가져옴)
+
+    // 내부 변수
+    private float moveSpeed;
+    private float detectionRange;
+    private float attackRangeX;
+    private float attackRangeY;
+    private float attackCooldown;
+    private int attackDamage;
+    private float knockback;
+    private float attackDelay;
+    private float smoothTime;
+    private LayerMask obstacleLayer;
+    private Transform player;
+
+    private MonsterState currentState = MonsterState.Patrol;
     private float lastAttackTime;
+    private Animator animator;
+
+    private void Awake()
+    {
+        obstacleLayer = LayerMask.GetMask("Ground");
+        animator = GetComponentInChildren<Animator>();
+
+        GameObject playerObj = GameObject.Find("PlayerStartMarker");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
+        else
+        {
+            Debug.LogWarning("[FloatingMonster] 씬에서 'PlayerStartMarker' 오브젝트를 찾을 수 없습니다!");
+        }
+
+        if (monsterData != null)
+        {
+            moveSpeed = monsterData.MoveSpeed;
+            detectionRange = monsterData.DetectionRange;
+            attackRangeX = monsterData.AttackRangeX;
+            attackRangeY = monsterData.AttackRangeY;
+            attackCooldown = monsterData.CoolTime;
+            attackDamage = monsterData.Damage;
+            knockback = monsterData.Knockback;
+            attackDelay = monsterData.AttackAnimDelay;
+            smoothTime = monsterData.smoothTime;
+        }
+    }
 
     private void Update()
     {
-        if (player == null) return;
+        if (player == null)
+        {
+            GameObject playerObj = GameObject.Find("PlayerStartMarker");
+            if (playerObj != null) player = playerObj.transform;
+            if (player == null) return;
+        }
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         float distX = Mathf.Abs(player.position.x - transform.position.x);
@@ -56,7 +94,7 @@ public class FloatingMonsterMovement : MonoBehaviour
                     ChangeState(MonsterState.Patrol); 
                 }
             }
-            else if (distanceToPlayer <= chaseRange && HasLineOfSight())
+            else if (distanceToPlayer <= detectionRange && HasLineOfSight())
             {
                 ChangeState(MonsterState.Chase);
             }
@@ -96,13 +134,13 @@ public class FloatingMonsterMovement : MonoBehaviour
     private void UpdatePatrol()
     {
         // 기본 정지 상태: 부드럽게 멈춤
-        transform.position = Vector3.SmoothDamp(transform.position, transform.position, ref currentVelocity, smoothTime, maxSpeed, Time.deltaTime);
+        transform.position = Vector3.SmoothDamp(transform.position, transform.position, ref currentVelocity, smoothTime, moveSpeed, Time.deltaTime);
     }
 
     private void UpdateChase()
     {
         // 플레이어 방향으로 자연스럽게 이동 (FairyMovement 방식)
-        transform.position = Vector3.SmoothDamp(transform.position, player.position, ref currentVelocity, smoothTime, maxSpeed, Time.deltaTime);
+        transform.position = Vector3.SmoothDamp(transform.position, player.position, ref currentVelocity, smoothTime, moveSpeed, Time.deltaTime);
 
         // 시선 방향 전환 (스프라이트 좌우 반전)
         FlipTowardsPlayer();
@@ -125,24 +163,36 @@ public class FloatingMonsterMovement : MonoBehaviour
         // 일단 정지
         currentVelocity = Vector3.zero;
 
-        // 공격 범위 안에 플레이어가 존재하는지 다시 한 번 확인 후 데미지/넉백
-        float distX = Mathf.Abs(player.position.x - transform.position.x);
-        float distY = Mathf.Abs(player.position.y - transform.position.y);
-        if (distX <= attackRangeX && distY <= attackRangeY)
+        if (animator != null)
         {
-            var playerHealth = player.GetComponent<BasePlatformer.Player.PlayerHealth>();
-            if (playerHealth != null)
+            animator.SetTrigger("Attack");
+        }
+
+        // 딜레이 대기
+        yield return new WaitForSeconds(attackDelay);
+
+        // 공격 범위 안에 플레이어가 존재하는지 다시 한 번 확인 후 데미지/넉백
+        if (player != null)
+        {
+            float distX = Mathf.Abs(player.position.x - transform.position.x);
+            float distY = Mathf.Abs(player.position.y - transform.position.y);
+            if (distX <= attackRangeX && distY <= attackRangeY)
             {
-                float dirX = (player.position.x > transform.position.x) ? 1f : -1f;
-                Vector2 knockbackDir = new Vector2(dirX, 1.5f).normalized;
-                playerHealth.TakeDamage(attackDamage, knockbackDir);
+                var playerHealth = player.GetComponent<BasePlatformer.Player.PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    float dirX = (player.position.x > transform.position.x) ? 1f : -1f;
+                    Vector2 knockbackDir = new Vector2(dirX, 1.5f).normalized * knockback;
+                    playerHealth.TakeDamage(attackDamage, knockbackDir);
+                }
             }
         }
 
         lastAttackTime = Time.time;
 
-        // 쿨타임만큼 휴식 (정지 상태 유지)
-        yield return new WaitForSeconds(attackCooldown);
+        // 쿨타임에서 딜레이를 뺀 시간만큼 휴식 (전체 공격 주기를 쿨타임으로 맞춤)
+        float remainingCooldown = Mathf.Max(0f, attackCooldown - attackDelay);
+        yield return new WaitForSeconds(remainingCooldown);
 
         // 쿨타임이 끝나면 Patrol(정지) 상태로 복귀 후 다음 프레임에서 재평가
         ChangeState(MonsterState.Patrol);
@@ -162,10 +212,12 @@ public class FloatingMonsterMovement : MonoBehaviour
     
     private void OnDrawGizmosSelected()
     {
+        if (monsterData == null) return;
+
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, chaseRange);
+        Gizmos.DrawWireSphere(transform.position, monsterData.DetectionRange);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, new Vector3(attackRangeX * 2, attackRangeY * 2, 0));
+        Gizmos.DrawWireCube(transform.position, new Vector3(monsterData.AttackRangeX * 2, monsterData.AttackRangeY * 2, 0));
     }
 }

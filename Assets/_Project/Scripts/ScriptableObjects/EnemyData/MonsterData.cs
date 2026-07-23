@@ -7,4 +7,9 @@ public class MonsterData : ScriptableObject
     public float MoveSpeed;
     public int Damage;
     public float CoolTime;
+    public float AttackRangeX;
+    public float AttackRangeY;
+    public float DetectionRange;
+    public float Knockback;
+    public float AttackAnimDelay;
 }
