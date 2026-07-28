@@ -99,8 +99,7 @@
 - [ ] 벌(`BeeMarker`/`Bee_Idle_0`)에 Animator 부착 및 `AC_Monster_Bee.controller` 연결 + Speed/Attack 연동 (다른 몬스터와 동일 패턴)
 - [ ] `MonsterHealth.cs` / `MonsterFacing.cs`를 실제 몬스터 오브젝트(MushroomMarker 등)에 부착
 - [ ] 빈 껍데기 상태인 enum 3개에 실제 값 채우기: `RangedMonsterData.ProjectileTypes`, `DebuffMonsterData.DebuffTypes`, `Enum/PlatformTypes.cs` (`스탯_기획서.md`/`발판_확장_기획서.md` 참고)
-- [ ] 몬스터/정령별 실제 데이터 에셋(.asset) 인스턴스 생성 — 2026-07-28 기준 `BeeData_temp_real.asset`, `MushroomData_temp_real.asset` 2개 생성됨, 나머지 몬스터 5종·정령 7종은 아직 없음
-- [ ] 기존 데이터 에셋 2개(`BeeData_temp_real.asset`, `MushroomData_temp_real.asset`)를 새 네이밍 규칙(`SO_Monster_이름.asset`, `Assets/_Project/Data/Monsters/`)에 맞게 이름 변경·이동 (`에셋_네이밍_관리규칙.md` 3.3.1절 참고)
+- [ ] 몬스터/정령별 실제 데이터 에셋(.asset) 인스턴스 생성 (현재 `PlayerData.asset` 1개만 존재, 몬스터 7종·정령 7종 데이터 에셋은 아직 없음)
 
 **아트**
 - [ ] 정령 7종 색상 팔레트(HEX) 확정 (`아트스타일_가이드.md` 9.1절)
@@ -114,7 +113,6 @@
 - [x] 몬스터 Animator Controller 7종 생성 (2026-07-16, `Assets/_Project/Animators/Monsters/AC_Monster_이름.controller` — Slime만 클립 연결 완료, 나머지 6개는 구조만 있고 클립은 비어있음)
 - [x] 나머지 6개 몬스터 Animator Controller에 실제 클립 채워넣기 완료 (2026-07-23 — Bee/Mushroom/Skeleton/TreeGolem은 에셋 팩 클립 연결, CarnivorousPlant/Boss_Ent는 클립이 없어 직접 제작해 연결, `몬스터_기획서.md` 6.1절 참고)
 - [ ] 신규 발판 3종 타일/오브젝트 아트 제작 (`아트스타일_가이드.md` 9.3절)
-- [x] 정령 변신 플랫폼용 임시 스프라이트 배치 (2026-07-28, `env_platform_fairy_01.png` — 정식 아트로 교체 필요, `정령_시스템_기획서.md` 2.2절 참고)
 - [x] 하트 UI 아이콘 초안 제작 (2026-07-16, `heart.png`+`heart_fill.png` 2-레이어로 제작했으나 **실제로는 채택되지 않음** — 현재는 `ui_heart_full.png`/`ui_heart_empty.png` 임시 플레이스홀더가 연결되어 있음, `월드_스테이지_구성.md` 6.1절 참고)
 - [ ] 마커 UI 목업 제작 (`아트스타일_가이드.md` 9.4절)
 
