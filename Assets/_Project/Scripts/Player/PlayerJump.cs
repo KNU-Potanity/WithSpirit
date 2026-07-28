@@ -54,19 +54,19 @@ namespace BasePlatformer.Player
         //[Tooltip("최대 점프 높이 (타일 = Unity Unit)")]
         private float maxJumpHeight => 3.0f * jumpMultiplyer;
 
-        [Tooltip("최대 점프 높이까지 도달하는 시간(초)")]
-        [SerializeField] private float timeToApex = 0.35f;
+        //[Tooltip("최대 점프 높이까지 도달하는 시간(초)")]
+        private float timeToApex => playerData != null ? playerData.timeToApex : 0.35f;
 
-        [Header("가변 점프 스펙 (캐릭터컨트롤_스펙_ver1.md 3.2장)")]
+        //[Header("가변 점프 스펙 (캐릭터컨트롤_스펙_ver1.md 3.2장)")]
         //[Tooltip("짧게 탭(최소 입력) 했을 때 보장되는 최소 점프 높이 (타일)")]
         private float minJumpHeight => 1.2f * jumpMultiplyer;
 
-        [Tooltip("점프 버튼을 떼는 순간, 상승 속도에 곱해지는 비율 (50% 감소 = 0.5배로 남김)")]
-        [SerializeField] private float jumpCutMultiplier = 0.5f;
+        //[Tooltip("점프 버튼을 떼는 순간, 상승 속도에 곱해지는 비율 (50% 감소 = 0.5배로 남김)")]
+        private float jumpCutMultiplier => playerData != null ? playerData.jumpCutMultiplier : 0.5f;
 
-        [Header("코요테 타임 스펙 (캐릭터컨트롤_스펙_ver1.md 3.3장)")]
-        [Tooltip("발판에서 떨어진 후에도 점프를 허용해주는 시간(초)")]
-        [SerializeField] private float coyoteTime = 0.12f;
+        //[Header("코요테 타임 스펙 (캐릭터컨트롤_스펙_ver1.md 3.3장)")]
+        //[Tooltip("발판에서 떨어진 후에도 점프를 허용해주는 시간(초)")]
+        private float coyoteTime => playerData != null ? playerData.coyoteTime : 0.12f;
 
         private Rigidbody2D rb;
         private PlayerGroundDetector groundDetector;

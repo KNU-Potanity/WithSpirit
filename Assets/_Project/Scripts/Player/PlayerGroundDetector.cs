@@ -24,8 +24,9 @@ namespace BasePlatformer.Player
     [RequireComponent(typeof(Collider2D))]
     public class PlayerGroundDetector : MonoBehaviour
     {
+        [SerializeField] private PlayerData playerData;
         [Tooltip("이 값보다 위쪽에 가까운 접촉 법선만 '바닥'으로 인정한다 (0~1, 1에 가까울수록 거의 수직으로 위를 향해야 함). 0.9 = 약 25.8도 이내만 인정 (발판 모서리/코너의 대각선 접촉을 바닥으로 오인하지 않도록)")]
-        [SerializeField] private float minUpwardNormalY = 0.9f;
+        private float minUpwardNormalY => playerData.minUpwardNormalY;
 
         private readonly HashSet<Collider2D> groundedColliders = new HashSet<Collider2D>();
 

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b07d0d554294e714b97826fe7b01bf78, type: 3}
+  m_Name: MushroomData_temp_real
+  m_EditorClassIdentifier: Assembly-CSharp::GroundMonsterData
+  Health: 10
+  MoveSpeed: 2
+  Damage: 1
+  CoolTime: 1.5
+  AttackRangeX: 1.2
+  AttackRangeY: 2
+  DetectionRange: 8
+  Knockback: 2
+  AttackAnimDelay: 0.4
+  minHorizontalNormalX: 0.9

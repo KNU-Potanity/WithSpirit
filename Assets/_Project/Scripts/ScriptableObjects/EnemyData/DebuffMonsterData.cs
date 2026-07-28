@@ -8,5 +8,4 @@ public enum DebuffTypes
 public class DebuffMonsterData : ScriptableObject
 {
     public DebuffTypes DebuffType;
-    public float AttackRange;
 }
