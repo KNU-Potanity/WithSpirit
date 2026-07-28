@@ -1,3 +1,4 @@
+using BasePlatformer.Monsters;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,8 +27,9 @@ public class MonsterClickMarker : MonoBehaviour
     // ─────────────────────────────────────────────
     //  내부 참조
     // ─────────────────────────────────────────────
+    private Transform parentTransform;
     private FairyAttackController fairyAttack;
-    private GroundMonsterHealth monsterHealth;
+    private MonsterHealth monsterHealth;
     private Collider2D col;
 
     private bool isHovering = false; // 현재 마우스가 이 콜라이더 위에 있는지
@@ -38,9 +40,10 @@ public class MonsterClickMarker : MonoBehaviour
     private void Start()
     {
         col = GetComponent<Collider2D>();
+        parentTransform = transform.parent;
 
         // 부모 오브젝트에서 체력 컴포넌트를 찾음
-        monsterHealth = GetComponentInParent<GroundMonsterHealth>();
+        monsterHealth = GetComponentInParent<MonsterHealth>();
         if (monsterHealth == null)
             Debug.LogWarning($"[MonsterClickMarker] {gameObject.name} 의 부모에서 GroundMonsterHealth를 찾을 수 없습니다!");
 
@@ -103,5 +106,18 @@ public class MonsterClickMarker : MonoBehaviour
         isHovering = false;
         if (markerObject != null)
             markerObject.SetActive(false);
+    }
+    
+    void LateUpdate()
+    {
+        if (parentTransform == null) return;
+
+        // 부모의 Scale.x가 음수이면 자식의 Scale.x도 -1을 곱해 상쇄시킵니다.
+        Vector3 currentScale = transform.localScale;
+        
+        float parentSignX = Mathf.Sign(parentTransform.lossyScale.x);
+        currentScale.x = Mathf.Abs(currentScale.x) * parentSignX;
+
+        transform.localScale = currentScale;
     }
 }
