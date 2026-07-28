@@ -98,6 +98,7 @@
 - [x] 공중형(벌) 이동 로직 구현 완료 (2026-07-23, 팀원 작성 `FloatingMonsterMovement.cs` — Patrol/Chase/Attack 상태 머신, `SmoothDamp` 자유 비행 + 시야 레이캐스트, 씬의 `BeeMarker`에 적용됨, `몬스터_기획서.md` 5.1절 참고)
 - [ ] 벌(`BeeMarker`/`Bee_Idle_0`)에 Animator 부착 및 `AC_Monster_Bee.controller` 연결 + Speed/Attack 연동 (다른 몬스터와 동일 패턴)
 - [ ] `MonsterHealth.cs` / `MonsterFacing.cs`를 실제 몬스터 오브젝트(MushroomMarker 등)에 부착
+- [ ] QA에서 발견된 무적 시간/피격 판정 버그 3건 수정 (`QA_테스트_계획서.md` 10장 BUG-01~03 참고)
 - [ ] 빈 껍데기 상태인 enum 3개에 실제 값 채우기: `RangedMonsterData.ProjectileTypes`, `DebuffMonsterData.DebuffTypes`, `Enum/PlatformTypes.cs` (`스탯_기획서.md`/`발판_확장_기획서.md` 참고)
 - [ ] 몬스터/정령별 실제 데이터 에셋(.asset) 인스턴스 생성 — 2026-07-28 기준 `BeeData_temp_real.asset`, `MushroomData_temp_real.asset` 2개 생성됨, 나머지 몬스터 5종·정령 7종은 아직 없음
 - [ ] 기존 데이터 에셋 2개(`BeeData_temp_real.asset`, `MushroomData_temp_real.asset`)를 새 네이밍 규칙(`SO_Monster_이름.asset`, `Assets/_Project/Data/Monsters/`)에 맞게 이름 변경·이동 (`에셋_네이밍_관리규칙.md` 3.3.1절 참고)
