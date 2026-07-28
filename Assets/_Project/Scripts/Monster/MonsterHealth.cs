@@ -8,11 +8,10 @@ namespace BasePlatformer.Monsters
     /// Animator는 멈춤/걷기/공격만 담당하고, 피격/사망 연출은 이 스크립트가 별도로 처리합니다.
     /// (몬스터_기획서.md 참고 — Idle/Walk/Attack은 Animator State, Hurt/Death는 스크립트 연출)
     /// </summary>
-    [RequireComponent(typeof(SpriteRenderer))]
     public class MonsterHealth : MonoBehaviour
     {
         [Header("체력")]
-        [SerializeField] private int maxHealth = 10;
+        [SerializeField] protected int maxHealth = 10;
         private int currentHealth;
 
         [Header("피격 연출 (데미지 받음)")]
@@ -27,10 +26,15 @@ namespace BasePlatformer.Monsters
         private Coroutine hurtRoutine;
         private bool isDead;
 
-        private void Awake()
+        protected virtual void Awake()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
-            originalColor = spriteRenderer.color;
+            // SpriteRenderer는 자식 오브젝트에 있을 수 있으므로 GetComponentInChildren 사용
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer != null)
+                originalColor = spriteRenderer.color;
+            else
+                Debug.LogWarning($"[MonsterHealth] {gameObject.name} 에서 SpriteRenderer를 찾을 수 없습니다!");
+
             currentHealth = maxHealth;
         }
 
@@ -55,10 +59,12 @@ namespace BasePlatformer.Monsters
 
         private IEnumerator HurtFlash()
         {
+            if (spriteRenderer == null) yield break;
             spriteRenderer.color = hurtColor;
             yield return new WaitForSeconds(hurtFlashDuration);
             spriteRenderer.color = originalColor;
             hurtRoutine = null;
+            Debug.Log("HurtFlash 실행");
         }
 
         private void Die()
@@ -66,21 +72,34 @@ namespace BasePlatformer.Monsters
             if (isDead) return;
             isDead = true;
 
-            // 더 이상 움직이거나 공격하지 않도록 비활성화
-            var collider = GetComponent<Collider2D>();
-            if (collider != null) collider.enabled = false;
+            // Rigidbody2D를 kinematic으로 고정해 추락 방지 (collider를 끄면 지면 충돌이 사라져 몬스터가 떨어짐)
+            var rb = GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.bodyType = RigidbodyType2D.Kinematic;
+            }
 
-            var animator = GetComponent<Animator>();
-            if (animator != null) animator.enabled = false; // 마지막 프레임에서 정지
+            // AI 이동 중지
+            var groundMovement = GetComponent<GroundMonsterMovement>();
+            if (groundMovement != null) groundMovement.enabled = false;
 
-            var monsterAI = GetComponent<MonoBehaviour>(); // 프로젝트의 실제 AI 스크립트로 교체 필요
-            if (monsterAI != null && monsterAI != this) monsterAI.enabled = false;
+            // 마지막 프레임에서 애니메이션 정지
+            var animator = GetComponentInChildren<Animator>();
+            if (animator != null) animator.enabled = false;
 
             StartCoroutine(FadeOutAndDestroy());
         }
 
         private IEnumerator FadeOutAndDestroy()
         {
+            Debug.Log("FadeOutAndDestroy 실행");
+            if (spriteRenderer == null)
+            {
+                Destroy(gameObject);
+                yield break;
+            }
+
             float elapsed = 0f;
             Color startColor = spriteRenderer.color;
 
