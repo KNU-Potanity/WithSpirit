@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73de91a4561e8a43b486e979f220888, type: 3}
   m_Name: MainFairyData
   m_EditorClassIdentifier: Assembly-CSharp::MainFairyData
-  Damage: 5
+  Damage: 1
   CoolTime: 0.5
   PlatformSize: 0
   PlatformType: 0
