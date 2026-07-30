@@ -83,9 +83,11 @@
 
 **프로그래밍**
 - [ ] 부원별로 `feature/` 브랜치 생성 안내
-- [ ] 정령 상호작용(마커 표시, 마우스 클릭 처리) 프로토타입 구현
+- [x] 정령 상호작용(마커 표시, 마우스 클릭 처리) 프로토타입 구현 완료 (2026-07-30, `MonsterClickMarker.cs` + `FairyAttackController.cs`, `정령_시스템_기획서.md` 5.2절 참고)
 - [ ] 정령 선택/전환 로직(마우스 오른쪽 클릭) 구현
-- [ ] 기본 정령(공격+플랫폼) 구현 → 이후 추가 정령 6종으로 확장 (이동 추적은 `FairyMovement.cs`로 구현 완료, 공격/플랫폼 생성 로직만 남음)
+- [x] 기본 정령 공격 구현 완료 (2026-07-30, `FairyAttackController.cs` — 돌진→데미지→복귀)
+- [ ] 기본 정령 플랫폼 생성 기능 구현 (아직 미구현), 이후 추가 정령 6종으로 확장
+- [ ] `FairyAttackController.cs`의 공격 돌진/복귀 동작에 `AC_Fairy_Base.controller`(Speed/Interact 파라미터) 연동 — 현재 애니메이션 미연동 상태
 - [ ] `TerrainType`을 이동/무너짐/스탯변화 발판까지 포함하도록 확장
 - [x] 하트(체력) 시스템 및 게임오버 로직 구현 (`PlayerHealth.cs`+`HeartUI.cs`로 구현 완료)
 - [x] 무적 시간/깜빡임 값 확인 — Inspector 실측값은 0.5초/0.15초로, 스크립트 필드 초기값(10초/0.1초)과 다름을 확인. 문서는 Inspector 실측값 기준으로 유지 (2026-07-16, `캐릭터컨트롤_스펙.md` ver9)
@@ -97,7 +99,8 @@
 - [ ] 나머지 지상 근접몹(나무 골렘, 식충식물)에도 동일한 Patrol/Chase/Attack 상태 머신 + Speed/Attack Animator 연동 패턴 적용
 - [x] 공중형(벌) 이동 로직 구현 완료 (2026-07-23, 팀원 작성 `FloatingMonsterMovement.cs` — Patrol/Chase/Attack 상태 머신, `SmoothDamp` 자유 비행 + 시야 레이캐스트, 씬의 `BeeMarker`에 적용됨, `몬스터_기획서.md` 5.1절 참고)
 - [ ] 벌(`BeeMarker`/`Bee_Idle_0`)에 Animator 부착 및 `AC_Monster_Bee.controller` 연결 + Speed/Attack 연동 (다른 몬스터와 동일 패턴)
-- [ ] `MonsterHealth.cs` / `MonsterFacing.cs`를 실제 몬스터 오브젝트(MushroomMarker 등)에 부착
+- [x] `MonsterHealth.cs`를 실제 몬스터 오브젝트(MushroomMarker, BeeMarker)에 부착 완료 (2026-07-30)
+- [ ] `MonsterFacing.cs`는 여전히 미부착 — `GroundMonsterMovement.cs`/`FloatingMonsterMovement.cs`가 이미 자체적으로 좌우 반전을 처리하고 있어 실제로 필요한지 검토 필요
 - [ ] QA에서 발견된 무적 시간/피격 판정 버그 3건 수정 (`QA_테스트_계획서.md` 10장 BUG-01~03 참고)
 - [ ] 빈 껍데기 상태인 enum 3개에 실제 값 채우기: `RangedMonsterData.ProjectileTypes`, `DebuffMonsterData.DebuffTypes`, `Enum/PlatformTypes.cs` (`스탯_기획서.md`/`발판_확장_기획서.md` 참고)
 - [ ] 몬스터/정령별 실제 데이터 에셋(.asset) 인스턴스 생성 — 2026-07-28 기준 `BeeData_temp_real.asset`, `MushroomData_temp_real.asset` 2개 생성됨, 나머지 몬스터 5종·정령 7종은 아직 없음
