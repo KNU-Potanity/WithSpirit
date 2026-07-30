@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BeeData_temp_real
   m_EditorClassIdentifier: Assembly-CSharp::FloatingMonsterData
   Health: 1
-  MoveSpeed: 5
+  MoveSpeed: 7
   Damage: 1
   CoolTime: 0.5
   AttackRangeX: 0.5
