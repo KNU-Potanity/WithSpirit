@@ -21,4 +21,6 @@ MonoBehaviour:
   DetectionRange: 8
   Knockback: 2
   AttackAnimDelay: 0.4
+  hurtFlashDuration: 0.1
+  deathFadeDuration: 0.5
   smoothTime: 0.3
