@@ -102,6 +102,10 @@
 - [ ] 빈 껍데기 상태인 enum 3개에 실제 값 채우기: `RangedMonsterData.ProjectileTypes`, `DebuffMonsterData.DebuffTypes`, `Enum/PlatformTypes.cs` (`스탯_기획서.md`/`발판_확장_기획서.md` 참고)
 - [ ] 몬스터/정령별 실제 데이터 에셋(.asset) 인스턴스 생성 — 2026-07-28 기준 `BeeData_temp_real.asset`, `MushroomData_temp_real.asset` 2개 생성됨, 나머지 몬스터 5종·정령 7종은 아직 없음
 - [ ] 기존 데이터 에셋 2개(`BeeData_temp_real.asset`, `MushroomData_temp_real.asset`)를 새 네이밍 규칙(`SO_Monster_이름.asset`, `Assets/_Project/Data/Monsters/`)에 맞게 이름 변경·이동 (`에셋_네이밍_관리규칙.md` 3.3.1절 참고)
+- [ ] 나머지 몬스터 5종(슬라임/나무골렘/식충식물/스켈레톤/밤나무) 데이터 에셋 생성 — `스탯_기획서.md` 3.6절 제안 초안값 참고
+- [ ] `DebuffMonsterData`에 디버프 지속시간·감소율 필드 추가 (`스탯_기획서.md` 3.6절 슬라임 항목 참고)
+- [ ] 보스(밤 나무) 전용 `BossMonsterData` 클래스 신설 (근접+원거리 복합 패턴을 담을 구조 필요, `스탯_기획서.md` 3.6절·`기술기획서.md` 4.9절 참고)
+- [ ] `ProjectileTypes`/`DebuffTypes` enum에 실제 값 채우기 (기존 항목과 중복 — 스켈레톤/슬라임 데이터 에셋 생성 전 선행 필요)
 
 **아트**
 - [ ] 정령 7종 색상 팔레트(HEX) 확정 (`아트스타일_가이드.md` 9.1절)
