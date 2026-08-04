@@ -23,7 +23,8 @@ public class FairyMovement : MonoBehaviour
     private Vector3 currentVelocity = Vector3.zero;
     private float hoverTimer = 0f;
     private Vector3 currentSmoothPosition;
-    private bool followLocked;
+    // bool 대신 카운터로 관리: 여러 컨트롤러가 독립적으로 Lock/Unlock해도 안전
+    private int lockRefCount;
 
     private void Start()
     {
@@ -50,7 +51,7 @@ public class FairyMovement : MonoBehaviour
 
     private void FollowTarget(float deltaTime)
     {
-        if (followLocked || player == null)
+        if (lockRefCount > 0 || player == null)
             return;
 
         Vector3 targetPosition = player.position + offset;
@@ -85,13 +86,14 @@ public class FairyMovement : MonoBehaviour
 
     public void LockFollow()
     {
-        followLocked = true;
+        lockRefCount++;
     }
 
     public void UnlockFollow()
     {
-        followLocked = false;
-        SyncFollowState(transform.position);
+        lockRefCount = Mathf.Max(0, lockRefCount - 1);
+        if (lockRefCount == 0)
+            SyncFollowState(transform.position);
     }
 
     public void SyncFollowState(Vector3 position)

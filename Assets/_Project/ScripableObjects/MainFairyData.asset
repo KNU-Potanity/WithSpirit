@@ -16,3 +16,5 @@ MonoBehaviour:
   CoolTime: 0.5
   PlatformSize: 0
   PlatformType: 0
+  PlatformPrefab: {fileID: 6387948801513792350, guid: 81de51a930c2eda4abd88beaa9e02843, type: 3}
+  PlatformSpawnOffset: {x: 0, y: -0.4}

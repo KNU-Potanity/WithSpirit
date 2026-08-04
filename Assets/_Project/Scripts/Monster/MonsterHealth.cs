@@ -97,6 +97,10 @@ namespace BasePlatformer.Monsters
             if (groundMovement != null)
                 groundMovement.enabled = false;
 
+            var floatingMovement = GetComponent<FloatingMonsterMovement>();
+            if (floatingMovement != null)
+                floatingMovement.enabled = false;
+
             if (animator != null)
                 animator.enabled = false;
 
