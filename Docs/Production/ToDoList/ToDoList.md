@@ -87,7 +87,7 @@
 - [ ] 정령 선택/전환 로직(마우스 오른쪽 클릭) 구현
 - [x] 기본 정령 공격 구현 완료 (2026-07-30, `FairyAttackController.cs` — 돌진→데미지→복귀)
 - [x] 기본 정령 플랫폼 생성/해제 기능 구현 완료 (2026-08-04, `FairyPlatformController.cs`/`PlatformClickMarker.cs`/`FairyPlatformEntityPusher.cs`, `정령_시스템_기획서.md` 2.2·2.3절 참고), 이후 추가 정령 6종으로 확장 필요
-- [ ] 플랫폼 변신 해제 시 "공격 쿨타임 확인" 로직 추가 (현재는 쿨타임과 무관하게 좌클릭만으로 즉시 해제됨 — `정령_시스템_기획서.md` 2.3절 참고)
+- [x] 정령 플랫폼 설치 로직 조정 완료 (2026-08-04): 플랫폼을 프리팹 Instantiate 방식으로 생성, 여러 마커 동시 지원, 다른 마커 클릭 시 즉시 전환, 정령 공격과 플랫폼 변신 간 상호 배제 처리 (`정령_시스템_기획서.md` 2.2·2.3절 참고). 단, 해제 조건이 "쿨타임 확인"이 아니라 "클릭 대상 판별" 방식으로 바뀐 상태 — 원래 설계와는 여전히 다름
 - [ ] `FairyAttackController.cs`의 공격 돌진/복귀 동작에 `AC_Fairy_Base.controller`(Speed/Interact 파라미터) 연동 — 현재 애니메이션 미연동 상태
 - [ ] `TerrainType`을 이동/무너짐/스탯변화 발판까지 포함하도록 확장
 - [x] 하트(체력) 시스템 및 게임오버 로직 구현 (`PlayerHealth.cs`+`HeartUI.cs`로 구현 완료)
@@ -102,7 +102,7 @@
 - [x] `MonsterHealth.cs`를 실제 몬스터 오브젝트(MushroomMarker, BeeMarker)에 부착 완료 (2026-07-30)
 - [ ] `MonsterFacing.cs`는 여전히 미부착 — `GroundMonsterMovement.cs`/`FloatingMonsterMovement.cs`가 이미 자체적으로 좌우 반전을 처리하고 있어 실제로 필요한지 검토 필요
 - [x] QA에서 발견된 무적 시간/피격 판정 버그 3건 해결 확인 (2026-07-30, `QA_테스트_계획서.md`에서 항목 삭제됨)
-- [ ] ⚠️ (Critical) 공중 몬스터 사망 페이드 아웃 중 이동+공격 모두 계속되는 버그 수정 — 사망 후에도 플레이어에게 실제 데미지가 들어감 (지상 몬스터는 이미 정상 동작 확인됨, `QA_테스트_계획서.md` 10장 BUG-01 참고)
+- [x] 공중 몬스터 사망 페이드 아웃 중 이동+공격 계속되던 버그 해결 확인 (2026-08-04, `MonsterHealth.Die()`에 `FloatingMonsterMovement` 비활성화 추가, `QA_테스트_계획서.md`에서 항목 삭제됨)
 - [ ] 빈 껍데기 상태인 enum 3개에 실제 값 채우기: `RangedMonsterData.ProjectileTypes`, `DebuffMonsterData.DebuffTypes`, `Enum/PlatformTypes.cs` (`스탯_기획서.md`/`발판_확장_기획서.md` 참고)
 - [ ] 몬스터/정령별 실제 데이터 에셋(.asset) 인스턴스 생성 — 2026-07-28 기준 `BeeData_temp_real.asset`, `MushroomData_temp_real.asset` 2개 생성됨, 나머지 몬스터 5종·정령 7종은 아직 없음
 - [ ] 기존 데이터 에셋 2개(`BeeData_temp_real.asset`, `MushroomData_temp_real.asset`)를 새 네이밍 규칙(`SO_Monster_이름.asset`, `Assets/_Project/Data/Monsters/`)에 맞게 이름 변경·이동 (`에셋_네이밍_관리규칙.md` 3.3.1절 참고)
