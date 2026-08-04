@@ -7,9 +7,6 @@ public class PlatformClickMarker : MonoBehaviour
     [Header("Marker Settings")]
     public GameObject markerObject;
 
-    [Header("Platform Target")]
-    public GameObject targetPlatformObject;
-
     private FairyPlatformController fairyPlatform;
     private Collider2D col;
     private bool isHovering = false;
@@ -21,9 +18,6 @@ public class PlatformClickMarker : MonoBehaviour
 
         if (fairyPlatform == null)
             Debug.LogWarning("[PlatformClickMarker] 씬에서 FairyPlatformController를 찾을 수 없습니다!");
-
-        if (targetPlatformObject != null)
-            targetPlatformObject.SetActive(false);
 
         HideMarker();
     }
@@ -58,9 +52,13 @@ public class PlatformClickMarker : MonoBehaviour
 
         if (isHovering && IsMarkerVisible() && Mouse.current.leftButton.wasPressedThisFrame && !monsterHovered)
         {
-            if (fairyPlatform != null && targetPlatformObject != null && fairyPlatform.CanTransform)
+            if (fairyPlatform != null)
             {
-                fairyPlatform.RequestTransform(transform.position, targetPlatformObject);
+                // 클릭 소비 등록 → FairyPlatformController.LateUpdate의 빈공간 해제 억제
+                fairyPlatform.MarkClickHandled();
+                // 변신 중·완료 상태라도 즉시 이 마커 위치로 전환 (쿨다운 없이)
+                // 프리팹은 FairyPlatformController가 PlatformFairyData에서 읽음
+                fairyPlatform.RequestTransformOrReplace(transform.position, this);
                 HideMarker();
             }
         }
@@ -68,10 +66,8 @@ public class PlatformClickMarker : MonoBehaviour
 
     private bool IsPlatformInstalled()
     {
-        if (fairyPlatform != null && fairyPlatform.HasActivePlatform)
-            return true;
-
-        return targetPlatformObject != null && targetPlatformObject.activeInHierarchy;
+        // 내 마커가 현재 활성 상태일 때만 true → 다른 마커가 활성돼도 이 마커는 클릭 가능
+        return fairyPlatform != null && fairyPlatform.IsMyMarkerActive(this);
     }
 
     private bool IsMarkerVisible()

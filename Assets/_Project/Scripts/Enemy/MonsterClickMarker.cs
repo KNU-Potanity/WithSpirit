@@ -29,6 +29,7 @@ public class MonsterClickMarker : MonoBehaviour
     // ─────────────────────────────────────────────
     private Transform parentTransform;
     private FairyAttackController fairyAttack;
+    private FairyPlatformController fairyPlatform;
     private MonsterHealth monsterHealth;
     private Collider2D col;
 
@@ -51,6 +52,8 @@ public class MonsterClickMarker : MonoBehaviour
         fairyAttack = FindAnyObjectByType<FairyAttackController>();
         if (fairyAttack == null)
             Debug.LogWarning("[MonsterClickMarker] 씬에서 FairyAttackController를 찾을 수 없습니다!");
+
+        fairyPlatform = FindAnyObjectByType<FairyPlatformController>();
 
         // 마커는 처음에 꺼둠
         HideMarker();
@@ -83,6 +86,14 @@ public class MonsterClickMarker : MonoBehaviour
         // 마우스가 올라온 상태에서 왼쪽 클릭
         if (isHovering && Mouse.current.leftButton.wasPressedThisFrame)
         {
+            // 플랫폼 활성 상태면 먼저 해제 후 공격
+            // MarkClickHandled()로 LateUpdate의 이중 해제 방지
+            if (fairyPlatform != null && fairyPlatform.HasActivePlatform)
+            {
+                fairyPlatform.MarkClickHandled();
+                fairyPlatform.RevertTransform();
+            }
+
             if (fairyAttack != null && monsterHealth != null)
                 fairyAttack.RequestAttack(monsterHealth);
         }

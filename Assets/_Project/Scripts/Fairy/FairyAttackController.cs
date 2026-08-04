@@ -18,12 +18,14 @@ public class FairyAttackController : MonoBehaviour
     private float coolTimer;
 
     private FairyMovement fairyMovement;
+    private FairyPlatformController fairyPlatform;
     private Coroutine attackRoutine;
     private bool isAttacking;
 
     private void Awake()
     {
         fairyMovement = GetComponent<FairyMovement>();
+        fairyPlatform = GetComponent<FairyPlatformController>();
 
         if (fairyData != null)
         {
@@ -50,6 +52,14 @@ public class FairyAttackController : MonoBehaviour
         if (coolTimer > 0f)
         {
             Debug.Log($"[FairyAttackController] 쿨타임 중 ({coolTimer:F1}초 남음)");
+            return;
+        }
+
+        // 플랫폼 변신 중(이동 중 포함)이면 공격 차단
+        // 두 코루틴이 동시에 transform.position을 덮어써 freeze/stutter가 발생하는 것을 방지
+        if (fairyPlatform != null && fairyPlatform.HasActivePlatform)
+        {
+            Debug.Log("[FairyAttackController] 정령이 플랫폼 변신 중이라 공격을 시작할 수 없습니다.");
             return;
         }
 
