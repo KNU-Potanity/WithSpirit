@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2d4d1624e5e92a4597c1f580009bd72, type: 3}
   m_Name: BeeData_temp_real
   m_EditorClassIdentifier: Assembly-CSharp::FloatingMonsterData
-  Health: 10
-  MoveSpeed: 5
+  Health: 1
+  MoveSpeed: 7
   Damage: 1
   CoolTime: 0.5
   AttackRangeX: 0.5
   AttackRangeY: 0.8
-  DetectionRange: 8
+  DetectionRange: 6
   Knockback: 2
   AttackAnimDelay: 0.4
   hurtFlashDuration: 0.1
