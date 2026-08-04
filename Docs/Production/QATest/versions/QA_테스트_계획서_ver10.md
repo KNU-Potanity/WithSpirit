@@ -11,7 +11,6 @@
 - 2026-07-30 개정: 10장에 기록했던 버그 3건(BUG-01~03)이 모두 해결 확인되어 항목을 삭제했습니다.
 - 2026-07-30 개정: 10장에 신규 버그(몬스터 사망 페이드 아웃 중 이동)를 BUG-01로 기록했습니다.
 - 2026-08-04 개정: BUG-01을 "공중 몬스터"로 범위를 명확히 수정 (지상 몬스터는 이미 정상 동작 확인됨).
-- 2026-08-04 개정 2: 실제 테스트 결과 이동뿐 아니라 공격까지 계속 동작함을 확인, 우선순위를 Critical로 상향.
 
 ---
 
@@ -161,14 +160,14 @@ Critical / Major / Minor (6장 기준 참고)
 
 ## 10. 발견된 버그 (2026-07-30 발견, 프로그래머 처리 필요)
 
-### BUG-01. 공중 몬스터 사망 페이드 아웃 중 계속 이동+공격함
+### BUG-01. 공중 몬스터 사망 페이드 아웃 중 계속 이동함
 
-- **증상**: 공중 몬스터(벌 등, `FloatingMonsterMovement.cs` 사용)를 처치하면 `MonsterHealth.cs`의 사망 연출(알파값 페이드 아웃)만 재생되고, **이동뿐 아니라 공격(플레이어 추격·데미지 판정)까지 그대로 동작함** (2026-08-04 실제 테스트로 확인). **지상 몬스터(버섯 등)는 이미 정상적으로 멈춥니다** — `MonsterHealth.Die()`가 `Rigidbody2D`를 Kinematic으로 바꾸고 `GroundMonsterMovement`를 비활성화하기 때문입니다.
+- **증상**: 공중 몬스터(벌 등, `FloatingMonsterMovement.cs` 사용)를 처치하면 `MonsterHealth.cs`의 사망 연출(알파값 페이드 아웃)이 재생되는데, 그 동안 계속 날아다님. **지상 몬스터(버섯 등)는 이미 정상적으로 멈춥니다** — `MonsterHealth.Die()`가 `Rigidbody2D`를 Kinematic으로 바꾸고 `GroundMonsterMovement`를 비활성화하기 때문입니다.
 - **재현 방법**:
   1. 공중 몬스터(벌)를 공격해 체력을 0으로 만듦
   2. 사망 연출(페이드 아웃)이 재생되는 동안 몬스터를 관찰
-  3. 투명해지는 도중에도 비행/추격 동작이 멈추지 않고 계속되며, 플레이어가 사거리 안에 있으면 **공격까지 정상적으로 실행되어 데미지가 들어감**
-- **기대 동작**: 사망 연출이 시작되면 몬스터는 이동과 공격 모두 완전히 멈춰야 함 (투명해지는 동안 플레이어에게 피해를 줘서는 안 됨) — 몬스터 종류와 무관하게 동일해야 함
-- **제안하는 해결 방향**: `MonsterHealth.cs`의 `Die()`가 `GroundMonsterMovement`만 비활성화하고 `FloatingMonsterMovement`는 빠뜨리고 있음. `FloatingMonsterMovement.cs`는 이동뿐 아니라 Patrol/Chase/Attack 상태 머신(공격 로직)까지 한 스크립트에 같이 들어있어서, 이 스크립트가 꺼지지 않으면 이동과 공격이 전부 계속 동작함. 몬스터 종류와 무관하게 이동/AI 스크립트(`GroundMonsterMovement`/`FloatingMonsterMovement` 등)를 전부 비활성화하도록 수정 필요
-- **우선순위**: Critical (사망한 몬스터가 여전히 플레이어에게 실제 피해를 줄 수 있는 상태이므로 상향)
+  3. 투명해지는 도중에도 비행/추격 동작이 멈추지 않고 계속됨
+- **기대 동작**: 사망 연출이 시작되면 몬스터는 그 자리에서 완전히 멈춰야 함 (페이드 아웃 도중 위치 이동 없음) — 몬스터 종류와 무관하게 동일해야 함
+- **제안하는 해결 방향**: `MonsterHealth.cs`의 `Die()`가 `GroundMonsterMovement`만 비활성화하고 `FloatingMonsterMovement`는 빠뜨리고 있음. 공중 몬스터의 이동은 Rigidbody 물리가 아니라 `SmoothDamp`로 `transform.position`을 직접 갱신하는 방식이라, Kinematic 전환만으로는 멈추지 않음. 몬스터 종류와 무관하게 이동 스크립트(`GroundMonsterMovement`/`FloatingMonsterMovement` 등)를 전부 비활성화하도록 수정 필요
+- **우선순위**: Major
 

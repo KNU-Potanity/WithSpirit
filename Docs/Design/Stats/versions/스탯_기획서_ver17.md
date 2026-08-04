@@ -2,7 +2,7 @@
 
 ## 0. 문서 목적
 
-> 마지막 수정일: 2026-08-04 (버섯 체력, 스켈레톤·슬라임 개별 수치 갱신 — ver18)
+> 마지막 수정일: 2026-08-04 (4장 "상태이상" 절 신설, 몬스터/정령 쪽은 이름만 표기하도록 정리 — ver17)
 
 확장 단계에서 등장하는 플레이어·정령·몬스터의 스탯 **항목 및 수치**를 정리합니다.
 2026-07-14 개정: 기존에 "(추후 확정)"으로 비워두었던 정령·몬스터 항목에 실제 수치를 채웠습니다. 아래 수치는 1차 밸런스 기준값이며, 플레이 테스트(`QA_테스트_계획서.md` 9장 E-01~E-15) 결과에 따라 조정될 수 있습니다.
@@ -115,11 +115,11 @@
 
 #### 테마 2 (변방)
 
-#### 버섯 (Mushroom) — ✅ 구현 완료 (`GroundMonsterData`, 2026-08-04 체력 수정)
+#### 버섯 (Mushroom) — ✅ 구현 완료 (`GroundMonsterData`, 2026-07-30 수정 반영)
 
 | 필드 (한글) | 값 |
 |---|---|
-| Health (체력) | 3 |
+| Health (체력) | 2 |
 | Move Speed (이동 속도) | 2 |
 | Damage (공격력) | 1 |
 | Cool Time (쿨타임) | 1 |
@@ -132,14 +132,14 @@
 | Death Fade Duration (사망 시 페이드 아웃 지속시간) | 0.5 |
 | Min Horizontal Normal X (수평 벽 판정 기준값) | 0.9 |
 
-#### 스켈레톤 (Skeleton) — 📝 제안 초안 (`RangedMonsterData`, 2026-08-04 수정)
+#### 스켈레톤 (Skeleton) — 📝 제안 초안 (`RangedMonsterData`)
 
 | 필드 (한글) | 값 |
 |---|---|
-| Health (체력) | 2 |
-| Move Speed (이동 속도) | 2.0 (제자리 순찰 위주) |
+| Health (체력) | 8 |
+| Move Speed (이동 속도) | 1.0 (제자리 순찰 위주) |
 | Damage (공격력) | 1 |
-| Cool Time (쿨타임) | 2 |
+| Cool Time (쿨타임) | 1.5 |
 | Attack Range X (공격 범위 X) | 4.0 (발사 사거리) |
 | Attack Range Y (공격 범위 Y) | 2.0 |
 | Detection Range (감지 범위) | 5.0 |
@@ -148,17 +148,17 @@
 | Projectile Type (투사체 종류) | 화살 (`ProjectileTypes` enum 값 채우기 필요) |
 | Firing Type (발사 방식) | Straight |
 
-#### 슬라임 (Slime) — 📝 제안 초안 (`DebuffMonsterData`, 2026-08-04 수정)
+#### 슬라임 (Slime) — 📝 제안 초안 (`DebuffMonsterData`)
 
 | 필드 (한글) | 값 |
 |---|---|
-| Health (체력) | 3 |
-| Move Speed (이동 속도) | 1.0 |
+| Health (체력) | 8 |
+| Move Speed (이동 속도) | 1.5 |
 | Damage (공격력) | 1 |
-| Cool Time (쿨타임) | 2 |
+| Cool Time (쿨타임) | 1.5 |
 | Attack Range X (공격 범위 X) | 1.0 |
 | Attack Range Y (공격 범위 Y) | 1.5 |
-| Detection Range (감지 범위) | 3 |
+| Detection Range (감지 범위) | 6 |
 | Knockback (넉백) | 1.5 |
 | Attack Anim Delay (공격 애니메이션 시작 후 데미지 적용까지의 지연시간) | 0.3 |
 | Debuff Type (디버프 종류) | 둔화 (상세 수치는 4.1절 참고, `DebuffTypes` enum 값 채우기 필요) |

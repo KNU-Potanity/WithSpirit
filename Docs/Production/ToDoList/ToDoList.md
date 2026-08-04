@@ -86,7 +86,8 @@
 - [x] 정령 상호작용(마커 표시, 마우스 클릭 처리) 프로토타입 구현 완료 (2026-07-30, `MonsterClickMarker.cs` + `FairyAttackController.cs`, `정령_시스템_기획서.md` 5.2절 참고)
 - [ ] 정령 선택/전환 로직(마우스 오른쪽 클릭) 구현
 - [x] 기본 정령 공격 구현 완료 (2026-07-30, `FairyAttackController.cs` — 돌진→데미지→복귀)
-- [ ] 기본 정령 플랫폼 생성 기능 구현 (아직 미구현), 이후 추가 정령 6종으로 확장
+- [x] 기본 정령 플랫폼 생성/해제 기능 구현 완료 (2026-08-04, `FairyPlatformController.cs`/`PlatformClickMarker.cs`/`FairyPlatformEntityPusher.cs`, `정령_시스템_기획서.md` 2.2·2.3절 참고), 이후 추가 정령 6종으로 확장 필요
+- [ ] 플랫폼 변신 해제 시 "공격 쿨타임 확인" 로직 추가 (현재는 쿨타임과 무관하게 좌클릭만으로 즉시 해제됨 — `정령_시스템_기획서.md` 2.3절 참고)
 - [ ] `FairyAttackController.cs`의 공격 돌진/복귀 동작에 `AC_Fairy_Base.controller`(Speed/Interact 파라미터) 연동 — 현재 애니메이션 미연동 상태
 - [ ] `TerrainType`을 이동/무너짐/스탯변화 발판까지 포함하도록 확장
 - [x] 하트(체력) 시스템 및 게임오버 로직 구현 (`PlayerHealth.cs`+`HeartUI.cs`로 구현 완료)
@@ -96,13 +97,12 @@
 - [ ] 미사용 상태인 `Assets/UI/Icons/Heart/heart.png`, `heart_fill.png`(Flaticon 기반) 처리 방향 결정 — 정식 아트로 채택하거나, 아니면 정리
 - [ ] 몬스터 공통 스탯/AI 베이스 구현 → 근거리/원거리/디버프/보스로 확장 (부분 진행: 버섯 이동 스크립트(`GroundMonsterMovement.cs`) 애니메이션 연동 완료, 나머지 몬스터는 미착수)
 - [x] 버섯(`GroundMonsterMovement.cs`) Animator 연동 — Speed/Attack 파라미터 반영 (2026-07-16 최초 적용 → 2026-07-23 팀원이 Patrol/Chase/Attack 상태 머신으로 전면 재작성, 병합 중 유실된 Animator 연동을 새 구조에 맞게 재적용, `몬스터_기획서.md` 5장·6.2절 참고)
-- [ ] 나머지 지상 근접몹(나무 골렘, 식충식물)에도 동일한 Patrol/Chase/Attack 상태 머신 + Speed/Attack Animator 연동 패턴 적용
+- [ ] 씬에 아직 오브젝트가 없는 몬스터는 오브젝트/프리팹부터 생성 후, 기존 구현된 몬스터와 동일한 패턴(Patrol/Chase/Attack 상태 머신 + Animator 연동)을 전부 적용
 - [x] 공중형(벌) 이동 로직 구현 완료 (2026-07-23, 팀원 작성 `FloatingMonsterMovement.cs` — Patrol/Chase/Attack 상태 머신, `SmoothDamp` 자유 비행 + 시야 레이캐스트, 씬의 `BeeMarker`에 적용됨, `몬스터_기획서.md` 5.1절 참고)
-- [ ] 벌(`BeeMarker`/`Bee_Idle_0`)에 Animator 부착 및 `AC_Monster_Bee.controller` 연결 + Speed/Attack 연동 (다른 몬스터와 동일 패턴)
 - [x] `MonsterHealth.cs`를 실제 몬스터 오브젝트(MushroomMarker, BeeMarker)에 부착 완료 (2026-07-30)
 - [ ] `MonsterFacing.cs`는 여전히 미부착 — `GroundMonsterMovement.cs`/`FloatingMonsterMovement.cs`가 이미 자체적으로 좌우 반전을 처리하고 있어 실제로 필요한지 검토 필요
 - [x] QA에서 발견된 무적 시간/피격 판정 버그 3건 해결 확인 (2026-07-30, `QA_테스트_계획서.md`에서 항목 삭제됨)
-- [ ] 몬스터 사망 페이드 아웃 중 이동 버그 수정 (`QA_테스트_계획서.md` 10장 BUG-01 참고)
+- [ ] ⚠️ (Critical) 공중 몬스터 사망 페이드 아웃 중 이동+공격 모두 계속되는 버그 수정 — 사망 후에도 플레이어에게 실제 데미지가 들어감 (지상 몬스터는 이미 정상 동작 확인됨, `QA_테스트_계획서.md` 10장 BUG-01 참고)
 - [ ] 빈 껍데기 상태인 enum 3개에 실제 값 채우기: `RangedMonsterData.ProjectileTypes`, `DebuffMonsterData.DebuffTypes`, `Enum/PlatformTypes.cs` (`스탯_기획서.md`/`발판_확장_기획서.md` 참고)
 - [ ] 몬스터/정령별 실제 데이터 에셋(.asset) 인스턴스 생성 — 2026-07-28 기준 `BeeData_temp_real.asset`, `MushroomData_temp_real.asset` 2개 생성됨, 나머지 몬스터 5종·정령 7종은 아직 없음
 - [ ] 기존 데이터 에셋 2개(`BeeData_temp_real.asset`, `MushroomData_temp_real.asset`)를 새 네이밍 규칙(`SO_Monster_이름.asset`, `Assets/_Project/Data/Monsters/`)에 맞게 이름 변경·이동 (`에셋_네이밍_관리규칙.md` 3.3.1절 참고)
