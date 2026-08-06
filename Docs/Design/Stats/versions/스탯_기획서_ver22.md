@@ -2,7 +2,7 @@
 
 ## 0. 문서 목적
 
-> 마지막 수정일: 2026-08-06 (스켈레톤 투사체 필드 추가 반영 — ver23)
+> 마지막 수정일: 2026-08-06 (슬라임 디버프 필드(Duration/SpeedDecreaseRate) 구현 완료 반영 — ver22)
 
 확장 단계에서 등장하는 플레이어·정령·몬스터의 스탯 **항목 및 수치**를 정리합니다.
 2026-07-14 개정: 기존에 "(추후 확정)"으로 비워두었던 정령·몬스터 항목에 실제 수치를 채웠습니다. 아래 수치는 1차 밸런스 기준값이며, 플레이 테스트(`QA_테스트_계획서.md` 9장 E-01~E-15) 결과에 따라 조정될 수 있습니다.
@@ -132,7 +132,7 @@
 | Death Fade Duration (사망 시 페이드 아웃 지속시간) | 0.5 |
 | Min Horizontal Normal X (수평 벽 판정 기준값) | 0.9 |
 
-#### 스켈레톤 (Skeleton) — ✅ 구현 완료 (`RangedMonsterData`, 2026-08-06 갱신 — `RangedMonsterMovement.cs`+`MonsterProjectile.cs`로 AI·투사체까지 완료)
+#### 스켈레톤 (Skeleton) — ✅ 구현 완료 (`RangedMonsterData`, 2026-08-04 확인 — 실제 에셋 값과 일치)
 
 | 필드 (한글) | 값 |
 |---|---|
@@ -147,8 +147,6 @@
 | Attack Anim Delay (공격 애니메이션 시작 후 데미지 적용까지의 지연시간) | 0.5 (활 조준 시간) |
 | Projectile Type (투사체 종류) | 화살 (`ProjectileTypes` enum 값 채우기 필요) |
 | Firing Type (발사 방식) | Straight |
-| Projectile Prefab (신규) | `Assets/_Project/Prefabs/Arrow.prefab` |
-| Projectile Speed (신규) | 5 |
 
 #### 슬라임 (Slime) — ✅ 구현 완료 (`DebuffMonsterData`, 2026-08-06 갱신 — `DebuffMonsterMovement.cs`로 AI까지 완료)
 

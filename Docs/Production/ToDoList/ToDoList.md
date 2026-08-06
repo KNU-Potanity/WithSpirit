@@ -107,11 +107,16 @@
 - [ ] `MonsterFacing.cs`는 여전히 미부착 — `GroundMonsterMovement.cs`/`FloatingMonsterMovement.cs`가 이미 자체적으로 좌우 반전을 처리하고 있어 실제로 필요한지 검토 필요
 - [x] QA에서 발견된 무적 시간/피격 판정 버그 3건 해결 확인 (2026-07-30, `QA_테스트_계획서.md`에서 항목 삭제됨)
 - [x] 공중 몬스터 사망 페이드 아웃 중 이동+공격 계속되던 버그 해결 확인 (2026-08-04, `MonsterHealth.Die()`에 `FloatingMonsterMovement` 비활성화 추가, `QA_테스트_계획서.md`에서 항목 삭제됨)
-- [ ] 빈 껍데기 상태인 enum 3개에 실제 값 채우기: `RangedMonsterData.ProjectileTypes`, `DebuffMonsterData.DebuffTypes`, `Enum/PlatformTypes.cs` (`스탯_기획서.md`/`발판_확장_기획서.md` 참고)
-- [ ] 몬스터/정령별 실제 데이터 에셋(.asset) 인스턴스 생성 — 2026-07-28 기준 `BeeData_temp_real.asset`, `MushroomData_temp_real.asset` 2개 생성됨, 나머지 몬스터 5종·정령 7종은 아직 없음
+- [x] `DebuffTypes` enum에 `Slow` 값 채움 완료 (2026-08-06)
+- [ ] 나머지 enum 2개(`RangedMonsterData.ProjectileTypes`, `Enum/PlatformTypes.cs`)는 여전히 비어있음 — 값 채우기 필요
+- [x] 디버프형(슬라임)·원거리형(스켈레톤) AI 및 몬스터 프리팹 구현 완료 (2026-08-06, `DebuffMonsterMovement.cs`/`RangedMonsterMovement.cs`, `몬스터_기획서.md` 5.2·5.3절 참고)
+- [x] 투사체 시스템 신규 구현 완료 (2026-08-06, `MonsterProjectile.cs` — 스켈레톤 화살에 사용 중, 보스 밤송이에도 재사용 가능)
+- [ ] 밤송이 투척 구현 시 `MonsterProjectile.cs`에 피격/클릭 판정(`MonsterHealth`류·`MonsterClickMarker`류) 추가 필요 ("정령 공격으로 제거" 파훼법을 위해)
+- [x] `MonsterHealth.Die()`의 이동 스크립트 비활성화 로직을 `IMonsterMovement` 인터페이스 기반으로 일반화 완료 (2026-08-06)
+- [x] 몬스터 데이터 에셋 7종 전체 생성 완료 (2026-08-04 기준, `몬스터_기획서.md` 6.4절 참고), 정령 데이터 에셋은 `MainFairyData` 1개만 존재 — 나머지 정령 6종은 아직 없음
 - [ ] 기존 데이터 에셋 2개(`BeeData_temp_real.asset`, `MushroomData_temp_real.asset`)를 새 네이밍 규칙(`SO_Monster_이름.asset`, `Assets/_Project/Data/Monsters/`)에 맞게 이름 변경·이동 (`에셋_네이밍_관리규칙.md` 3.3.1절 참고)
 - [ ] 나머지 몬스터 5종(슬라임/나무골렘/식충식물/스켈레톤/밤나무) 데이터 에셋 생성 — `스탯_기획서.md` 3.6절 제안 초안값 참고
-- [ ] `DebuffMonsterData`에 디버프 지속시간·감소율 필드 추가 (`스탯_기획서.md` 3.6절 슬라임 항목 참고)
+- [x] `DebuffMonsterData`에 디버프 지속시간·감소율 필드 추가 완료 (2026-08-06)
 - [ ] 보스(밤 나무) 전용 `BossMonsterData` 클래스 신설 (근접+원거리 복합 패턴을 담을 구조 필요, `스탯_기획서.md` 3.6절·`기술기획서.md` 4.9절 참고)
 - [ ] `ProjectileTypes`/`DebuffTypes` enum에 실제 값 채우기 (기존 항목과 중복 — 스켈레톤/슬라임 데이터 에셋 생성 전 선행 필요)
 
