@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 778f1281e3e17ca4cbdc28222172cf7e, type: 3}
-  m_Name: Boss_EntData
-  m_EditorClassIdentifier: Assembly-CSharp::MonsterData
+  m_Script: {fileID: 11500000, guid: 19bc568c22e2490469acc4977fc77a55, type: 3}
+  m_Name: BossEntData
+  m_EditorClassIdentifier: Assembly-CSharp::BossMonsterData
   Health: 60
   MoveSpeed: 1.5
   Damage: 1
@@ -23,3 +23,7 @@ MonoBehaviour:
   AttackAnimDelay: 0.8
   hurtFlashDuration: 0.1
   deathFadeDuration: 0.9
+  chargeSpeedMultiplier: 5
+  chargePreDelay: 0.8
+  chargeCooldown: 5
+  chargeKnockback: 4
