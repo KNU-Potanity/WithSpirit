@@ -25,3 +25,5 @@ MonoBehaviour:
   deathFadeDuration: 0.5
   ProjectileType: 0
   FiringType: 0
+  ProjectilePrefab: {fileID: 308843897111631679, guid: 793cb858aeb5b79458b17f5365cbc8ef, type: 3}
+  ProjectileSpeed: 5

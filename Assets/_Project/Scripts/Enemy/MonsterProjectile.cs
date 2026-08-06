@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class MonsterProjectile : MonoBehaviour
 {
+    [Header("Settings")]
+    public float lifetime = 5f;
+
     private Vector2 direction;
     private float speed;
     private int damage;
@@ -16,7 +19,10 @@ public class MonsterProjectile : MonoBehaviour
         groundLayer = groundMask;
         isInitialized = true;
 
-        // 방향에 따라 스프라이트/오브젝트 Flip 또는 회전 처리 (필요시)
+        // 일정 시간 후 자동으로 투사체 파괴
+        Destroy(gameObject, lifetime);
+
+        // 방향에 따라 스프라이트/오브젝트 Flip 처리
         if (direction.x < 0)
         {
             Vector3 scale = transform.localScale;
@@ -47,10 +53,21 @@ public class MonsterProjectile : MonoBehaviour
             return;
         }
 
-        // Player (또는 플레이어 관련 충돌체)와 충돌 시 데미지 처리 (선택적)
+        // Player (또는 플레이어 관련 충돌체)와 충돌 시 데미지 처리
         if (collision.CompareTag("Player") || collision.name.Contains("Player"))
         {
-            // 플레이어 피격 로직이 있다면 연동 가능
+            var playerHealth = collision.GetComponentInParent<BasePlatformer.Player.PlayerHealth>();
+            if (playerHealth == null)
+            {
+                playerHealth = collision.GetComponent<BasePlatformer.Player.PlayerHealth>();
+            }
+
+            if (playerHealth != null)
+            {
+                Vector2 knockbackDir = (collision.transform.position - transform.position).normalized;
+                playerHealth.TakeDamage(damage, knockbackDir);
+            }
+
             Destroy(gameObject);
         }
     }

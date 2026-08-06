@@ -12,7 +12,6 @@ public class RangedMonsterMovement : MonoBehaviour
 
     [Header("Projectile Settings")]
     public Transform spawnPoint; // 투사체 발사 위치 (미설정 시 transform.position)
-    public float projectileSpeed = 10f;
 
     // 내부 변수
     private LayerMask whatIsGround;
@@ -21,7 +20,10 @@ public class RangedMonsterMovement : MonoBehaviour
     private float attackRangeX;
     private float attackRangeY;
     private float attackCooldown;
-    private int attackDamage;
+    private float attackDamage;
+    private float knockback;
+    private float projectileSpeed;
+    private float attackDelay;
 
     private bool movingRight = true;
     private Rigidbody2D rb;
@@ -43,6 +45,9 @@ public class RangedMonsterMovement : MonoBehaviour
             attackRangeY = monsterData.AttackRangeY;
             attackCooldown = monsterData.CoolTime;
             attackDamage = monsterData.Damage;
+            knockback = monsterData.Knockback;
+            attackDelay = monsterData.AttackAnimDelay;
+            projectileSpeed = monsterData.ProjectileSpeed;
         }
     }
 
@@ -154,6 +159,14 @@ public class RangedMonsterMovement : MonoBehaviour
             animator.SetTrigger("Attack");
         }
 
+        StartCoroutine(SpawnProjectileCoroutine(attackDelay));
+    }
+
+    private System.Collections.IEnumerator SpawnProjectileCoroutine(float delay)
+    {
+        if (delay > 0f)
+            yield return new WaitForSeconds(delay);
+
         if (monsterData != null && monsterData.ProjectilePrefab != null)
         {
             Vector3 firePos = spawnPoint != null ? spawnPoint.position : transform.position;
@@ -167,7 +180,7 @@ public class RangedMonsterMovement : MonoBehaviour
                 projScript = projObj.AddComponent<MonsterProjectile>();
             }
 
-            projScript.Initialize(fireDirection, projectileSpeed, attackDamage, whatIsGround);
+            projScript.Initialize(fireDirection, projectileSpeed, (int)attackDamage, whatIsGround);
         }
         else
         {
@@ -182,4 +195,58 @@ public class RangedMonsterMovement : MonoBehaviour
         scale.x *= -1f;
         transform.localScale = scale;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        HandleContactDamage(collision.gameObject);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        HandleContactDamage(collision.gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        HandleContactDamage(collision.gameObject);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        HandleContactDamage(collision.gameObject);
+    }
+
+    private void HandleContactDamage(GameObject target)
+    {
+        if (target.CompareTag("Player") || target.name.Contains("Player"))
+        {
+            var playerHealth = target.GetComponentInParent<BasePlatformer.Player.PlayerHealth>();
+            if (playerHealth == null)
+            {
+                playerHealth = target.GetComponent<BasePlatformer.Player.PlayerHealth>();
+            }
+
+            if (playerHealth != null)
+            {
+                float dirX = (target.transform.position.x > transform.position.x) ? 1f : -1f;
+                Vector2 knockbackDir = new Vector2(dirX, 1.5f).normalized * knockback;
+                playerHealth.TakeDamage((int)attackDamage, knockbackDir);
+            }
+        }
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        if (monsterData == null) return;
+
+        // 감지 범위 (노란색)
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(transform.position, new Vector3(monsterData.DetectionRange * 2f, 1f, 0f));
+
+        // 공격 범위 (빨간색)
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position, new Vector3(monsterData.AttackRangeX * 2f, monsterData.AttackRangeY * 2f, 0f));
+    }
+#endif
 }

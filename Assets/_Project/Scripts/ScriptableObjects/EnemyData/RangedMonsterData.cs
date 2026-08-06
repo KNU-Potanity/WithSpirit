@@ -14,4 +14,5 @@ public class RangedMonsterData : MonsterData
     public ProjectileTypes ProjectileType;
     public FiringTypes FiringType;
     public GameObject ProjectilePrefab;
+    public float ProjectileSpeed = 10f;
 }
