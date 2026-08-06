@@ -97,7 +97,10 @@
 - [ ] 미사용 상태인 `Assets/UI/Icons/Heart/heart.png`, `heart_fill.png`(Flaticon 기반) 처리 방향 결정 — 정식 아트로 채택하거나, 아니면 정리
 - [ ] 몬스터 공통 스탯/AI 베이스 구현 → 근거리/원거리/디버프/보스로 확장 (부분 진행: 버섯 이동 스크립트(`GroundMonsterMovement.cs`) 애니메이션 연동 완료, 나머지 몬스터는 미착수)
 - [x] 버섯(`GroundMonsterMovement.cs`) Animator 연동 — Speed/Attack 파라미터 반영 (2026-07-16 최초 적용 → 2026-07-23 팀원이 Patrol/Chase/Attack 상태 머신으로 전면 재작성, 병합 중 유실된 Animator 연동을 새 구조에 맞게 재적용, `몬스터_기획서.md` 5장·6.2절 참고)
-- [ ] 씬에 아직 오브젝트가 없는 몬스터는 오브젝트/프리팹부터 생성 후, 기존 구현된 몬스터와 동일한 패턴(Patrol/Chase/Attack 상태 머신 + Animator 연동)을 전부 적용
+- [x] 근접 지상 몬스터 프리팹(버섯/나무골렘/식충식물) + 공통 템플릿(`GroundMonsterPrefab`) 생성 완료, 몬스터 데이터 에셋 7종 전체 생성 완료 (2026-08-04, `몬스터_기획서.md` 6.4절 참고)
+- [ ] 나무골렘/식충식물/밤나무 데이터 에셋 수치를 `스탯_기획서.md` 3.6절 최신 확정값으로 갱신 (현재 더 오래된 수치로 만들어져 있음)
+- [ ] `에셋_네이밍_관리규칙.md` 2장 계획 경로(`Prefabs/Monsters/`, `Data/Monsters/`)와 실제 경로(`Prefabs/Entitys/Monsters/`, `ScripableObjects/Monster/`) 중 어느 쪽에 맞출지 결정
+- [ ] `CarnivorousPlantData.prefab` 파일명을 `CarnivorousPlant.prefab`으로 정리 (데이터 에셋과 이름 혼동 방지)
 - [x] 공중형(벌) 이동 로직 구현 완료 (2026-07-23, 팀원 작성 `FloatingMonsterMovement.cs` — Patrol/Chase/Attack 상태 머신, `SmoothDamp` 자유 비행 + 시야 레이캐스트, 씬의 `BeeMarker`에 적용됨, `몬스터_기획서.md` 5.1절 참고)
 - [x] `MonsterHealth.cs`를 실제 몬스터 오브젝트(MushroomMarker, BeeMarker)에 부착 완료 (2026-07-30)
 - [ ] `MonsterFacing.cs`는 여전히 미부착 — `GroundMonsterMovement.cs`/`FloatingMonsterMovement.cs`가 이미 자체적으로 좌우 반전을 처리하고 있어 실제로 필요한지 검토 필요
