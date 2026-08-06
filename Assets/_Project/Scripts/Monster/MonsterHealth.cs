@@ -93,13 +93,15 @@ namespace BasePlatformer.Monsters
                 rb.bodyType = RigidbodyType2D.Kinematic;
             }
 
-            var groundMovement = GetComponent<GroundMonsterMovement>();
-            if (groundMovement != null)
-                groundMovement.enabled = false;
-
-            var floatingMovement = GetComponent<FloatingMonsterMovement>();
-            if (floatingMovement != null)
-                floatingMovement.enabled = false;
+            // IMonsterMovement를 구현한 모든 몬스터 로직/이동 컴포넌트를 일괄 비활성화
+            var movements = GetComponents<IMonsterMovement>();
+            foreach (var movement in movements)
+            {
+                if (movement is MonoBehaviour mb)
+                {
+                    mb.enabled = false;
+                }
+            }
 
             if (animator != null)
                 animator.enabled = false;
