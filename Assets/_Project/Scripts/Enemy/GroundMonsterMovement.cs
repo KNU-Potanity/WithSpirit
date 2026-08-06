@@ -1,8 +1,9 @@
 using UnityEngine;
+using BasePlatformer.Monsters;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
-public class GroundMonsterMovement : MonoBehaviour
+public class GroundMonsterMovement : MonoBehaviour, IMonsterMovement
 {
     // ─────────────────────────────────────────────
     //  상태 정의

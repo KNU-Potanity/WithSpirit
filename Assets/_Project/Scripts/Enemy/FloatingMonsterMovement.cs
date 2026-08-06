@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using BasePlatformer.Monsters;
 
-public class FloatingMonsterMovement : MonoBehaviour
+public class FloatingMonsterMovement : MonoBehaviour, IMonsterMovement
 {
     public enum MonsterState
     {

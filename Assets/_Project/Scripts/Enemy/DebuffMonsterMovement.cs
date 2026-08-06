@@ -1,8 +1,9 @@
 using UnityEngine;
+using BasePlatformer.Monsters;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
-public class DebuffMonsterMovement : MonoBehaviour
+public class DebuffMonsterMovement : MonoBehaviour, IMonsterMovement
 {
     private enum State { Patrol, Chase, Attack }
     private State currentState = State.Patrol;
