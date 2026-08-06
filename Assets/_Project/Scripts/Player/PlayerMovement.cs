@@ -28,7 +28,12 @@ namespace BasePlatformer.Player
         [SerializeField] private PlayerData playerData;
         [Header("이동 스펙 (캐릭터컨트롤_스펙_ver1.md 2장)")]
         //[Tooltip("최고 이동 속도 (타일/초 = Unity Unit/초)")]
-        private float maxMoveSpeed => playerData != null ? playerData.MoveSpeed : 6f;
+        private float maxMoveSpeed => (playerData != null ? playerData.MoveSpeed : 6f) * speedMultiplier;
+
+        private float speedMultiplier = 1.0f;
+        private Coroutine slowDebuffCoroutine;
+        private SpriteRenderer spriteRenderer;
+        private Color originalColor = Color.white;
 
         [Tooltip("0 -> 최고 속도까지 걸리는 시간(초)")]
         [SerializeField] private float accelerationTime = 0.15f;
@@ -63,6 +68,39 @@ namespace BasePlatformer.Player
                 .With("Negative", "<Keyboard>/leftArrow")
                 .With("Positive", "<Keyboard>/d")
                 .With("Positive", "<Keyboard>/rightArrow");
+
+            // SpriteRenderer 참조 구하기
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer != null) originalColor = spriteRenderer.color;
+        }
+
+        public void ApplySlowDebuff(float decreaseRate, float duration)
+        {
+            if (slowDebuffCoroutine != null)
+            {
+                StopCoroutine(slowDebuffCoroutine);
+            }
+            slowDebuffCoroutine = StartCoroutine(SlowDebuffRoutine(decreaseRate, duration));
+        }
+
+        private System.Collections.IEnumerator SlowDebuffRoutine(float decreaseRate, float duration)
+        {
+            speedMultiplier = Mathf.Max(0.1f, 1.0f - decreaseRate);
+            if (spriteRenderer != null)
+            {
+                // 기획서 4.1절: 하늘색(Cyan / SkyBlue)으로 시각적 효과 변경
+                spriteRenderer.color = new Color(0.5f, 0.8f, 1.0f, 1.0f);
+            }
+
+            yield return new WaitForSeconds(duration);
+
+            speedMultiplier = 1.0f;
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = originalColor;
+            }
+            slowDebuffCoroutine = null;
         }
 
         private void OnEnable()
