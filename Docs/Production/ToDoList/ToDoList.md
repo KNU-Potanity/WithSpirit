@@ -99,7 +99,7 @@
 - [x] 버섯(`GroundMonsterMovement.cs`) Animator 연동 — Speed/Attack 파라미터 반영 (2026-07-16 최초 적용 → 2026-07-23 팀원이 Patrol/Chase/Attack 상태 머신으로 전면 재작성, 병합 중 유실된 Animator 연동을 새 구조에 맞게 재적용, `몬스터_기획서.md` 5장·6.2절 참고)
 - [x] 근접 지상 몬스터 프리팹(버섯/나무골렘/식충식물) + 공통 템플릿(`GroundMonsterPrefab`) 생성 완료, 몬스터 데이터 에셋 7종 전체 생성 완료 (2026-08-04, `몬스터_기획서.md` 6.4절 참고)
 - [ ] 나무골렘/식충식물/밤나무 데이터 에셋 수치를 `스탯_기획서.md` 3.6절 최신 확정값으로 갱신 (현재 더 오래된 수치로 만들어져 있음)
-- [ ] `에셋_네이밍_관리규칙.md` 2장 계획 경로(`Prefabs/Monsters/`, `Data/Monsters/`)와 실제 경로(`Prefabs/Entitys/Monsters/`, `ScripableObjects/Monster/`) 중 어느 쪽에 맞출지 결정
+- [x] 폴더 경로 결정 완료 (2026-08-04): 문서를 실제 구조(`Prefabs/Entities/Monsters/`, `ScripableObjects/Monster/`)에 맞춰 확정, `Entitys` 오타만 `Entities`로 실제 폴더명 수정
 - [ ] `CarnivorousPlantData.prefab` 파일명을 `CarnivorousPlant.prefab`으로 정리 (데이터 에셋과 이름 혼동 방지)
 - [x] 공중형(벌) 이동 로직 구현 완료 (2026-07-23, 팀원 작성 `FloatingMonsterMovement.cs` — Patrol/Chase/Attack 상태 머신, `SmoothDamp` 자유 비행 + 시야 레이캐스트, 씬의 `BeeMarker`에 적용됨, `몬스터_기획서.md` 5.1절 참고)
 - [x] `MonsterHealth.cs`를 실제 몬스터 오브젝트(MushroomMarker, BeeMarker)에 부착 완료 (2026-07-30)
