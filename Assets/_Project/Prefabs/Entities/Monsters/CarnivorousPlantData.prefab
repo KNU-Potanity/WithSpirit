@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4592267635236619655}
   - component: {fileID: 5143399587500913799}
   - component: {fileID: 7036290462679399467}
-  - component: {fileID: 1432783970645237337}
   - component: {fileID: 6098677903735483814}
   - component: {fileID: 4820410194155883419}
+  - component: {fileID: -1280995704426211031}
   m_Layer: 11
   m_Name: CarnivorousPlantData
   m_TagString: Untagged
@@ -110,20 +110,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!114 &1432783970645237337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1896382300768062444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da0721700c9fae0459763bc81af7cba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GroundMonsterMovement
-  monsterData: {fileID: 11400000, guid: ee5bcd9024568244692a2c9fb987b66e, type: 2}
+  m_Constraints: 7
 --- !u!212 &6098677903735483814
 SpriteRenderer:
   serializedVersion: 3
@@ -197,6 +184,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasePlatformer.Monsters.MonsterHealth
   monsterData: {fileID: 11400000, guid: ee5bcd9024568244692a2c9fb987b66e, type: 2}
+--- !u!114 &-1280995704426211031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896382300768062444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00c7fdc9dfbab746995d90989a5ec10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlantMonsterMovement
+  monsterData: {fileID: 11400000, guid: ee5bcd9024568244692a2c9fb987b66e, type: 2}
+  defaultLeftFacing: 0
 --- !u!1 &6643743372736015914
 GameObject:
   m_ObjectHideFlags: 0

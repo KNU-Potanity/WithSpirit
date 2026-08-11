@@ -32,6 +32,9 @@ public class BossMonsterMovement : MonoBehaviour, IMonsterMovement
     private float chargeTimer = 0f;
     private Vector2 chargeDirection;
 
+    // 소환 패턴 관련 타이머 배열
+    private float[] patternTimers;
+
     private bool movingRight = true;
     private Rigidbody2D rb;
     private Animator animator;
@@ -60,6 +63,16 @@ public class BossMonsterMovement : MonoBehaviour, IMonsterMovement
             chargePreDelay = monsterData.chargePreDelay;
             chargeCooldown = monsterData.chargeCooldown;
             chargeKnockback = monsterData.chargeKnockback;
+
+            if (monsterData.spawnPatterns != null && monsterData.spawnPatterns.Count > 0)
+            {
+                patternTimers = new float[monsterData.spawnPatterns.Count];
+                for (int i = 0; i < patternTimers.Length; i++)
+                {
+                    // 씬 시작 후 지정된 spawnInterval 시간 뒤 첫 소환되도록 초기화
+                    patternTimers[i] = monsterData.spawnPatterns[i].spawnInterval;
+                }
+            }
         }
     }
 
@@ -71,6 +84,8 @@ public class BossMonsterMovement : MonoBehaviour, IMonsterMovement
         if (chargeTimer > 0f)
             chargeTimer -= Time.fixedDeltaTime;
 
+        UpdateSpawnPatterns();
+
         if (playerTransform == null)
         {
             GameObject playerObj = GameObject.Find("PlayerStartMarker");
@@ -80,10 +95,118 @@ public class BossMonsterMovement : MonoBehaviour, IMonsterMovement
         UpdateState();
         ExecuteState();
 
-        if (animator != null)
+        if (animator != null && HasParameter(animator, "Speed"))
         {
             animator.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
         }
+    }
+
+    private bool HasParameter(Animator anim, string paramName)
+    {
+        foreach (AnimatorControllerParameter param in anim.parameters)
+        {
+            if (param.name == paramName) return true;
+        }
+        return false;
+    }
+
+    private void UpdateSpawnPatterns()
+    {
+        if (monsterData == null || monsterData.spawnPatterns == null || patternTimers == null) return;
+
+        for (int i = 0; i < monsterData.spawnPatterns.Count; i++)
+        {
+            if (i >= patternTimers.Length) break;
+
+            patternTimers[i] -= Time.fixedDeltaTime;
+
+            if (patternTimers[i] <= 0f)
+            {
+                SpawnPattern(monsterData.spawnPatterns[i]);
+                patternTimers[i] = monsterData.spawnPatterns[i].spawnInterval;
+            }
+        }
+    }
+
+    private void SpawnPattern(PatternSpawnData pattern)
+    {
+        if (pattern.patternPrefab == null) return;
+
+        if (animator != null && HasParameter(animator, "Attack"))
+        {
+            animator.SetTrigger("Attack");
+        }
+
+        StartCoroutine(SpawnPatternCoroutine(pattern, attackDelay));
+    }
+
+    private IEnumerator SpawnPatternCoroutine(PatternSpawnData pattern, float delay)
+    {
+        if (delay > 0f)
+        {
+            yield return new WaitForSeconds(delay);
+        }
+
+        int spawnCount = Mathf.Max(1, pattern.count);
+
+        for (int k = 0; k < spawnCount; k++)
+        {
+            Vector3 basePosition = transform.position + pattern.spawnOffset;
+            bool hasValidSpawnPoint = false;
+
+            // 1. k번째 스폰 포인트 이름이 명시되어 있는지 확인
+            if (pattern.spawnPointNames != null && pattern.spawnPointNames.Count > 0)
+            {
+                // k가 스폰 포인트 개수 이상이면 유효한 마지막 스폰 포인트를 기준점으로 사용
+                int nameIndex = Mathf.Min(k, pattern.spawnPointNames.Count - 1);
+                string pointName = pattern.spawnPointNames[nameIndex];
+
+                if (!string.IsNullOrEmpty(pointName))
+                {
+                    Transform targetPoint = FindChildByName(transform, pointName);
+                    if (targetPoint != null)
+                    {
+                        basePosition = targetPoint.position;
+                        hasValidSpawnPoint = true;
+                    }
+                }
+            }
+
+            Vector3 spacingOffset = pattern.spawnSpacing * k;
+            Vector3 spawnPosition;
+
+            if (hasValidSpawnPoint)
+            {
+                // 스폰 포인트가 존재하는 경우: 스폰 포인트 위치에 (해당 포인트 이후 추가 소환분 index차이만큼 spacing) 추가
+                int extraIndex = (pattern.spawnPointNames != null && k >= pattern.spawnPointNames.Count) ? (k - (pattern.spawnPointNames.Count - 1)) : 0;
+                Vector3 extraSpacing = pattern.spawnSpacing * extraIndex;
+                if (!movingRight) extraSpacing.x *= -1f;
+                spawnPosition = basePosition + extraSpacing;
+            }
+            else
+            {
+                // 스폰 포인트가 없는 경우: 보스 위치 + Offset 기준 spacing 계산
+                if (!movingRight)
+                {
+                    spacingOffset.x *= -1f;
+                    Vector3 adjustedOffset = pattern.spawnOffset;
+                    adjustedOffset.x *= -1f;
+                    basePosition = transform.position + adjustedOffset;
+                }
+                spawnPosition = basePosition + spacingOffset;
+            }
+
+            Instantiate(pattern.patternPrefab, spawnPosition, Quaternion.identity);
+        }
+    }
+
+    private Transform FindChildByName(Transform parent, string childName)
+    {
+        foreach (Transform child in parent.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name == childName) return child;
+        }
+        return null;
     }
 
     private void UpdateState()

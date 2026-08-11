@@ -9,18 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b07d0d554294e714b97826fe7b01bf78, type: 3}
-  m_Name: CarnivorousPlantData
-  m_EditorClassIdentifier: Assembly-CSharp::GroundMonsterData
-  Health: 10
-  MoveSpeed: 0
+  m_Script: {fileID: 11500000, guid: 3d4c6e769f3dc854fb8d92e77f4dc916, type: 3}
+  m_Name: ChestnutMonsterData
+  m_EditorClassIdentifier: Assembly-CSharp::ChestnutMonsterData
+  Health: 1
+  MoveSpeed: 4
   Damage: 1
-  CoolTime: 1.2
-  AttackRangeX: 2
-  AttackRangeY: 1
-  DetectionRange: 5
+  CoolTime: 1
+  AttackRangeX: 4
+  AttackRangeY: 2
+  DetectionRange: 8
   Knockback: 2
-  AttackAnimDelay: 0.35
+  AttackAnimDelay: 0
   hurtFlashDuration: 0.1
   deathFadeDuration: 0.5
   minHorizontalNormalX: 0.9
+  jumpAngle: 45
+  defaultLeftFacing: 1
