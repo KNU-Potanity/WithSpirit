@@ -20,10 +20,18 @@ MonoBehaviour:
   AttackRangeY: 3
   DetectionRange: 10
   Knockback: 4
-  AttackAnimDelay: 0.8
+  AttackAnimDelay: 0.5
   hurtFlashDuration: 0.1
   deathFadeDuration: 0.9
   chargeSpeedMultiplier: 5
   chargePreDelay: 0.8
   chargeCooldown: 5
   chargeKnockback: 4
+  spawnPatterns:
+  - patternPrefab: {fileID: 6467456967004999262, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
+    spawnInterval: 5
+    count: 3
+    spawnPointNames:
+    - PatternPoint
+    spawnOffset: {x: 0, y: 0, z: 0}
+    spawnSpacing: {x: 0.7, y: 0, z: 0}
