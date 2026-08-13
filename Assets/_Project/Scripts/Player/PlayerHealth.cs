@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using BasePlatformer.Respawn;
+using BasePlatformer.Terrain;
 
 namespace BasePlatformer.Player
 {
@@ -43,6 +44,12 @@ namespace BasePlatformer.Player
         public void TakeDamage(int damage, Vector2 knockbackDir = default)
         {
             if (isInvincible) return; // 무적 상태면 데미지 무시
+
+            // 장막(BarrierWall)이 활성화 되어 있으면 데미지 1회 무효화
+            // 씬 내 활성 BarrierWall을 탐색 (플레이어 근처에 있는 것)
+            var barrierWall = FindActiveBarrierWall();
+            if (barrierWall != null && barrierWall.TryAbsorb())
+                return;
 
             CurrentHearts -= damage;
             if (CurrentHearts < 0) CurrentHearts = 0;
@@ -111,6 +118,34 @@ namespace BasePlatformer.Player
             OnHealthChanged?.Invoke(CurrentHearts);
 
             respawnManager?.RespawnPlayer();
+        }
+
+        /// <summary>
+        /// 씬에서 활성화된 BarrierWall 중 이 플레이어와 가장 가까운 것을 반환합니다.
+        /// 장막이 없거나 비활성 상태이면 null을 반환합니다.
+        /// </summary>
+        private BarrierWall FindActiveBarrierWall()
+        {
+            // 씬에 장막이 많지 않으므로 FindObjectsByType 사용
+            var barriers = FindObjectsByType<BarrierWall>(FindObjectsInactive.Exclude);
+            if (barriers.Length == 0) return null;
+
+            BarrierWall closest = null;
+            float minDist = float.MaxValue;
+            Vector2 myPos = transform.position;
+
+            foreach (var b in barriers)
+            {
+                float dist = Vector2.Distance(myPos, b.transform.position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    closest = b;
+                }
+            }
+
+            // 너무 멀리 있는 장막은 무시 (같은 플랫폼 위가 아닌 경우)
+            return minDist <= 8f ? closest : null;
         }
     }
 }
