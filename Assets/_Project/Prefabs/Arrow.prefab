@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0529bf9d3b5bf6419fa2a9f760c8579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterProjectile
+  lifetime: 5
 --- !u!61 &-1765687070137728630
 BoxCollider2D:
   m_ObjectHideFlags: 0

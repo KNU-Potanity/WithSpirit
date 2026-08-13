@@ -260,6 +260,9 @@ public class DebuffMonsterMovement : MonoBehaviour, IMonsterMovement
             var playerHealth = target.GetComponentInParent<BasePlatformer.Player.PlayerHealth>();
             if (playerHealth == null) playerHealth = target.GetComponent<BasePlatformer.Player.PlayerHealth>();
 
+            // 장막이 활성 상태인지 미리 확인 (TakeDamage가 장막을 소모하기 전에 체크)
+            bool barrierWasActive = IsBarrierActiveNear(target.transform);
+
             if (playerHealth != null)
             {
                 float dirX = (target.transform.position.x > transform.position.x) ? 1f : -1f;
@@ -267,7 +270,9 @@ public class DebuffMonsterMovement : MonoBehaviour, IMonsterMovement
                 playerHealth.TakeDamage((int)attackDamage, knockbackDir);
             }
 
-            // 2. 디버프 (둔화 - 이동속도 50% 감소 및 하늘색 시각 효과)
+            // 2. 디버프 — 장막이 활성 상태였다면 이번 공격은 장막이 흡수했으므로 디버프 건너뜀
+            if (barrierWasActive) return;
+
             var playerMovement = target.GetComponentInParent<BasePlatformer.Player.PlayerMovement>();
             if (playerMovement == null) playerMovement = target.GetComponent<BasePlatformer.Player.PlayerMovement>();
 
@@ -279,6 +284,21 @@ public class DebuffMonsterMovement : MonoBehaviour, IMonsterMovement
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// target 근처에 활성화된 BarrierWall이 있는지 확인합니다.
+    /// </summary>
+    private bool IsBarrierActiveNear(Transform target)
+    {
+        var barriers = UnityEngine.Object.FindObjectsByType<BasePlatformer.Terrain.BarrierWall>(
+            FindObjectsInactive.Exclude);
+        foreach (var b in barriers)
+        {
+            if (b.IsActive && Vector2.Distance(target.position, b.transform.position) <= 8f)
+                return true;
+        }
+        return false;
     }
 
 #if UNITY_EDITOR

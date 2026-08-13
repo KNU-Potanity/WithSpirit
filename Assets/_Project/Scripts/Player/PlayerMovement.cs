@@ -32,6 +32,7 @@ namespace BasePlatformer.Player
 
         private float speedMultiplier = 1.0f;
         private Coroutine slowDebuffCoroutine;
+        private Coroutine speedBuffCoroutine;
         private SpriteRenderer spriteRenderer;
         private Color originalColor = Color.white;
 
@@ -77,6 +78,12 @@ namespace BasePlatformer.Player
 
         public void ApplySlowDebuff(float decreaseRate, float duration)
         {
+            // 버프 중이면 취소 후 디버프 적용
+            if (speedBuffCoroutine != null)
+            {
+                StopCoroutine(speedBuffCoroutine);
+                speedBuffCoroutine = null;
+            }
             if (slowDebuffCoroutine != null)
             {
                 StopCoroutine(slowDebuffCoroutine);
@@ -101,6 +108,46 @@ namespace BasePlatformer.Player
                 spriteRenderer.color = originalColor;
             }
             slowDebuffCoroutine = null;
+        }
+
+        /// <summary>
+        /// 이동 속도 버프를 적용합니다.
+        /// 디버프가 활성 중이면 취소하고 버프로 덮어씁니다.
+        /// </summary>
+        /// <param name="multiplier">속도 배율 (예: 1.5 = 1.5배)</param>
+        /// <param name="duration">지속 시간(초)</param>
+        public void ApplySpeedBuff(float multiplier, float duration)
+        {
+            // 디버프 중이면 취소 후 버프 적용
+            if (slowDebuffCoroutine != null)
+            {
+                StopCoroutine(slowDebuffCoroutine);
+                slowDebuffCoroutine = null;
+            }
+            if (speedBuffCoroutine != null)
+            {
+                StopCoroutine(speedBuffCoroutine);
+            }
+            speedBuffCoroutine = StartCoroutine(SpeedBuffRoutine(multiplier, duration));
+        }
+
+        private System.Collections.IEnumerator SpeedBuffRoutine(float multiplier, float duration)
+        {
+            speedMultiplier = multiplier;
+            if (spriteRenderer != null)
+            {
+                // 속도 버프: 노란색으로 시각적 효과 표시
+                spriteRenderer.color = new Color(1.0f, 0.9f, 0.2f, 1.0f);
+            }
+
+            yield return new WaitForSeconds(duration);
+
+            speedMultiplier = 1.0f;
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = originalColor;
+            }
+            speedBuffCoroutine = null;
         }
 
         private void OnEnable()

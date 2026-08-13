@@ -70,13 +70,19 @@ namespace BasePlatformer.Player
 
         private Rigidbody2D rb;
         private PlayerGroundDetector groundDetector;
+        private SpriteRenderer spriteRenderer;
+        private Color originalColor = Color.white;
 
-        private float jumpVelocity;   // 역산된 초기 점프 속도 (위 방향, +)
-        private float gravity;        // 역산된 중력 가속도 (아래 방향으로 적용, 양수 값)
+        private float baseJumpVelocity;  // Awake에서 역산된 기본 초기 점프 속도
+        private float jumpVelocity;      // 실제 사용되는 초기 점프 속도 (버프 배율 적용 가능)
+        private float gravity;           // 역산된 중력 가속도 (아래 방향으로 적용, 양수 값)
 
         private float jumpStartY;        // 이번 점프가 시작된 월드 Y 좌표 (최소 높이 보장 계산용)
         private bool isJumpCutApplied;    // 이번 점프에서 가변 점프 컷이 이미 적용됐는지 (중복 적용 방지)
         private float coyoteTimer;        // 남은 코요테 타임 (그라운드에 있으면 항상 coyoteTime으로 채워짐)
+
+        private Coroutine jumpBuffCoroutine;
+        private bool isJumpBuffActive = false;
 
         /// <summary> 현재 접지 상태 여부 </summary>
         public bool IsGrounded => groundDetector.IsGrounded;
@@ -98,8 +104,13 @@ namespace BasePlatformer.Player
             // h = 0.5 * v0 * t  =>  v0 = 2h/t
             // g = v0 / t = 2h / t^2
             float t = Mathf.Max(timeToApex, 0.0001f);
-            jumpVelocity = 2f * maxJumpHeight / t;
+            baseJumpVelocity = 2f * maxJumpHeight / t;
+            jumpVelocity = baseJumpVelocity;
             gravity = 2f * maxJumpHeight / (t * t);
+
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer != null) originalColor = spriteRenderer.color;
 
             // Jump 액션: Space / W / 위쪽 화살표
             jumpAction = new InputAction(name: "Jump", type: InputActionType.Button);
@@ -199,6 +210,40 @@ namespace BasePlatformer.Player
 
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, resultVelocity);
             isJumpCutApplied = true;
+        }
+
+        /// <summary>
+        /// 점프력 버프를 즉시 적용합니다. 발판 위에 올라서는 순간 호출됩니다.
+        /// </summary>
+        /// <param name="multiplier">점프 속도 배율 (예: 1.5 = 높이 약 1.5배)</param>
+        public void SetJumpBuff(float multiplier)
+        {
+            // 코루틴 방식 버프가 있으면 취소
+            if (jumpBuffCoroutine != null)
+            {
+                StopCoroutine(jumpBuffCoroutine);
+                jumpBuffCoroutine = null;
+            }
+
+            isJumpBuffActive = true;
+            jumpVelocity = baseJumpVelocity * multiplier;
+
+            if (spriteRenderer != null)
+                spriteRenderer.color = new Color(0.3f, 1.0f, 0.4f, 1.0f); // 초록색
+        }
+
+        /// <summary>
+        /// 점프력 버프를 해제합니다. 발판에서 이탈하는 순간 호출됩니다.
+        /// </summary>
+        public void ClearJumpBuff()
+        {
+            if (!isJumpBuffActive) return;
+
+            isJumpBuffActive = false;
+            jumpVelocity = baseJumpVelocity;
+
+            if (spriteRenderer != null)
+                spriteRenderer.color = originalColor;
         }
     }
 }
