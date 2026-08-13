@@ -6196,6 +6196,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarnivorousPlantData
       objectReference: {fileID: 0}
+    - target: {fileID: 1896382300768062444, guid: b65ff429da569bc4f8804d8b52bf05c6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4592267635236619655, guid: b65ff429da569bc4f8804d8b52bf05c6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.04632
@@ -9118,7 +9122,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5936936060892978325, guid: fac7b60de1516f940b7f561646e8aadb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6061819418832787422, guid: fac7b60de1516f940b7f561646e8aadb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9165,67 +9169,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fac7b60de1516f940b7f561646e8aadb, type: 3}
---- !u!1001 &2428498732056551566
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5867336236754505291, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 10.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867336236754505291, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.46
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867336236754505291, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867336236754505291, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867336236754505291, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867336236754505291, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867336236754505291, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867336236754505291, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867336236754505291, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5867336236754505291, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6467456967004999262, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_Name
-      value: Chestnut
-      objectReference: {fileID: 0}
-    - target: {fileID: 6467456967004999262, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
 --- !u!1001 &5629418120318121237
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9485,6 +9428,5 @@ SceneRoots:
   - {fileID: 78706364}
   - {fileID: 6215576457815122023}
   - {fileID: 9091547857005210042}
-  - {fileID: 2428498732056551566}
   - {fileID: 2017932804}
   - {fileID: 361694173}

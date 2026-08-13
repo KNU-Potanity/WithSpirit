@@ -28,7 +28,7 @@ MonoBehaviour:
   chargeCooldown: 5
   chargeKnockback: 4
   spawnPatterns:
-  - patternPrefab: {fileID: 6467456967004999262, guid: 807433faf40b46f4db5dc010c7314cce, type: 3}
+  - patternPrefab: {fileID: 6467456967004999262, guid: e83e231512494f241b5e332e25aa1ca6, type: 3}
     spawnInterval: 5
     count: 3
     spawnPointNames:
