@@ -1,9 +1,10 @@
 using UnityEngine;
 using BasePlatformer.Monsters;
+using BasePlatformer.Terrain;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
-public class RangedMonsterMovement : MonoBehaviour, IMonsterMovement
+public class RangedMonsterMovement : MonoBehaviour, IMonsterMovement, IBarrierConsumable
 {
     private enum State { Idle, Chase, Attack }
     private State currentState = State.Idle;

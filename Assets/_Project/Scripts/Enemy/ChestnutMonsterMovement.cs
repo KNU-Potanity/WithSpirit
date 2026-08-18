@@ -2,10 +2,11 @@ using System.Collections;
 using UnityEngine;
 using BasePlatformer.Monsters;
 using BasePlatformer.Player;
+using BasePlatformer.Terrain;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
-public class ChestnutMonsterMovement : MonoBehaviour, IMonsterMovement
+public class ChestnutMonsterMovement : MonoBehaviour, IMonsterMovement, IBarrierConsumable
 {
     // ─────────────────────────────────────────────
     //  상태 정의
