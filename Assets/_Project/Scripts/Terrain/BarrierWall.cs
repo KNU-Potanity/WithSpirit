@@ -66,15 +66,8 @@ namespace BasePlatformer.Terrain
                 return;
             }
 
-            // 접촉 데미지 몬스터 또는 투사체가 Barrier에 닿으면 장막 소멸
-            // - ChestnutMonsterMovement : 점프해서 몸으로 부딪히는 몬스터
-            // - RangedMonsterMovement   : 원거리지만 몸에 닿아도 데미지를 주는 몬스터
-            // - MonsterProjectile       : 화살 등 투사체
-            bool isContactDamageMonster = other.GetComponent<ChestnutMonsterMovement>() != null
-                                       || other.GetComponent<RangedMonsterMovement>() != null;
-            bool isProjectile = other.GetComponent<MonsterProjectile>() != null;
-
-            if (isContactDamageMonster || isProjectile)
+            // IBarrierConsumable 인터페이스를 구현한 대상(접촉 데미지 몬스터, 투사체 등)이 Barrier에 닿으면 장막 소멸
+            if (other.GetComponent<IBarrierConsumable>() != null)
             {
                 Consume();
             }

@@ -1,6 +1,7 @@
 using UnityEngine;
+using BasePlatformer.Terrain;
 
-public class MonsterProjectile : MonoBehaviour
+public class MonsterProjectile : MonoBehaviour, IBarrierConsumable
 {
     [Header("Settings")]
     public float lifetime = 5f;

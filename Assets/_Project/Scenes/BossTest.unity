@@ -6629,13 +6629,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d351dd2d42ed2b4459c60ef9f913bf8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FairyMovement
-  player: {fileID: 564528734}
+  followTarget: {fileID: 564528734}
   offset: {x: -1.5, y: 1.5, z: 0}
   smoothTime: 0.3
   maxSpeed: 15
   enableHover: 1
   hoverAmplitude: 0.2
   hoverFrequency: 2
+  phaseOffset: 0
   updateType: 2
 --- !u!212 &487825427
 SpriteRenderer:
@@ -8238,6 +8239,61 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1305451573
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1305451575}
+  - component: {fileID: 1305451574}
+  m_Layer: 0
+  m_Name: FairyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1305451574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305451573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fa57ef16f8099442b1643d92d250d0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasePlatformer.Fairy.FairyManager
+  playerTransform: {fileID: 564528734}
+  baseFairy: {fileID: 487825426}
+  baseFairyOffset: {x: -1.5, y: 1.5, z: 0}
+  subFairyOffsetStep: {x: -1.5, y: 0.2, z: 0}
+  followSmoothTime: 0.45
+  followMaxSpeed: 10
+  testSubFairyPrefabs:
+  - {fileID: 5466460339071912849, guid: 0bb52b3242ef28440ad665093117bbfb, type: 3}
+  - {fileID: 5241247108877864983, guid: 21cd8d58f2df57d4a978a580a72ce144, type: 3}
+  - {fileID: 7686864555190939244, guid: 9684f9725bd021146a0db3470081e45b, type: 3}
+  subFairies: []
+--- !u!4 &1305451575
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305451573}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.58198, y: 0.96682, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1508608342
 GameObject:
   m_ObjectHideFlags: 0
@@ -9305,7 +9361,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 570020486880445574, guid: c2d395225c0c598409ab3f5d36889d7e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2089567742891926506, guid: c2d395225c0c598409ab3f5d36889d7e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9484,6 +9540,7 @@ SceneRoots:
   - {fileID: 1890312481}
   - {fileID: 561018464}
   - {fileID: 1156913380}
+  - {fileID: 1305451575}
   - {fileID: 1138138373}
   - {fileID: 1034144533}
   - {fileID: 487825428}
