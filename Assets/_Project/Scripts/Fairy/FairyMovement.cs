@@ -22,7 +22,6 @@ public class FairyMovement : MonoBehaviour
     public UpdateType updateType = UpdateType.LateUpdate;
 
     private Vector3 currentVelocity = Vector3.zero;
-    private float hoverTimer = 0f;
     private Vector3 currentSmoothPosition;
     // bool 대신 카운터로 관리: 여러 컨트롤러가 독립적으로 Lock/Unlock해도 안전
     private int lockRefCount;
@@ -86,8 +85,8 @@ public class FairyMovement : MonoBehaviour
         Vector3 finalPosition = currentSmoothPosition;
         if (enableHover)
         {
-            hoverTimer += deltaTime;
-            finalPosition.y += Mathf.Sin((hoverTimer + phaseOffset) * hoverFrequency) * hoverAmplitude;
+            // Time.time 기준 글로벌 시간 동기화 + phaseOffset(파도/물결 지연)으로 앞선 정령을 따라 물결치는 호버링 연출
+            finalPosition.y += Mathf.Sin(Time.time * hoverFrequency + phaseOffset) * hoverAmplitude;
         }
 
         transform.position = finalPosition;
@@ -120,7 +119,6 @@ public class FairyMovement : MonoBehaviour
     {
         currentSmoothPosition = position;
         currentVelocity = Vector3.zero;
-        hoverTimer = 0f;
     }
 
     public void FaceTarget(Vector3 targetPosition)
