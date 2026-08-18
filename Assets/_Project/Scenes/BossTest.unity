@@ -8275,7 +8275,7 @@ MonoBehaviour:
   followSmoothTime: 0.45
   followMaxSpeed: 10
   testSubFairyPrefabs:
-  - {fileID: 5466460339071912849, guid: 0bb52b3242ef28440ad665093117bbfb, type: 3}
+  - {fileID: 5241247108877864983, guid: 21cd8d58f2df57d4a978a580a72ce144, type: 3}
   - {fileID: 4595169336727990096, guid: de75904bad70c284e947de89f1222acd, type: 3}
   - {fileID: 7686864555190939244, guid: 9684f9725bd021146a0db3470081e45b, type: 3}
   subFairies: []
@@ -9631,7 +9631,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8362598938131165415, guid: dbaf95c1dc61635499285bf74d5805fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
