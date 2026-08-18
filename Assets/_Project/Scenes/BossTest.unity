@@ -6770,63 +6770,6 @@ MonoBehaviour:
   xMargin: 0.05
   fairyData: {fileID: 11400000, guid: a1470fa468e29674c8fcd62f940b6c53, type: 2}
   pushUpForce: 8
---- !u!1001 &510868234
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2736358685072792309, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 6.35
-      objectReference: {fileID: 0}
-    - target: {fileID: 2736358685072792309, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.85
-      objectReference: {fileID: 0}
-    - target: {fileID: 2736358685072792309, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2736358685072792309, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2736358685072792309, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2736358685072792309, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2736358685072792309, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2736358685072792309, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2736358685072792309, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2736358685072792309, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6387948801513792350, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
-      propertyPath: m_Name
-      value: BarrierPlatform
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 22f182f975b2cf142ab007c85fd3602f, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -9553,4 +9496,3 @@ SceneRoots:
   - {fileID: 361694173}
   - {fileID: 1841064575}
   - {fileID: 276719141}
-  - {fileID: 510868234}
