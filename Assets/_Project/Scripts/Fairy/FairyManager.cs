@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace BasePlatformer.Fairy
 {
@@ -71,10 +72,53 @@ namespace BasePlatformer.Fairy
             UpdateChain();
         }
 
+        public event System.Action<FairyMovement, Color> OnFairySelected;
+
         private void Update()
         {
+            HandleSelectionInput();
             UpdatePlayerFacing();
             UpdateChain();
+        }
+
+        private void HandleSelectionInput()
+        {
+            if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                // 마우스가 올려진 대상(몬스터 / 플랫폼)에 따라 지능적으로 다음 정령 선택
+                if (IsAnyMonsterHovered())
+                {
+                    SelectNextAttackFairy();
+                }
+                else if (IsAnyPlatformHovered())
+                {
+                    SelectNextPlatformFairy();
+                }
+                else
+                {
+                    SelectNextFairy();
+                }
+            }
+        }
+
+        private bool IsAnyMonsterHovered()
+        {
+            MonsterClickMarker[] monsterMarkers = FindObjectsByType<MonsterClickMarker>(FindObjectsInactive.Exclude);
+            foreach (var marker in monsterMarkers)
+            {
+                if (marker != null && marker.IsHovering) return true;
+            }
+            return false;
+        }
+
+        private bool IsAnyPlatformHovered()
+        {
+            PlatformClickMarker[] platformMarkers = FindObjectsByType<PlatformClickMarker>(FindObjectsInactive.Exclude);
+            foreach (var marker in platformMarkers)
+            {
+                if (marker != null && marker.IsHovering) return true;
+            }
+            return false;
         }
 
         private void UpdatePlayerFacing()
@@ -193,9 +237,9 @@ namespace BasePlatformer.Fairy
                     stepY = baseFairyOffset.y + subFairyOffsetStep.y * activeSlotIndex;
                 }
 
-                float wiggleY = (activeSlotIndex % 2 == 0) ? -0.2f : 0.2f;
-                Vector3 targetOffset = new Vector3(stepX, stepY + wiggleY, 0f);
-                float phaseOffset = activeSlotIndex * 0.5f;
+                Vector3 targetOffset = new Vector3(stepX, stepY, 0f);
+                // 앞선 정령의 파동을 일정 시간차(위상 지연)로 전달받아 물결(Wave)치도록 음수 phaseOffset 적용
+                float phaseOffset = -activeSlotIndex * 0.8f;
 
                 subFairies[i].SetTarget(playerTransform, targetOffset, phaseOffset);
 
@@ -229,13 +273,292 @@ namespace BasePlatformer.Fairy
         }
 
         /// <summary>
+        /// 현재 선택된 정령의 SpriteRenderer 색상을 반환합니다. (SpriteRenderer가 없으면 Color.white)
+        /// </summary>
+        public Color GetSelectedFairyColor()
+        {
+            FairyMovement fairy = GetSelectedFairy();
+            return GetFairyColor(fairy);
+        }
+
+        /// <summary>
+        /// 특정 정령 오브젝트/컴포넌트의 SpriteRenderer 색상을 반환합니다. (null이거나 없으면 선택된 정령 색상 또는 흰색)
+        /// </summary>
+        public Color GetFairyColor(object fairyObj)
+        {
+            if (fairyObj is Component comp)
+            {
+                SpriteRenderer sr = comp.GetComponent<SpriteRenderer>();
+                if (sr == null) sr = comp.GetComponentInChildren<SpriteRenderer>();
+                if (sr != null) return sr.color;
+            }
+            else if (fairyObj is GameObject go)
+            {
+                SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+                if (sr == null) sr = go.GetComponentInChildren<SpriteRenderer>();
+                if (sr != null) return sr.color;
+            }
+            return Color.white;
+        }
+
+        /// <summary>
+        /// 지정한 인덱스(0: 기본 정령, 1~N: 서브 정령)의 FairyMovement를 반환합니다.
+        /// </summary>
+        public FairyMovement GetFairyAtIndex(int index)
+        {
+            if (index == 0) return baseFairy;
+            int subIdx = index - 1;
+            if (subIdx >= 0 && subIdx < subFairies.Count) return subFairies[subIdx];
+            return null;
+        }
+
+        /// <summary>
+        /// 전체 등록된 정령(기본 정령 + 서브 정령)의 총 개수를 반환합니다.
+        /// </summary>
+        public int TotalFairyCount => 1 + (subFairies != null ? subFairies.Count : 0);
+
+        /// <summary>
+        /// 특정 인덱스의 정령을 명시적으로 선택합니다.
+        /// </summary>
+        public void SelectFairyAtIndex(int index)
+        {
+            int total = TotalFairyCount;
+            if (total == 0) return;
+
+            int clampedIndex = Mathf.Clamp(index, 0, total - 1);
+            if (selectedIndex != clampedIndex)
+            {
+                selectedIndex = clampedIndex;
+                FairyMovement selected = GetSelectedFairy();
+                Color color = GetSelectedFairyColor();
+
+                Debug.Log($"[FairyManager] 대상 조준으로 선택 정령 자동 변경: Index {selectedIndex} (Name: {selected?.gameObject.name}, Color: {color})");
+                OnFairySelected?.Invoke(selected, color);
+            }
+        }
+
+        /// <summary>
+        /// 몬스터를 조준했을 때, 현재 선택된 정령 인덱스로부터 가장 가까운 '공격 가능(IFairyAttack)'한 정령을 찾아 반환합니다.
+        /// (유저가 선택한 정령 인덱스는 변경되지 않고 그대로 유지됩니다)
+        /// </summary>
+        public IFairyAttack GetBestFairyForAttack()
+        {
+            int count = TotalFairyCount;
+            if (count == 0) return null;
+
+            // 1. 선택된 인덱스부터 순환하면서 IFairyAttack을 가지고 있고 CanAttack인 정령 탐색
+            for (int i = 0; i < count; i++)
+            {
+                int checkIndex = (selectedIndex + i) % count;
+                FairyMovement fairy = GetFairyAtIndex(checkIndex);
+                if (fairy == null) continue;
+
+                IFairyAttack attackCtrl = fairy.GetComponent<IFairyAttack>();
+                if (attackCtrl != null && attackCtrl.CanAttack)
+                {
+                    return attackCtrl;
+                }
+            }
+
+            // 2. 모든 정령이 쿨타임/이탈 중이어도 IFairyAttack 컴포넌트를 가진 가장 가까운 정령 반환
+            for (int i = 0; i < count; i++)
+            {
+                int checkIndex = (selectedIndex + i) % count;
+                FairyMovement fairy = GetFairyAtIndex(checkIndex);
+                if (fairy == null) continue;
+
+                IFairyAttack attackCtrl = fairy.GetComponent<IFairyAttack>();
+                if (attackCtrl != null)
+                {
+                    return attackCtrl;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 플랫폼 마커를 조준했을 때, 현재 선택된 정령 인덱스로부터 가장 가까운 '플랫폼 변신 가능(IFairyPlatform)'한 정령을 찾아 반환합니다.
+        /// (유저가 선택한 정령 인덱스는 변경되지 않고 그대로 유지됩니다)
+        /// </summary>
+        public IFairyPlatform GetBestFairyForPlatform()
+        {
+            int count = TotalFairyCount;
+            if (count == 0) return null;
+
+            // 1. 선택된 인덱스부터 순환하면서 IFairyPlatform을 가지고 있고 CanTransform인 정령 탐색
+            for (int i = 0; i < count; i++)
+            {
+                int checkIndex = (selectedIndex + i) % count;
+                FairyMovement fairy = GetFairyAtIndex(checkIndex);
+                if (fairy == null) continue;
+
+                IFairyPlatform platCtrl = fairy.GetComponent<IFairyPlatform>();
+                if (platCtrl != null && platCtrl.CanTransform)
+                {
+                    return platCtrl;
+                }
+            }
+
+            // 2. 이미 플랫폼을 설치한 상태에서 다른 마커로 재변신(RequestTransformOrReplace)하기 위해 활성 플랫폼 보유 정령 탐색
+            for (int i = 0; i < count; i++)
+            {
+                int checkIndex = (selectedIndex + i) % count;
+                FairyMovement fairy = GetFairyAtIndex(checkIndex);
+                if (fairy == null) continue;
+
+                IFairyPlatform platCtrl = fairy.GetComponent<IFairyPlatform>();
+                if (platCtrl != null && platCtrl.HasActivePlatform)
+                {
+                    return platCtrl;
+                }
+            }
+
+            // 3. 그 외 IFairyPlatform을 가진 가장 가까운 정령 반환
+            for (int i = 0; i < count; i++)
+            {
+                int checkIndex = (selectedIndex + i) % count;
+                FairyMovement fairy = GetFairyAtIndex(checkIndex);
+                if (fairy == null) continue;
+
+                IFairyPlatform platCtrl = fairy.GetComponent<IFairyPlatform>();
+                if (platCtrl != null)
+                {
+                    return platCtrl;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 활성화된 모든 플랫폼 정령의 플랫폼을 해제합니다. (몬스터 클릭 시 사용)
+        /// </summary>
+        public void RevertAllActivePlatforms()
+        {
+            int count = TotalFairyCount;
+            for (int i = 0; i < count; i++)
+            {
+                FairyMovement fairy = GetFairyAtIndex(i);
+                if (fairy == null) continue;
+
+                IFairyPlatform platCtrl = fairy.GetComponent<IFairyPlatform>();
+                if (platCtrl != null && platCtrl.HasActivePlatform)
+                {
+                    platCtrl.MarkClickHandled();
+                    platCtrl.RevertTransform();
+                }
+            }
+        }
+
+        /// <summary>
         /// 다음 정령을 선택합니다 (기본 정령 -> 서브 정령 1 -> 서브 정령 2 ... 순환)
         /// </summary>
         public void SelectNextFairy()
         {
-            int total = 1 + subFairies.Count;
+            int total = TotalFairyCount;
+            if (total == 0) return;
+
             selectedIndex = (selectedIndex + 1) % total;
-            Debug.Log($"[FairyManager] 선택된 정령 변경: Index {selectedIndex}");
+
+            FairyMovement selected = GetSelectedFairy();
+            Color color = GetSelectedFairyColor();
+
+            Debug.Log($"[FairyManager] 선택된 정령 변경: Index {selectedIndex} (Name: {selected?.gameObject.name}, Color: {color})");
+            OnFairySelected?.Invoke(selected, color);
+        }
+
+        /// <summary>
+        /// 몬스터 호버 상태에서 우클릭 시, 현재 조준/선택된 공격 정령의 다음 공격 정령(IFairyAttack)으로 즉시 전환합니다.
+        /// </summary>
+        public void SelectNextAttackFairy()
+        {
+            int total = TotalFairyCount;
+            if (total <= 1)
+            {
+                SelectNextFairy();
+                return;
+            }
+
+            // 현재 이 대상에게 실제로 조준되고 있는 공격 정령을 기준 시작점으로 잡음
+            IFairyAttack currentBest = GetBestFairyForAttack();
+            int baseIndex = selectedIndex;
+            if (currentBest is Component comp)
+            {
+                int found = GetFairyIndex(comp.GetComponent<FairyMovement>());
+                if (found != -1) baseIndex = found;
+            }
+
+            // 기준 정령 다음 번호부터 1바퀴 순환하며 IFairyAttack을 가진 첫 번째 정령을 선택
+            for (int i = 1; i <= total; i++)
+            {
+                int checkIndex = (baseIndex + i) % total;
+                FairyMovement fairy = GetFairyAtIndex(checkIndex);
+                if (fairy == null) continue;
+
+                if (fairy.GetComponent<IFairyAttack>() != null)
+                {
+                    SelectFairyAtIndex(checkIndex);
+                    return;
+                }
+            }
+
+            // 공격 정령을 별도로 찾지 못한 경우 일반 다음 정령 선택
+            SelectNextFairy();
+        }
+
+        /// <summary>
+        /// 플랫폼 호버 상태에서 우클릭 시, 현재 조준/선택된 플랫폼 정령의 다음 플랫폼 정령(IFairyPlatform)으로 즉시 전환합니다.
+        /// </summary>
+        public void SelectNextPlatformFairy()
+        {
+            int total = TotalFairyCount;
+            if (total <= 1)
+            {
+                SelectNextFairy();
+                return;
+            }
+
+            // 현재 이 대상에게 실제로 조준되고 있는 플랫폼 정령을 기준 시작점으로 잡음
+            IFairyPlatform currentBest = GetBestFairyForPlatform();
+            int baseIndex = selectedIndex;
+            if (currentBest is Component comp)
+            {
+                int found = GetFairyIndex(comp.GetComponent<FairyMovement>());
+                if (found != -1) baseIndex = found;
+            }
+
+            // 기준 정령 다음 번호부터 1바퀴 순환하며 IFairyPlatform을 가진 첫 번째 정령을 선택
+            for (int i = 1; i <= total; i++)
+            {
+                int checkIndex = (baseIndex + i) % total;
+                FairyMovement fairy = GetFairyAtIndex(checkIndex);
+                if (fairy == null) continue;
+
+                if (fairy.GetComponent<IFairyPlatform>() != null)
+                {
+                    SelectFairyAtIndex(checkIndex);
+                    return;
+                }
+            }
+
+            // 플랫폼 정령을 별도로 찾지 못한 경우 일반 다음 정령 선택
+            SelectNextFairy();
+        }
+
+        /// <summary>
+        /// 특정 FairyMovement 인스턴스의 인덱스를 반환합니다 (0: 기본 정령, 1~N: 서브 정령, 미등록: -1)
+        /// </summary>
+        public int GetFairyIndex(FairyMovement fairy)
+        {
+            if (fairy == null) return -1;
+            if (fairy == baseFairy) return 0;
+            if (subFairies != null)
+            {
+                int subIdx = subFairies.IndexOf(fairy);
+                if (subIdx != -1) return subIdx + 1;
+            }
+            return -1;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using BasePlatformer.Fairy;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,7 +7,7 @@ using UnityEngine.InputSystem;
 /// 정령의 플랫폼 변신/해제를 제어하는 컨트롤러.
 /// 기획서 2.2(플랫폼 변신) 및 2.3(플랫폼 해제) 스펙에 맞추어 연동됩니다.
 /// </summary>
-public class FairyPlatformController : MonoBehaviour
+public class FairyPlatformController : MonoBehaviour, IFairyPlatform
 {
     [Header("Movement & Anim Settings")]
     [SerializeField] private float moveSpeed = 18f;

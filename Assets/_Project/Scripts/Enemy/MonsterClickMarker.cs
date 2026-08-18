@@ -1,4 +1,5 @@
 using BasePlatformer.Monsters;
+using BasePlatformer.Fairy;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,12 +8,6 @@ using UnityEngine.InputSystem;
 /// Update()에서 OverlapPoint로 마우스 위치를 직접 감지하므로
 /// 부모 오브젝트의 콜라이더나 Physics 2D Raycaster 세팅과 무관하게 동작합니다.
 /// 이 오브젝트의 Collider2D 크기 = 마우스 인식 범위(에임 보정)
-///
-/// 씬 구성 예시:
-/// Mushroom (몬스터)
-/// └── MonsterMarker (이 스크립트가 붙는 자식 오브젝트)
-///     ├── Collider2D — IsTrigger ✅, 크기로 마우스 감지 범위 조절
-///     └── SpriteRenderer (선택) — 마커 비주얼을 여기 바로 달아도 됨
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class MonsterClickMarker : MonoBehaviour
@@ -28,12 +23,12 @@ public class MonsterClickMarker : MonoBehaviour
     //  내부 참조
     // ─────────────────────────────────────────────
     private Transform parentTransform;
-    private FairyAttackController fairyAttack;
-    private FairyPlatformController fairyPlatform;
     private MonsterHealth monsterHealth;
     private Collider2D col;
 
     private bool isHovering = false; // 현재 마우스가 이 콜라이더 위에 있는지
+
+    public bool IsHovering => isHovering;
 
     // ─────────────────────────────────────────────
     //  초기화
@@ -48,13 +43,6 @@ public class MonsterClickMarker : MonoBehaviour
         if (monsterHealth == null)
             Debug.LogWarning($"[MonsterClickMarker] {gameObject.name} 의 부모에서 GroundMonsterHealth를 찾을 수 없습니다!");
 
-        // 씬에서 정령 공격 컨트롤러를 찾아 캐싱
-        fairyAttack = FindAnyObjectByType<FairyAttackController>();
-        if (fairyAttack == null)
-            Debug.LogWarning("[MonsterClickMarker] 씬에서 FairyAttackController를 찾을 수 없습니다!");
-
-        fairyPlatform = FindAnyObjectByType<FairyPlatformController>();
-
         // 마커는 처음에 꺼둠
         HideMarker();
     }
@@ -64,6 +52,8 @@ public class MonsterClickMarker : MonoBehaviour
     // ─────────────────────────────────────────────
     private void Update()
     {
+        if (Camera.main == null || Mouse.current == null) return;
+
         // 마우스의 화면 좌표 → 월드 좌표 변환
         Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
@@ -83,19 +73,36 @@ public class MonsterClickMarker : MonoBehaviour
             HideMarker();
         }
 
+        // 호버 중일 때: 우클릭으로 정령이 변경되거나 쿨다운 상태가 변할 수 있으므로 마커 색상을 실시간 갱신
+        if (isHovering && markerObject != null && markerObject.activeSelf)
+        {
+            ApplyFairyColor();
+        }
+
         // 마우스가 올라온 상태에서 왼쪽 클릭
         if (isHovering && Mouse.current.leftButton.wasPressedThisFrame)
         {
             // 플랫폼 활성 상태면 먼저 해제 후 공격
-            // MarkClickHandled()로 LateUpdate의 이중 해제 방지
-            if (fairyPlatform != null && fairyPlatform.HasActivePlatform)
+            if (FairyManager.Instance != null)
             {
-                fairyPlatform.MarkClickHandled();
-                fairyPlatform.RevertTransform();
-            }
+                FairyManager.Instance.RevertAllActivePlatforms();
 
-            if (fairyAttack != null && monsterHealth != null)
-                fairyAttack.RequestAttack(monsterHealth);
+                // 선택된 정령에서 가장 가까운 공격 가능한 정령을 찾아서 공격 요청
+                IFairyAttack attackTarget = FairyManager.Instance.GetBestFairyForAttack();
+                if (attackTarget != null && monsterHealth != null)
+                {
+                    attackTarget.RequestAttack(monsterHealth);
+                }
+            }
+            else
+            {
+                // Fallback: 씬 내 단일 컨트롤러 검색
+                var fairyAttack = FindAnyObjectByType<FairyAttackController>();
+                if (fairyAttack != null && monsterHealth != null)
+                {
+                    fairyAttack.RequestAttack(monsterHealth);
+                }
+            }
         }
     }
 
@@ -105,7 +112,35 @@ public class MonsterClickMarker : MonoBehaviour
     private void ShowMarker()
     {
         if (markerObject != null)
+        {
+            ApplyFairyColor();
             markerObject.SetActive(true);
+        }
+    }
+
+    private void ApplyFairyColor()
+    {
+        if (FairyManager.Instance == null) return;
+
+        // 실제로 이 몬스터를 공격하러 출격할 정령의 색상 획득
+        IFairyAttack attackTarget = FairyManager.Instance.GetBestFairyForAttack();
+        Color fairyColor = FairyManager.Instance.GetFairyColor(attackTarget);
+
+        // markerObject 또는 자식의 SpriteRenderer 또는 UI Image 색상 적용
+        var sr = markerObject.GetComponent<SpriteRenderer>();
+        if (sr == null) sr = markerObject.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null)
+        {
+            sr.color = fairyColor;
+            return;
+        }
+
+        var img = markerObject.GetComponent<UnityEngine.UI.Image>();
+        if (img == null) img = markerObject.GetComponentInChildren<UnityEngine.UI.Image>();
+        if (img != null)
+        {
+            img.color = fairyColor;
+        }
     }
 
     /// <summary>

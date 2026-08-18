@@ -1,8 +1,9 @@
 using System.Collections;
 using BasePlatformer.Monsters;
+using BasePlatformer.Fairy;
 using UnityEngine;
 
-public class FairyAttackController : MonoBehaviour
+public class FairyAttackController : MonoBehaviour, IFairyAttack
 {
     [Header("Fairy Data")]
     public MainFairyData fairyData;

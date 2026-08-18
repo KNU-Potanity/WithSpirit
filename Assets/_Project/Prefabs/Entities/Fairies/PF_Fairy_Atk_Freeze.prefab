@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6528065621533571398}
   - component: {fileID: 4016019364082984083}
   - component: {fileID: 8037064935468814276}
+  - component: {fileID: -4365240105088057564}
   m_Layer: 0
   m_Name: PF_Fairy_Atk_Freeze
   m_TagString: Untagged
@@ -128,11 +129,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d351dd2d42ed2b4459c60ef9f913bf8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FairyMovement
-  player: {fileID: 0}
+  followTarget: {fileID: 0}
   offset: {x: -1.5, y: 1.5, z: 0}
   smoothTime: 0.3
   maxSpeed: 15
   enableHover: 1
   hoverAmplitude: 0.2
   hoverFrequency: 2
+  phaseOffset: 0
   updateType: 1
+--- !u!114 &-4365240105088057564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6737748898311101103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d378542c5f16a4b42acd81feb5393754, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FairyAttackController
+  fairyData: {fileID: 11400000, guid: a1470fa468e29674c8fcd62f940b6c53, type: 2}
+  dashSpeed: 18
+  returnSpeed: 18
+  hitDistance: 0.15
+  returnDistance: 0.05
