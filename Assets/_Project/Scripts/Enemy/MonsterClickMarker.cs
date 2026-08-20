@@ -31,6 +31,40 @@ public class MonsterClickMarker : MonoBehaviour
     public bool IsHovering => isHovering;
 
     // ─────────────────────────────────────────────
+    //  전역 단일 타겟팅 관리
+    // ─────────────────────────────────────────────
+    private static readonly System.Collections.Generic.List<MonsterClickMarker> allMarkers = new System.Collections.Generic.List<MonsterClickMarker>();
+    private static int lastEvaluatedFrame = -1;
+    private static MonsterClickMarker currentHoveredMarker = null;
+
+    public static MonsterClickMarker CurrentHoveredMarker => currentHoveredMarker;
+
+    private void OnEnable()
+    {
+        if (!allMarkers.Contains(this))
+            allMarkers.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        allMarkers.Remove(this);
+        if (currentHoveredMarker == this)
+        {
+            currentHoveredMarker = null;
+        }
+        HideMarker();
+    }
+
+    private void OnDestroy()
+    {
+        allMarkers.Remove(this);
+        if (currentHoveredMarker == this)
+        {
+            currentHoveredMarker = null;
+        }
+    }
+
+    // ─────────────────────────────────────────────
     //  초기화
     // ─────────────────────────────────────────────
     private void Start()
@@ -41,33 +75,45 @@ public class MonsterClickMarker : MonoBehaviour
         // 부모 오브젝트에서 체력 컴포넌트를 찾음
         monsterHealth = GetComponentInParent<MonsterHealth>();
         if (monsterHealth == null)
-            Debug.LogWarning($"[MonsterClickMarker] {gameObject.name} 의 부모에서 GroundMonsterHealth를 찾을 수 없습니다!");
+            Debug.LogWarning($"[MonsterClickMarker] {gameObject.name} 의 부모에서 MonsterHealth를 찾을 수 없습니다!");
 
         // 마커는 처음에 꺼둠
         HideMarker();
     }
 
     // ─────────────────────────────────────────────
-    //  매 프레임 마우스 위치 감지
+    //  매 프레임 마우스 위치 감지 및 단일 타겟 선정
     // ─────────────────────────────────────────────
     private void Update()
     {
         if (Camera.main == null || Mouse.current == null) return;
 
-        // 마우스의 화면 좌표 → 월드 좌표 변환
+        // 죽은 몬스터는 마커 비활성화
+        if (monsterHealth != null && monsterHealth.IsDead)
+        {
+            if (isHovering)
+                HideMarker();
+            return;
+        }
+
         Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
-        // 이 오브젝트의 콜라이더 위에 마우스가 있는지 체크
-        bool over = col.OverlapPoint(mouseWorldPos);
+        // 매 프레임 첫 번째 실행되는 마커에서 마우스와 겹치는 모든 마커 중 가장 가까운 단 하나만 선정
+        if (lastEvaluatedFrame != Time.frameCount)
+        {
+            lastEvaluatedFrame = Time.frameCount;
+            EvaluateCurrentTarget(mouseWorldPos);
+        }
 
-        // 마우스가 새로 올라왔을 때
-        if (over && !isHovering)
+        bool isTarget = (currentHoveredMarker == this);
+
+        // 상태 전환 처리
+        if (isTarget && !isHovering)
         {
             isHovering = true;
             ShowMarker();
         }
-        // 마우스가 벗어났을 때
-        else if (!over && isHovering)
+        else if (!isTarget && isHovering)
         {
             isHovering = false;
             HideMarker();
@@ -104,6 +150,42 @@ public class MonsterClickMarker : MonoBehaviour
                 }
             }
         }
+    }
+
+    private static void EvaluateCurrentTarget(Vector2 mouseWorldPos)
+    {
+        MonsterClickMarker closestMarker = null;
+        float minDistanceSq = float.MaxValue;
+
+        for (int i = allMarkers.Count - 1; i >= 0; i--)
+        {
+            var marker = allMarkers[i];
+            if (marker == null || !marker.isActiveAndEnabled)
+            {
+                allMarkers.RemoveAt(i);
+                continue;
+            }
+
+            if (marker.monsterHealth != null && marker.monsterHealth.IsDead)
+                continue;
+
+            if (marker.col == null)
+                marker.col = marker.GetComponent<Collider2D>();
+
+            if (marker.col != null && marker.col.OverlapPoint(mouseWorldPos))
+            {
+                // 마우스 위치와 마커(또는 몬스터 중심) 간의 거리 계산하여 가장 가까운 몬스터 1개만 선택
+                Vector2 centerPos = marker.transform.position;
+                float distSq = (centerPos - mouseWorldPos).sqrMagnitude;
+                if (distSq < minDistanceSq)
+                {
+                    minDistanceSq = distSq;
+                    closestMarker = marker;
+                }
+            }
+        }
+
+        currentHoveredMarker = closestMarker;
     }
 
     // ─────────────────────────────────────────────
