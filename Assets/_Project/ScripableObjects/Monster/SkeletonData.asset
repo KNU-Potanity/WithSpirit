@@ -20,7 +20,7 @@ MonoBehaviour:
   AttackRangeY: 2
   DetectionRange: 5
   Knockback: 2
-  AttackAnimDelay: 0.5
+  AttackAnimDelay: 0.25
   hurtFlashDuration: 0.1
   deathFadeDuration: 0.5
   ProjectileType: 0
