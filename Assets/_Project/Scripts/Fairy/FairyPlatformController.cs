@@ -21,7 +21,7 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
     [SerializeField] private float xMargin = 0.05f;
 
     [Header("Fairy Data")]
-    [SerializeField] private MainFairyData fairyData;
+    public MainFairyData fairyData;
 
     [Header("Platform Activation Physics")]
     [Tooltip("플랫폼 활성화 시 영역 안 오브젝트들을 위로 밀쳐내는 힘")]
