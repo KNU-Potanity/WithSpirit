@@ -8275,9 +8275,9 @@ MonoBehaviour:
   followSmoothTime: 0.45
   followMaxSpeed: 10
   testSubFairyPrefabs:
-  - {fileID: 5241247108877864983, guid: 21cd8d58f2df57d4a978a580a72ce144, type: 3}
+  - {fileID: 6737748898311101103, guid: 3b31437eae582e4478f58b9f2dbd6d48, type: 3}
   - {fileID: 4595169336727990096, guid: de75904bad70c284e947de89f1222acd, type: 3}
-  - {fileID: 7686864555190939244, guid: 9684f9725bd021146a0db3470081e45b, type: 3}
+  - {fileID: 5466460339071912849, guid: 0bb52b3242ef28440ad665093117bbfb, type: 3}
   subFairies: []
 --- !u!4 &1305451575
 Transform:
@@ -9412,7 +9412,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 128
   m_MaskInteraction: 0
   m_Sprite: {fileID: -5437846315669128455, guid: 15637d1673de6cd47b6b0aa14f492857, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -9469,7 +9469,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 570020486880445574, guid: c2d395225c0c598409ab3f5d36889d7e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2089567742891926506, guid: c2d395225c0c598409ab3f5d36889d7e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9570,7 +9570,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7620738790224228511, guid: 3d96db31887a72749929dc905a0b1e09, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9631,7 +9631,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8362598938131165415, guid: dbaf95c1dc61635499285bf74d5805fc, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

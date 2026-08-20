@@ -25,6 +25,8 @@ namespace BasePlatformer.Monsters
         private Coroutine hurtRoutine;
         private bool isDead;
 
+        public bool IsDead => isDead;
+
         protected virtual void Awake()
         {
             if (monsterData != null)
@@ -101,6 +103,14 @@ namespace BasePlatformer.Monsters
                 {
                     mb.enabled = false;
                 }
+            }
+
+            // 클릭 마커 비활성화
+            var clickMarkers = GetComponentsInChildren<MonsterClickMarker>(true);
+            foreach (var marker in clickMarkers)
+            {
+                marker.HideMarker();
+                marker.enabled = false;
             }
 
             if (animator != null)
