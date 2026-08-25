@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b211fcb0a284ee4aa8d58eef124da76, type: 3}
+  m_Name: FairySelectUIData
+  m_EditorClassIdentifier: Assembly-CSharp::FairySelectUIData
+  platformCategoryColor: {r: 0.2, g: 0.7, b: 1, a: 1}
+  attackCategoryColor: {r: 1, g: 0.35, b: 0.35, a: 1}
+  burnEffectDescription: "<size=25><b>\uD654\uC0C1</b></size>\n<b>\uD6A8\uACFC</b>
+    : 2\uCD08\uB9C8\uB2E4 1\uB370\uBBF8\uC9C0 (\uC9C0\uC18D \uB370\uBBF8\uC9C0)\r\n<b>\uC9C0\uC18D\uC2DC\uAC04</b>
+    : 6\uCD08 (\uCD1D 3\uD68C \uD2F1)\r\n<b>\uC2DC\uAC01\uC801 \uD6A8\uACFC</b> :
+    \uC801\uC6A9 \uC911 \uBAAC\uC2A4\uD130 \uC0C9\uC774 **\uBE68\uAC04\uC0C9**\uC73C\uB85C
+    \uBCC0\uACBD (\uC9C0\uC18D\uC2DC\uAC04 \uB05D\uB098\uBA74 \uC6D0\uB798 \uC0C9\uC73C\uB85C
+    \uBCF5\uADC0)"
+  freezeEffectDescription: "<size=25><b>\uBE59</b></size>\n<b>\uD6A8\uACFC</b> :
+    \uD589\uB3D9 \uBD88\uAC00 ( \uC774\uB3D9/\uACF5\uACA9 \uC815\uC9C0 )\n<b>\uC9C0\uC18D\uC2DC\uAC04</b>
+    : 3\uCD08\r\n<b>\uC2DC\uAC01\uC801 \uD6A8\uACFC</b> : \uC801\uC6A9 \uC911 \uBAAC\uC2A4\uD130
+    \uC0C9\uC774 **\uD558\uB298\uC0C9**\uC73C\uB85C \uBCC0\uACBD (\uC9C0\uC18D\uC2DC\uAC04
+    \uB05D\uB098\uBA74 \uC6D0\uB798 \uC0C9\uC73C\uB85C \uBCF5\uADC0)"

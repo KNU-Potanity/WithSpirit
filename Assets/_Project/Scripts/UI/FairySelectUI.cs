@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using TMPro;
 
 namespace BasePlatformer.Fairy
@@ -26,6 +27,12 @@ namespace BasePlatformer.Fairy
         private Image fairyImage;
         private TextMeshProUGUI contentText;
         private bool isInitialized;
+
+        public TextMeshProUGUI GetContentText()
+        {
+            Initialize();
+            return contentText;
+        }
 
         private void Initialize()
         {
@@ -60,7 +67,7 @@ namespace BasePlatformer.Fairy
             }
         }
 
-        public void Bind(FairyInfo info, System.Action onClickCallback)
+        public void Bind(FairyInfo info, System.Action onClickCallback, FairySelectUIData uiData = null)
         {
             if (cardRoot == null || info == null) return;
             Initialize();
@@ -68,13 +75,30 @@ namespace BasePlatformer.Fairy
             cardRoot.SetActive(true);
 
             if (categoryText != null)
+            {
                 categoryText.text = info.GetCategory();
+
+                if (uiData != null)
+                {
+                    bool isAttack = info.fairyType.ToString().StartsWith("Attack") || 
+                                    (info.GetCategory() != null && info.GetCategory().Contains("공격"));
+                    categoryText.color = uiData.GetCategoryColor(isAttack);
+                }
+            }
 
             if (titleText != null)
                 titleText.text = info.GetFairyName();
 
             if (contentText != null)
+            {
                 contentText.text = info.GetDescription();
+                contentText.ForceMeshUpdate();
+
+                // 기존 StatusEffectTooltip 컴포넌트가 남아있을 경우 충돌 방지를 위해 비활성화
+                var legacyTooltip = contentText.GetComponent<BasePlatformer.UI.StatusEffectTooltip>();
+                if (legacyTooltip != null)
+                    legacyTooltip.enabled = false;
+            }
 
             if (fairyImage != null)
             {
@@ -128,11 +152,25 @@ namespace BasePlatformer.Fairy
         [Header("All Fairy Pool")]
         [SerializeField] private FairyPool fairyPool;
 
+        [Header("UI Data (Colors & Descriptions)")]
+        [Tooltip("특화 텍스트 색상 및 상태이상 설명 데이터")]
+        [SerializeField] private FairySelectUIData uiData;
+
+        [Header("Status Effect Tooltip (비워둘 시 자동 탐색)")]
+        [Tooltip("화면에 표시할 툴팁 패널 오브젝트 (비워두면 StatusEffectTooltipPanel 자동 탐색)")]
+        [SerializeField] private GameObject tooltipPanel;
+        [SerializeField] private TextMeshProUGUI tooltipText;
+        [SerializeField] private RectTransform tooltipRect;
+        [SerializeField] private Vector2 tooltipOffset = new Vector2(16f, -16f);
+
         [Header("Settings")]
         [Tooltip("선택지 오픈 시 게임 일시정지 여부")]
         [SerializeField] private bool pauseGameOnOpen = true;
         private float timeScaleBeforeOpen = 1f;
         private bool isOpen;
+        private Canvas parentCanvas;
+        private int currentHoveredLinkIndex = -1;
+        private TextMeshProUGUI currentHoveredText = null;
 
         private void Awake()
         {
@@ -143,12 +181,16 @@ namespace BasePlatformer.Fairy
             }
             Instance = this;
 
+            parentCanvas = GetComponentInParent<Canvas>();
+
             // selectPanel이 미지정이면 자기 자신으로 설정
             if (selectPanel == null)
                 selectPanel = gameObject;
 
-            // 자기 자신이 selectPanel인 경우: SetActive(false)하면 이 컴포넌트도 꺼지므로 건너뜀
-            // → 이 경우 씬에서 비활성화 상태로 배치해두거나, selectPanel을 별도 자식 오브젝트로 분리해야 합니다.
+            // 툴팁 패널 초기화 및 Raycast 방지
+            AutoFindTooltipPanel();
+            EnsureUIData();
+
             if (selectPanel != gameObject)
             {
                 selectPanel.SetActive(false);
@@ -157,6 +199,29 @@ namespace BasePlatformer.Fairy
             {
                 Debug.LogWarning("[FairySelectUI] FairySelectUI 컴포넌트가 selectPanel과 같은 오브젝트에 있습니다. " +
                     "selectPanel을 별도 자식 오브젝트로 분리하거나, 씬에서 이 오브젝트를 시작 시 비활성화 해두세요.");
+            }
+        }
+
+        private void EnsureUIData()
+        {
+            if (uiData == null)
+            {
+                var allData = Resources.FindObjectsOfTypeAll<FairySelectUIData>();
+                if (allData != null && allData.Length > 0)
+                {
+                    uiData = allData[0];
+                }
+#if UNITY_EDITOR
+                if (uiData == null)
+                {
+                    string[] guids = UnityEditor.AssetDatabase.FindAssets("t:FairySelectUIData");
+                    if (guids != null && guids.Length > 0)
+                    {
+                        string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                        uiData = UnityEditor.AssetDatabase.LoadAssetAtPath<FairySelectUIData>(path);
+                    }
+                }
+#endif
             }
         }
 
@@ -182,6 +247,188 @@ namespace BasePlatformer.Fairy
                     cardUIs.Add(new FairySelectCardUI { cardRoot = cardTransform.gameObject });
                 }
             }
+        }
+
+        private void Update()
+        {
+            if (!isOpen)
+            {
+                HideTooltip();
+                return;
+            }
+
+            UpdateTooltip();
+        }
+
+        private void AutoFindTooltipPanel()
+        {
+            if (parentCanvas == null)
+                parentCanvas = GetComponentInParent<Canvas>();
+
+            if (tooltipPanel == null && parentCanvas != null)
+            {
+                var transforms = parentCanvas.GetComponentsInChildren<Transform>(true);
+                foreach (var t in transforms)
+                {
+                    if (t.gameObject.name == "StatusEffectTooltipPanel")
+                    {
+                        tooltipPanel = t.gameObject;
+                        break;
+                    }
+                }
+            }
+
+            if (tooltipPanel == null)
+            {
+                var roots = gameObject.scene.GetRootGameObjects();
+                foreach (var r in roots)
+                {
+                    var transforms = r.GetComponentsInChildren<Transform>(true);
+                    foreach (var t in transforms)
+                    {
+                        if (t.gameObject.name == "StatusEffectTooltipPanel")
+                        {
+                            tooltipPanel = t.gameObject;
+                            break;
+                        }
+                    }
+                    if (tooltipPanel != null) break;
+                }
+            }
+
+            if (tooltipPanel != null)
+            {
+                if (tooltipRect == null)
+                    tooltipRect = tooltipPanel.GetComponent<RectTransform>();
+
+                if (tooltipText == null)
+                    tooltipText = tooltipPanel.GetComponentInChildren<TextMeshProUGUI>(true);
+
+                // 마우스 레이캐스트 방지
+                var images = tooltipPanel.GetComponentsInChildren<Image>(true);
+                foreach (var img in images) img.raycastTarget = false;
+
+                var tmps = tooltipPanel.GetComponentsInChildren<TextMeshProUGUI>(true);
+                foreach (var tmp in tmps) tmp.raycastTarget = false;
+
+                tooltipPanel.SetActive(false);
+            }
+        }
+
+        private void UpdateTooltip()
+        {
+            if (tooltipPanel == null)
+                AutoFindTooltipPanel();
+
+            if (tooltipPanel == null || cardUIs == null) return;
+
+            Vector2 mousePos = Vector2.zero;
+            if (Mouse.current != null)
+                mousePos = Mouse.current.position.ReadValue();
+
+            Camera cam = null;
+            if (parentCanvas == null) parentCanvas = GetComponentInParent<Canvas>();
+            if (parentCanvas != null && parentCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            {
+                cam = parentCanvas.worldCamera != null ? parentCanvas.worldCamera : Camera.main;
+            }
+
+            bool foundLink = false;
+
+            foreach (var card in cardUIs)
+            {
+                if (card == null || card.cardRoot == null || !card.cardRoot.activeInHierarchy) continue;
+
+                var textComp = card.GetContentText();
+                if (textComp == null || !textComp.gameObject.activeInHierarchy) continue;
+
+                int linkIndex = TMP_TextUtilities.FindIntersectingLink(textComp, mousePos, cam);
+                if (linkIndex != -1)
+                {
+                    foundLink = true;
+                    if (currentHoveredLinkIndex != linkIndex || currentHoveredText != textComp)
+                    {
+                        currentHoveredLinkIndex = linkIndex;
+                        currentHoveredText = textComp;
+                        var linkInfo = textComp.textInfo.linkInfo[linkIndex];
+                        string linkId = linkInfo.GetLinkID();
+                        string desc = GetTooltipDescription(linkId);
+
+                        if (!string.IsNullOrEmpty(desc))
+                        {
+                            ShowTooltip(desc);
+                        }
+                        else
+                        {
+                            HideTooltip();
+                        }
+                    }
+
+                    if (tooltipPanel.activeSelf)
+                    {
+                        PositionTooltip(mousePos, cam);
+                    }
+                    break;
+                }
+            }
+
+            if (!foundLink)
+            {
+                if (currentHoveredLinkIndex != -1 || currentHoveredText != null)
+                {
+                    currentHoveredLinkIndex = -1;
+                    currentHoveredText = null;
+                    HideTooltip();
+                }
+            }
+        }
+
+        private string GetTooltipDescription(string linkId)
+        {
+            EnsureUIData();
+            if (uiData != null)
+            {
+                return uiData.GetStatusDescriptionByLinkId(linkId);
+            }
+
+            return string.Empty;
+        }
+
+        private void ShowTooltip(string content)
+        {
+            if (tooltipPanel == null) return;
+            if (tooltipText != null) tooltipText.text = content;
+            tooltipPanel.transform.SetAsLastSibling();
+            tooltipPanel.SetActive(true);
+        }
+
+        private void HideTooltip()
+        {
+            if (tooltipPanel != null && tooltipPanel.activeSelf)
+                tooltipPanel.SetActive(false);
+        }
+
+        private void PositionTooltip(Vector2 screenPos, Camera cam)
+        {
+            if (tooltipRect == null)
+            {
+                if (tooltipPanel != null) tooltipRect = tooltipPanel.GetComponent<RectTransform>();
+                if (tooltipRect == null) return;
+            }
+
+            if (parentCanvas == null) parentCanvas = GetComponentInParent<Canvas>();
+
+            if (parentCanvas != null && parentCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            {
+                RectTransform canvasRect = parentCanvas.transform as RectTransform;
+                if (canvasRect != null && RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos + tooltipOffset, cam, out Vector2 localPoint))
+                {
+                    tooltipRect.anchoredPosition = localPoint;
+                    return;
+                }
+            }
+
+            tooltipRect.position = screenPos + tooltipOffset;
         }
 
         /// <summary>
@@ -210,8 +457,6 @@ namespace BasePlatformer.Fairy
                 return false;
             }
 
-            // cardUIs가 비어있으면 패널을 열 수 없음
-            Debug.Log($"[FairySelectUI][DEBUG] cardUIs.Count={cardUIs.Count}, selectPanel={(selectPanel != null ? selectPanel.name : "NULL")}");
             if (cardUIs == null || cardUIs.Count == 0)
             {
                 Debug.LogWarning("[FairySelectUI] cardUIs가 비어 있습니다. 인스펙터에서 카드 루트 오브젝트를 연결해 주세요.");
@@ -227,7 +472,7 @@ namespace BasePlatformer.Fairy
                 if (i < chosenFairies.Count)
                 {
                     FairyInfo info = chosenFairies[i];
-                    cardUIs[i].Bind(info, () => OnFairySelected(info));
+                    cardUIs[i].Bind(info, () => OnFairySelected(info), uiData);
                 }
                 else
                 {
@@ -239,10 +484,6 @@ namespace BasePlatformer.Fairy
             if (selectPanel != null)
             {
                 selectPanel.SetActive(true);
-                Debug.Log($"[FairySelectUI][DEBUG] selectPanel.SetActive(true) 호출됨. activeSelf={selectPanel.activeSelf}, activeInHierarchy={selectPanel.activeInHierarchy}");
-                // cardRoot null 체크
-                for (int i = 0; i < cardUIs.Count; i++)
-                    Debug.Log($"[FairySelectUI][DEBUG] cardUIs[{i}].cardRoot={(cardUIs[i].cardRoot != null ? cardUIs[i].cardRoot.name : "NULL")}");
             }
             else
                 Debug.LogWarning("[FairySelectUI] selectPanel이 null입니다!");
@@ -256,7 +497,6 @@ namespace BasePlatformer.Fairy
             isOpen = true;
             return true;
         }
-
 
         private void OnFairySelected(FairyInfo selectedInfo)
         {
@@ -284,6 +524,8 @@ namespace BasePlatformer.Fairy
 
         public void CloseSelection()
         {
+            HideTooltip();
+
             if (pauseGameOnOpen && isOpen)
             {
                 Time.timeScale = timeScaleBeforeOpen;
@@ -316,7 +558,6 @@ namespace BasePlatformer.Fairy
                 if (data != null) ownedData.Add(data);
                 string nameEntry = baseFairy.gameObject.name.Replace("(Clone)", "").Trim();
                 ownedPrefabNames.Add(nameEntry);
-                Debug.Log($"[FairySelectUI][DEBUG] BaseFairy: '{nameEntry}', fairyData: {(data != null ? data.name : "null")}");
             }
 
             // 현재 장착된 서브 정령들 확인
@@ -331,12 +572,9 @@ namespace BasePlatformer.Fairy
                         if (data != null) ownedData.Add(data);
                         string nameEntry = fairy.gameObject.name.Replace("(Clone)", "").Trim();
                         ownedPrefabNames.Add(nameEntry);
-                        Debug.Log($"[FairySelectUI][DEBUG] SubFairy: '{nameEntry}', fairyData: {(data != null ? data.name : "null")}");
                     }
                 }
             }
-
-            Debug.Log($"[FairySelectUI][DEBUG] 보유 정령 수: 이름={ownedPrefabNames.Count}, 데이터={ownedData.Count} | FairyPool 전체 수: {fairyPool.fairies.Count}");
 
             // 풀 내의 정령들과 비교
             foreach (var info in fairyPool.fairies)
@@ -350,7 +588,6 @@ namespace BasePlatformer.Fairy
                 if (poolFairyData != null && ownedData.Contains(poolFairyData))
                 {
                     isOwned = true;
-                    Debug.Log($"[FairySelectUI][DEBUG] Pool[{info.fairyType}] → 보유 중 (데이터 일치: {poolFairyData.name})");
                 }
                 // 2. fairyData가 없는 경우 프리팹 이름 기반 fallback 비교 (완전 일치만)
                 else if (info.fairyPrefab != null)
@@ -361,7 +598,6 @@ namespace BasePlatformer.Fairy
                         if (string.Equals(ownedName, prefabName, System.StringComparison.OrdinalIgnoreCase))
                         {
                             isOwned = true;
-                            Debug.Log($"[FairySelectUI][DEBUG] Pool[{info.fairyType}] → 보유 중 (이름 완전 일치: '{prefabName}')");
                             break;
                         }
                     }
@@ -369,14 +605,12 @@ namespace BasePlatformer.Fairy
 
                 if (!isOwned)
                 {
-                    Debug.Log($"[FairySelectUI][DEBUG] Pool[{info.fairyType}] → 미보유 (선택지 추가)");
                     unowned.Add(info);
                 }
             }
 
             return unowned;
         }
-
 
         private List<FairyInfo> PickRandomFairies(List<FairyInfo> pool, int count)
         {
