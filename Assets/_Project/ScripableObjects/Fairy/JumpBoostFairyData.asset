@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73de91a4561e8a43b486e979f220888, type: 3}
   m_Name: JumpBoostFairyData
   m_EditorClassIdentifier: Assembly-CSharp::MainFairyData
+  Category: "\uD50C\uB7AB\uD3FC \uD2B9\uD654"
+  FairyName: "\uC810\uD504\uB825 \uAC15\uD654 \uC815\uB839"
+  Description: "\uC6D0\uB798 \uC810\uD504 \uB192\uC774\uC758 1.5\uBC30\uB9CC\uD07C
+    \uB354 \uB192\uC774 \uB6F0\uAC8C \uD574\uC8FC\uB294 \uC810\uD504\uB825 \uAC15\uD654
+    \uBC1C\uD310\uC744 \uC124\uCE58\uD569\uB2C8\uB2E4."
   Damage: 1
   CoolTime: 0.5
   PlatformSize: 0

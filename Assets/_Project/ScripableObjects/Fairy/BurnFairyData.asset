@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73de91a4561e8a43b486e979f220888, type: 3}
   m_Name: BurnFairyData
   m_EditorClassIdentifier: Assembly-CSharp::MainFairyData
+  Category: "\uACF5\uACA9 \uD2B9\uD654"
+  FairyName: "\uD654\uC0C1 \uC815\uB839"
+  Description: "\uACF5\uACA9\uD55C \uBAAC\uC2A4\uD130\uC5D0\uAC8C 2\uCD08\uB9C8\uB2E4
+    1\uB370\uBBF8\uC9C0\uB97C \uC785\uD788\uB294 \uD654\uC0C1 \uD6A8\uACFC\uB97C
+    \uBD80\uC5EC\uD569\uB2C8\uB2E4."
   Damage: 1
   CoolTime: 0.5
   PlatformSize: 0
