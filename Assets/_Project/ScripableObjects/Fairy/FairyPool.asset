@@ -12,4 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fbb68eb4cd595a4b8856e125f4edce3, type: 3}
   m_Name: FairyPool
   m_EditorClassIdentifier: Assembly-CSharp::FairyPool
-  fairies: []
+  fairies:
+  - fairyType: 0
+    fairyPrefab: {fileID: 5466460339071912849, guid: 0bb52b3242ef28440ad665093117bbfb, type: 3}
+    fairyData: {fileID: 11400000, guid: cf6ae206257823d47b7c6846da6e2e49, type: 2}
+    fairySprite: {fileID: 21300000, guid: 023efc80e0feadc4e8277927338125e4, type: 3}
+    fairyColor: {r: 1, g: 0.27058825, b: 0.27058825, a: 1}
+  - fairyType: 1
+    fairyPrefab: {fileID: 6737748898311101103, guid: 3b31437eae582e4478f58b9f2dbd6d48, type: 3}
+    fairyData: {fileID: 11400000, guid: a1d7e5d970d6da84fbbf2195991674f3, type: 2}
+    fairySprite: {fileID: 21300000, guid: 023efc80e0feadc4e8277927338125e4, type: 3}
+    fairyColor: {r: 0.2, g: 0.4, b: 1, a: 1}
+  - fairyType: 2
+    fairyPrefab: {fileID: 5241247108877864983, guid: 21cd8d58f2df57d4a978a580a72ce144, type: 3}
+    fairyData: {fileID: 11400000, guid: 0eaa85c61ab3e0b45a86e07b4c1c1f2f, type: 2}
+    fairySprite: {fileID: 21300000, guid: 023efc80e0feadc4e8277927338125e4, type: 3}
+    fairyColor: {r: 1, g: 0.54901963, b: 0, a: 1}
+  - fairyType: 5
+    fairyPrefab: {fileID: 8451371576905923122, guid: 41d5327337bb21846855ae583da56451, type: 3}
+    fairyData: {fileID: 11400000, guid: 7beb3aa9b97fa2d4f85594c37df469db, type: 2}
+    fairySprite: {fileID: 21300000, guid: 023efc80e0feadc4e8277927338125e4, type: 3}
+    fairyColor: {r: 0.5294118, g: 0.8117647, b: 0.98039216, a: 1}
+  - fairyType: 3
+    fairyPrefab: {fileID: 4595169336727990096, guid: de75904bad70c284e947de89f1222acd, type: 3}
+    fairyData: {fileID: 11400000, guid: eb4b7164822ebd34eb5250fc70168eee, type: 2}
+    fairySprite: {fileID: 21300000, guid: 023efc80e0feadc4e8277927338125e4, type: 3}
+    fairyColor: {r: 0.29803923, g: 0.6901961, b: 0.30980393, a: 1}
+  - fairyType: 4
+    fairyPrefab: {fileID: 7686864555190939244, guid: 9684f9725bd021146a0db3470081e45b, type: 3}
+    fairyData: {fileID: 11400000, guid: 81949c941921a66458e7c11b63c71419, type: 2}
+    fairySprite: {fileID: 21300000, guid: 023efc80e0feadc4e8277927338125e4, type: 3}
+    fairyColor: {r: 1, g: 0.8392157, b: 0, a: 1}
