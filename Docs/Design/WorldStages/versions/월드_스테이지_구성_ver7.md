@@ -2,7 +2,7 @@
 
 ## 0. 문서 목적
 
-> 마지막 수정일: 2026-08-25 (1.2절 타일 9종이 3×3 오토타일 그리드 배치 순서라는 것을 반영해 표 재정리 — ver8)
+> 마지막 수정일: 2026-08-20 (1.2절 테마 1·3 배경/타일 에셋 위치 기록 추가 — ver7)
 
 확장 단계의 테마(월드)별 스테이지 구성, 정령 등장 진행, 스토리 개요, 클리어·게임오버 조건을 정리합니다.
 
@@ -18,36 +18,14 @@
 
 > 기본 테마는 총 3개입니다.
 
-### 1.2 테마별 배경/타일 에셋 (2026-08-20 추가, 2026-08-25 타일 9종 배치 순서 반영)
+### 1.2 테마별 배경/타일 에셋 (2026-08-20 추가)
 
 | 테마 | 종류 | 파일 | 위치 |
 |---|---|---|---|
 | 테마 1 (마을) | 배경 | `tile_0247.png` | `Assets/craftpix-896753-village-pixel-art-environment-assets-pack/PNG/Tiles/` |
+| 테마 1 (마을) | 타일 (9종) | `tile_0054.png`, `tile_0140.png`, `tile_0042.png`, `tile_0021.png`, `tile_0174.png`, `tile_0017.png`, `tile_0022.png`, `tile_0043.png`, `tile_0020.png` | `Assets/craftpix-896753-village-pixel-art-environment-assets-pack/PNG/Tiles/` |
 | 테마 3 (숲) | 배경 | `Background.png` | `Assets/craftpix-net-247157-tiny-forest-tileset-platformer-pixel-art/1 Background/` |
-
-**타일 9종 배치 순서 (3×3 오토타일 그리드)**
-
-타일 9개는 아무렇게나 나열한 게 아니라, **주변에 어떤 타일이 있는지에 따라 끼워 넣을 타일이 달라지는 3×3 배치 규칙**을 따릅니다. 아래처럼 3×3 칸에 번호를 매겨서, 각 칸 위치에 어떤 타일 파일이 들어가는지로 정리합니다.
-
-```
-[1][2][3]   ← 윗줄 (좌상단 모서리 / 상단 가장자리 / 우상단 모서리)
-[4][5][6]   ← 가운데줄 (좌측 가장자리 / 중앙 채움 / 우측 가장자리)
-[7][8][9]   ← 아랫줄 (좌하단 모서리 / 하단 가장자리 / 우하단 모서리)
-```
-
-| 칸 번호 | 위치 의미 | 테마 1 (마을) 파일 | 테마 3 (숲) 파일 |
-|---|---|---|---|
-| 1 | 좌상단 모서리 | `tile_0054.png` | `Jungle_tile_01.png` |
-| 2 | 상단 가장자리 | `tile_0140.png` | `Jungle_tile_02.png` |
-| 3 | 우상단 모서리 | `tile_0042.png` | `Jungle_tile_03.png` |
-| 4 | 좌측 가장자리 | `tile_0021.png` | `Jungle_tile_10.png` |
-| 5 | 중앙 채움 | `tile_0174.png` | `Jungle_tile_11.png` |
-| 6 | 우측 가장자리 | `tile_0017.png` | `Jungle_tile_12.png` |
-| 7 | 좌하단 모서리 | `tile_0022.png` | `Jungle_tile_19.png` |
-| 8 | 하단 가장자리 | `tile_0043.png` | `Jungle_tile_20.png` |
-| 9 | 우하단 모서리 | `tile_0020.png` | `Jungle_tile_21.png` |
-
-> 두 테마 모두 `Assets/craftpix-.../` 원본 폴더 경로는 위 표(배경) 기준과 동일 폴더(`.../PNG/Tiles/`, `.../2 Tiles/`)에 있습니다.
+| 테마 3 (숲) | 타일 (9종) | `Jungle_tile_01.png`, `Jungle_tile_02.png`, `Jungle_tile_03.png`, `Jungle_tile_10.png`, `Jungle_tile_11.png`, `Jungle_tile_12.png`, `Jungle_tile_19.png`, `Jungle_tile_20.png`, `Jungle_tile_21.png` | `Assets/craftpix-net-247157-tiny-forest-tileset-platformer-pixel-art/2 Tiles/` |
 
 > 테마 2(변방)의 배경/타일 에셋은 아직 지정되지 않았습니다.
 
