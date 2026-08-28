@@ -378,43 +378,15 @@ namespace BasePlatformer.Fairy
         }
 
         /// <summary>
-        /// 플랫폼 마커를 조준했을 때, 현재 선택된 정령 인덱스로부터 가장 가까운 '플랫폼 변신 가능(IFairyPlatform)'한 정령을 찾아 반환합니다.
-        /// (유저가 선택한 정령 인덱스는 변경되지 않고 그대로 유지됩니다)
+        /// 플랫폼 마커를 조준했을 때, 현재 플레이어가 선택한 정령(selectedIndex)부터 시작하여
+        /// 플랫폼 변신이 가능한 정령(IFairyPlatform)을 찾아 반환합니다.
         /// </summary>
         public IFairyPlatform GetBestFairyForPlatform()
         {
             int count = TotalFairyCount;
             if (count == 0) return null;
 
-            // 1. 선택된 인덱스부터 순환하면서 IFairyPlatform을 가지고 있고 CanTransform인 정령 탐색
-            for (int i = 0; i < count; i++)
-            {
-                int checkIndex = (selectedIndex + i) % count;
-                FairyMovement fairy = GetFairyAtIndex(checkIndex);
-                if (fairy == null) continue;
-
-                IFairyPlatform platCtrl = fairy.GetComponent<IFairyPlatform>();
-                if (platCtrl != null && platCtrl.CanTransform)
-                {
-                    return platCtrl;
-                }
-            }
-
-            // 2. 이미 플랫폼을 설치한 상태에서 다른 마커로 재변신(RequestTransformOrReplace)하기 위해 활성 플랫폼 보유 정령 탐색
-            for (int i = 0; i < count; i++)
-            {
-                int checkIndex = (selectedIndex + i) % count;
-                FairyMovement fairy = GetFairyAtIndex(checkIndex);
-                if (fairy == null) continue;
-
-                IFairyPlatform platCtrl = fairy.GetComponent<IFairyPlatform>();
-                if (platCtrl != null && platCtrl.HasActivePlatform)
-                {
-                    return platCtrl;
-                }
-            }
-
-            // 3. 그 외 IFairyPlatform을 가진 가장 가까운 정령 반환
+            // 1. 현재 선택된 정령부터 순환하며 IFairyPlatform 컴포넌트가 있고 공격 쿨다운 등에 걸리지 않은 정령 탐색
             for (int i = 0; i < count; i++)
             {
                 int checkIndex = (selectedIndex + i) % count;
@@ -424,6 +396,7 @@ namespace BasePlatformer.Fairy
                 IFairyPlatform platCtrl = fairy.GetComponent<IFairyPlatform>();
                 if (platCtrl != null)
                 {
+                    // 공격 중이 아니거나 변신 가능한 상태면 선택
                     return platCtrl;
                 }
             }

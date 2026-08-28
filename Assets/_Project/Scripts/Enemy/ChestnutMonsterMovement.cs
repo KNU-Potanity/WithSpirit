@@ -348,6 +348,10 @@ public class ChestnutMonsterMovement : MonoBehaviour, IMonsterMovement, IBarrier
     {
         if (hasHitPlayer) return;
 
+        // 사망 후 페이드아웃 중에는 접촉 데미지 무시
+        var health = GetComponent<BasePlatformer.Monsters.MonsterHealth>();
+        if (health != null && health.IsDead) return;
+
         // 플레이어 캐릭터 또는 Marker 체크
         PlayerHealth playerHealth = target.GetComponent<PlayerHealth>();
         if (playerHealth == null && target.transform.parent != null)

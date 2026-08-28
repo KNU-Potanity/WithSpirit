@@ -61,6 +61,24 @@ public class PlatformClickMarker : MonoBehaviour
             {
                 // 클릭 소비 등록 → FairyPlatformController.LateUpdate의 빈공간 해제 억제
                 fairyPlatform.MarkClickHandled();
+
+                // 혹시 남아있을 수 있는 다른 모든 정령의 활성 플랫폼을 일괄 해제
+                if (FairyManager.Instance != null)
+                {
+                    int total = FairyManager.Instance.TotalFairyCount;
+                    for (int i = 0; i < total; i++)
+                    {
+                        var fairy = FairyManager.Instance.GetFairyAtIndex(i);
+                        if (fairy == null) continue;
+
+                        var plat = fairy.GetComponent<IFairyPlatform>();
+                        if (plat != null && plat != fairyPlatform && plat.HasActivePlatform)
+                        {
+                            plat.RevertTransform();
+                        }
+                    }
+                }
+
                 // 변신 중·완료 상태라도 즉시 이 마커 위치로 전환 (쿨다운 없이)
                 fairyPlatform.RequestTransformOrReplace(transform.position, this);
                 HideMarker();

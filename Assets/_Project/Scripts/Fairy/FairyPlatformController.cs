@@ -174,8 +174,9 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
             activePlatformInstance = Instantiate(platformPrefab, spawnPos, Quaternion.identity);
             activePlatformCollider = activePlatformInstance.GetComponent<Collider2D>();
 
-            // 인스턴스에 FairyPlatformEntityPusher가 없으면 자동 추가하여 밀쳐내기 실행
-            if (!activePlatformInstance.TryGetComponent<FairyPlatformEntityPusher>(out var pusher))
+            // 인스턴스 또는 자식에 FairyPlatformEntityPusher가 없으면 자동 추가하여 밀쳐내기 실행
+            var pusher = activePlatformInstance.GetComponentInChildren<FairyPlatformEntityPusher>();
+            if (pusher == null)
             {
                 pusher = activePlatformInstance.AddComponent<FairyPlatformEntityPusher>();
             }

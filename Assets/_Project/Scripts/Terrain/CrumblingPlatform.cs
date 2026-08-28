@@ -56,6 +56,17 @@ namespace BasePlatformer.Terrain
             {
                 platformTransform = platformRb.transform;
                 platformLocalOrigin = platformTransform.localPosition;
+
+                // 루트 아래에 있는 이미지/스프라이트 등의 다른 자식 오브젝트들을
+                // platformTransform(실제 물리 낙하 및 흔들림 대상)의 자식으로 편입
+                for (int i = transform.childCount - 1; i >= 0; i--)
+                {
+                    Transform child = transform.GetChild(i);
+                    if (child != platformTransform)
+                    {
+                        child.SetParent(platformTransform, true);
+                    }
+                }
             }
         }
 
@@ -77,8 +88,9 @@ namespace BasePlatformer.Terrain
         {
             if (!isFalling) return;
 
-            // Y좌표 기준 삭제 체크
-            if (transform.position.y < destroyBelowY)
+            // Y좌표 기준 삭제 체크 (실제 낙하 중인 platformTransform 위치 기준)
+            float currentY = platformTransform != null ? platformTransform.position.y : transform.position.y;
+            if (currentY < destroyBelowY)
                 DestroySelf();
         }
 
