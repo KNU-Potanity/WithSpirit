@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b07d0d554294e714b97826fe7b01bf78, type: 3}
   m_Name: CarnivorousPlantData
   m_EditorClassIdentifier: Assembly-CSharp::GroundMonsterData
-  Health: 10
+  Health: 3
   MoveSpeed: 0
   Damage: 1
   CoolTime: 1.2
