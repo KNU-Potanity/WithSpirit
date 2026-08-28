@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using BasePlatformer.Monsters;
 
 namespace BasePlatformer.Terrain
 {
@@ -25,6 +27,15 @@ namespace BasePlatformer.Terrain
         private Collider2D myCollider;
         private bool isConsumed = false;
 
+        [Header("몬스터 공격 연출")]
+        [Tooltip("근접/디버프 몬스터가 배리어를 때릴 때 공격 애니메이션 후 소멸까지의 딜레이(초)")]
+        [SerializeField] private float monsterAttackDelay = 0.4f;
+
+        /// <summary>이미 공격 모션을 시작한 몬스터를 추적하여 중복 트리거 방지.</summary>
+        private readonly System.Collections.Generic.HashSet<GameObject> attackingMonsters
+            = new System.Collections.Generic.HashSet<GameObject>();
+
+
         /// <summary>장막이 아직 살아있는지 외부에서 확인할 때 사용.</summary>
         public bool IsActive => !isConsumed && gameObject.activeSelf;
 
@@ -36,6 +47,7 @@ namespace BasePlatformer.Terrain
         private void OnEnable()
         {
             isConsumed = false;
+            attackingMonsters.Clear();
         }
 
         // ─── 물리 충돌 (isTrigger = false) ───────────────────────────────
@@ -70,7 +82,64 @@ namespace BasePlatformer.Terrain
             if (other.GetComponent<IBarrierConsumable>() != null)
             {
                 Consume();
+                return;
             }
+
+            // 근접/디버프 몬스터(IMonsterMovement는 있지만 IBarrierConsumable이 아닌)가
+            // 배리어에 닿으면 → 공격 애니메이션 재생 후 장막 소멸
+            if (other.GetComponent<IMonsterMovement>() != null
+                && !attackingMonsters.Contains(other))
+            {
+                attackingMonsters.Add(other);
+                StartCoroutine(MonsterAttackBarrierCoroutine(other));
+            }
+        }
+        // ─── 근접/디버프 몬스터의 배리어 공격 코루틴 ────────────────────
+
+        /// <summary>
+        /// 근접/디버프 몬스터가 배리어에 닿았을 때:
+        ///  1) 몬스터의 이동을 잠깐 멈추고 배리어를 바라보게 함
+        ///  2) Attack 애니메이션 트리거 재생
+        ///  3) monsterAttackDelay 후 장막 소멸
+        /// </summary>
+        private IEnumerator MonsterAttackBarrierCoroutine(GameObject monster)
+        {
+            if (monster == null) yield break;
+
+            // 몬스터의 이동 스크립트(MonoBehaviour)를 비활성화하여
+            // FixedUpdate가 속도를 덮어쓰지 못하게 함
+            var movement = monster.GetComponent<IMonsterMovement>() as MonoBehaviour;
+            if (movement != null)
+                movement.enabled = false;
+
+            // 몬스터의 Rigidbody X 속도를 0으로 정지
+            Rigidbody2D monsterRb = monster.GetComponent<Rigidbody2D>();
+            if (monsterRb != null)
+                monsterRb.linearVelocity = new Vector2(0f, monsterRb.linearVelocity.y);
+
+            // 몬스터가 배리어를 바라보도록 방향 조정
+            float dirToBarrier = transform.position.x - monster.transform.position.x;
+            if (dirToBarrier != 0f)
+            {
+                Vector3 scale = monster.transform.localScale;
+                scale.x = Mathf.Abs(scale.x) * (dirToBarrier > 0f ? 1f : -1f);
+                monster.transform.localScale = scale;
+            }
+
+            // Attack 애니메이션 트리거 재생
+            Animator monsterAnim = monster.GetComponentInChildren<Animator>();
+            if (monsterAnim != null)
+                monsterAnim.SetTrigger("Attack");
+
+            // 공격 딜레이 대기
+            yield return new WaitForSeconds(monsterAttackDelay);
+
+            // 딜레이 후 장막 소멸
+            Consume();
+
+            // 몬스터의 이동 스크립트 다시 활성화
+            if (movement != null)
+                movement.enabled = true;
         }
 
         // ─── 근접 공격 차단 (PlayerHealth.TakeDamage에서 호출) ───────────
@@ -93,6 +162,17 @@ namespace BasePlatformer.Terrain
         {
             if (isConsumed) return;
             isConsumed = true;
+
+            // 배리어 비활성화 시 모든 코루틴이 중단되므로,
+            // 공격 중인 몬스터들의 이동 스크립트를 먼저 복구
+            foreach (var monster in attackingMonsters)
+            {
+                if (monster == null) continue;
+                var movement = monster.GetComponent<IMonsterMovement>() as MonoBehaviour;
+                if (movement != null)
+                    movement.enabled = true;
+            }
+            attackingMonsters.Clear();
 
             Debug.Log("[BarrierWall] 장막 소멸");
             gameObject.SetActive(false);

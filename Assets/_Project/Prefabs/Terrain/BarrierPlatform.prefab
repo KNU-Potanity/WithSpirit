@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 922814793906064529}
   - component: {fileID: 5912063909394067146}
   - component: {fileID: 2819039877596509731}
-  - component: {fileID: 2575417564678943586}
+  - component: {fileID: 6257289285307404010}
   m_Layer: 8
   m_Name: Platform
   m_TagString: Untagged
@@ -319,7 +319,7 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 1975673275963422666}
---- !u!114 &2575417564678943586
+--- !u!114 &6257289285307404010
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -333,6 +333,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FairyPlatformEntityPusher
   pushUpForce: 1
   pushDuration: 0.3
+  pushBoxOffset: {x: 0, y: 0}
+  pushBoxExtraMargin: {x: -0.3, y: 0.3}
+  targetYOffset: 0.15
+  clipThreshold: 0.05
+  showGizmos: 1
+  gizmoColor: {r: 0, g: 1, b: 0.5, a: 0.35}
 --- !u!1 &5515896593989615680
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,7 +356,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1421909588740925774
 Transform:
   m_ObjectHideFlags: 0
@@ -397,7 +403,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -426,6 +432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasePlatformer.Terrain.BarrierWall
   playerTag: Player
+  monsterAttackDelay: 0.4
 --- !u!1 &6002150965017134008
 GameObject:
   m_ObjectHideFlags: 0

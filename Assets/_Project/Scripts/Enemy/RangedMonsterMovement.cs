@@ -220,6 +220,11 @@ public class RangedMonsterMovement : MonoBehaviour, IMonsterMovement, IBarrierCo
 
     private void HandleContactDamage(GameObject target)
     {
+        // 사망 후 페이드아웃 중에는 접촉 데미지 무시
+        // (OnCollision/OnTrigger 콜백은 enabled=false여도 호출됨)
+        var health = GetComponent<BasePlatformer.Monsters.MonsterHealth>();
+        if (health != null && health.IsDead) return;
+
         if (target.CompareTag("Player") || target.name.Contains("Player"))
         {
             var playerHealth = target.GetComponentInParent<BasePlatformer.Player.PlayerHealth>();

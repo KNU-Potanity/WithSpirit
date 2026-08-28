@@ -333,6 +333,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FairyPlatformEntityPusher
   pushUpForce: 1
   pushDuration: 0.3
+  pushBoxOffset: {x: 0, y: 0}
+  pushBoxExtraMargin: {x: 0.4, y: 0.6}
+  targetYOffset: 0.15
+  clipThreshold: 0.05
+  showGizmos: 1
+  gizmoColor: {r: 0, g: 1, b: 0.5, a: 0.35}
 --- !u!1 &6387948801513792350
 GameObject:
   m_ObjectHideFlags: 0
