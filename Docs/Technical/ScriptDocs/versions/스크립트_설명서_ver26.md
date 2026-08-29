@@ -24,7 +24,7 @@
 | Terrain | `HazardTrigger.cs` | 즉사 장애물(가시) 트리거 — 플레이어 접촉 시 리스폰 |
 | Respawn | `RespawnManager.cs` | 리스폰(재시작) 실행 관리자 |
 | Respawn | `FallRespawnDetector.cs` | 낭떠러지 추락 감지 — Y 좌표 기준 리스폰 |
-| Goal | `GoalTrigger.cs` | 목표 지점(트로피) 도달 감지. **2026-08-28 갱신**: 단순 클리어 로그 출력에서 **`SceneManager.LoadScene()`으로 실제 다음 씬 로드**로 확장됨. 에디터에서 `SceneAsset`을 드래그하면 `OnValidate`가 씬 이름 문자열로 자동 변환해 저장. `LoadSceneMode`(Single/Additive) 필드로 전환 방식 지정 가능. Stage1→2→3→StartScene 순으로 연결됨 (`월드_스테이지_구성.md` 5.1절 참고). |
+| Goal | `GoalTrigger.cs` | 목표 지점(트로피) 도달 감지 — 스테이지 클리어 처리 |
 
 ---
 
