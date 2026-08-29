@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19bc568c22e2490469acc4977fc77a55, type: 3}
   m_Name: BossEntData
   m_EditorClassIdentifier: Assembly-CSharp::BossMonsterData
-  Health: 60
+  Health: 25
   MoveSpeed: 1.5
   Damage: 1
   CoolTime: 3
