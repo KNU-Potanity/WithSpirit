@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -26,6 +27,21 @@ namespace BasePlatformer.Monsters
         private bool isDead;
 
         public bool IsDead => isDead;
+
+        /// <summary>
+        /// MonsterData에서 설정된 최대 체력값.
+        /// </summary>
+        public int MaxHealth => monsterData != null ? monsterData.Health : 0;
+
+        /// <summary>
+        /// 현재 체력값.
+        /// </summary>
+        public int CurrentHealthValue => currentHealth;
+
+        /// <summary>
+        /// 체력이 변경될 때 발생하는 이벤트. (현재 체력, 최대 체력)
+        /// </summary>
+        public event Action<int, int> OnHealthChanged;
 
         protected virtual void Awake()
         {
@@ -60,6 +76,8 @@ namespace BasePlatformer.Monsters
             if (isDead) return;
 
             currentHealth -= amount;
+
+            OnHealthChanged?.Invoke(currentHealth, MaxHealth);
 
             if (hurtRoutine != null)
                 StopCoroutine(hurtRoutine);
