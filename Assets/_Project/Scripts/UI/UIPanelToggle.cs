@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 namespace BasePlatformer.UI
 {
@@ -11,8 +12,7 @@ namespace BasePlatformer.UI
     }
 
     /// <summary>
-    /// 버튼 클릭 시 특정 UI 패널을 토글(켜기/끄기)하거나 열기/닫기 동작을 수행하는 컴포넌트입니다.
-    /// 버튼 오브젝트에 붙이면 자동으로 OnClick 이벤트에 등록됩니다.
+    /// 버튼 클릭 또는 키보드 단축키 입력 시 특정 UI 패널을 토글(켜기/끄기)하거나 열기/닫기 동작을 수행하는 컴포넌트입니다.
     /// </summary>
     public class UIPanelToggle : MonoBehaviour
     {
@@ -21,8 +21,15 @@ namespace BasePlatformer.UI
         [SerializeField] private GameObject targetPanel;
 
         [Header("동작 모드")]
-        [Tooltip("버튼 클릭 시 수행할 동작 (Toggle: 토글, Open: 열기, Close: 닫기)")]
+        [Tooltip("트리거 시 수행할 동작 (Toggle: 토글, Open: 열기, Close: 닫기)")]
         [SerializeField] private PanelToggleAction action = PanelToggleAction.Toggle;
+
+        [Header("단축키 설정")]
+        [Tooltip("키보드 단축키 사용 여부")]
+        [SerializeField] private bool useKeyShortcut = true;
+
+        [Tooltip("트리거할 키보드 키")]
+        [SerializeField] private Key shortcutKey = Key.G;
 
         [Header("선택 사항")]
         [Tooltip("연결할 버튼 (비워두면 자기 자신에서 자동 탐색)")]
@@ -36,6 +43,17 @@ namespace BasePlatformer.UI
             if (triggerButton != null)
             {
                 triggerButton.onClick.AddListener(Execute);
+            }
+        }
+
+        private void Update()
+        {
+            if (useKeyShortcut && Keyboard.current != null)
+            {
+                if (Keyboard.current[shortcutKey].wasPressedThisFrame)
+                {
+                    Execute();
+                }
             }
         }
 
