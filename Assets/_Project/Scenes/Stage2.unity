@@ -5760,7 +5760,7 @@ Transform:
   m_GameObject: {fileID: 144821725}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.408152, y: 2.29144, z: -10}
+  m_LocalPosition: {x: 3.1965718, y: 2.29144, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6222,8 +6222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a844f48d65c444a911c9bc4200866c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasePlatformer.Goal.GoalTrigger
-  sceneAsset: {fileID: 102900000, guid: efb90bcafee60ac43a96ac96dfcb334b, type: 3}
-  sceneName: Stage3
+  sceneAsset: {fileID: 102900000, guid: f1fdfb3c83dd97a4dba921c0210d25ae, type: 3}
+  sceneName: Stage3B
   loadMode: 0
 --- !u!212 &344946031
 SpriteRenderer:
