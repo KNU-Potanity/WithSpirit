@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c3b5bf5a6b95fc343a3b6abd6df5c682
+guid: d4adba0d8e979c045965f229037861f5
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - DungGeunMo
+  - NeoDunggeunmo
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
