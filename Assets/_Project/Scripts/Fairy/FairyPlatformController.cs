@@ -36,6 +36,9 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
     private Coroutine transformRoutine;
     private bool isTransformed = false;
     private bool isTransforming = false;
+    private bool ownsFollowLock;
+    private bool platformSpawned;
+    private Vector3 requestedPosition;
 
     // RevertTransform() 직후 1프레임 동안 재변신 요청을 차단하는 플래그
     private bool wasJustReverted = false;
@@ -61,7 +64,13 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
 
     private void Update()
     {
-        if (!isTransformed) return;
+        if (!isTransformed && !isTransforming) return;
+
+        if (platformSpawned && activePlatformInstance == null)
+        {
+            RevertTransform();
+            return;
+        }
 
         // 2.3 변신 해제 조건: 플랫폼이 카메라 화면 밖으로 벗어났을 때
         if (IsPlatformOffScreen())
@@ -74,7 +83,7 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
     {
         // 2.3 변신 해제 조건: 마커·몬스터가 아닌 빈 공간 클릭 시 해제
         // PlatformClickMarker.Update()에서 MarkClickHandled()를 호출했으면 실행하지 않음
-        if (isTransformed && Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame && !clickHandledThisFrame)
+        if ((isTransformed || isTransforming) && Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame && !clickHandledThisFrame)
         {
             RevertTransform();
         }
@@ -83,7 +92,13 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
 
     private bool IsPlatformOffScreen()
     {
-        if (activePlatformInstance == null || Camera.main == null) return false;
+        if (Camera.main == null) return false;
+        if (activePlatformInstance == null)
+        {
+            Vector3 targetViewport = Camera.main.WorldToViewportPoint(requestedPosition);
+            return targetViewport.x < -xMargin || targetViewport.x > 1f + xMargin
+                || targetViewport.y < -yMargin || targetViewport.y > 1f + yMargin;
+        }
 
         float minX = 0f - xMargin;
         float maxX = 1f + xMargin;
@@ -112,7 +127,8 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
         return isOffScreen;
     }
 
-    public bool CanTransform => !isTransformed && !isTransforming && !wasJustReverted && (fairyAttack == null || fairyAttack.CanAttack);
+    private bool HasValidSetup => isActiveAndEnabled && fairyData != null && fairyData.PlatformPrefab != null && moveSpeed > 0f;
+    public bool CanTransform => HasValidSetup && !isTransformed && !isTransforming && !wasJustReverted && (fairyAttack == null || fairyAttack.CanAttack);
     public bool HasActivePlatform => activePlatformInstance != null || isTransformed || isTransforming;
 
     /// <summary>
@@ -136,6 +152,8 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
             StopCoroutine(transformRoutine);
 
         activeMarker = marker;
+        requestedPosition = targetPosition;
+        MarkClickHandled();
         transformRoutine = StartCoroutine(TransformRoutine(targetPosition));
     }
 
@@ -145,7 +163,13 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
         GameObject platformPrefab = fairyData != null ? fairyData.PlatformPrefab : null;
 
         if (fairyMovement != null)
+        {
             fairyMovement.LockFollow();
+            ownsFollowLock = true;
+        }
+
+        // StartCoroutine가 핸들을 반환한 뒤에만 실패/취소 정리를 실행한다.
+        yield return null;
 
         // 1. 애니메이션 트리거: Interact & Move 속도 설정
         if (animator != null)
@@ -155,8 +179,16 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
         }
 
         // 2. 마커 위치로 이동 (InteractMove)
-        while (Vector3.Distance(transform.position, targetPosition) > arriveDistance)
+        float moveElapsed = 0f;
+        float moveTimeout = Vector3.Distance(transform.position, targetPosition) / moveSpeed + 2f;
+        while (Vector3.Distance(transform.position, targetPosition) > Mathf.Max(0.01f, arriveDistance))
         {
+            moveElapsed += Time.deltaTime;
+            if (moveElapsed > moveTimeout)
+            {
+                AbortRoutine();
+                yield break;
+            }
             if (fairyMovement != null)
                 fairyMovement.FaceTarget(targetPosition);
 
@@ -172,15 +204,26 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
             // 프리팹을 마커 위치 + 오프셋에 인스턴스로 생성
             Vector3 spawnPos = targetPosition + (Vector3)(fairyData != null ? fairyData.PlatformSpawnOffset : Vector2.zero);
             activePlatformInstance = Instantiate(platformPrefab, spawnPos, Quaternion.identity);
-            activePlatformCollider = activePlatformInstance.GetComponent<Collider2D>();
+            platformSpawned = true;
+            Physics2D.SyncTransforms();
+            activePlatformCollider = FairyPlatformEntityPusher.FindSolidCollider(activePlatformInstance);
 
             // 인스턴스 또는 자식에 FairyPlatformEntityPusher가 없으면 자동 추가하여 밀쳐내기 실행
             var pusher = activePlatformInstance.GetComponentInChildren<FairyPlatformEntityPusher>();
             if (pusher == null)
             {
-                pusher = activePlatformInstance.AddComponent<FairyPlatformEntityPusher>();
+                if (activePlatformCollider == null || activePlatformCollider.isTrigger)
+                {
+                    AbortRoutine();
+                    yield break;
+                }
+                pusher = activePlatformCollider.gameObject.AddComponent<FairyPlatformEntityPusher>();
             }
-            pusher.pushUpForce = pushUpForce;
+            if (!pusher.Initialize(pushUpForce, activePlatformInstance.transform, RevertTransform))
+            {
+                AbortRoutine();
+                yield break;
+            }
         }
 
         if (animator != null)
@@ -203,8 +246,12 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
             // normalizedTime >= 1 이 되는 순간 루프 탈출 → Idle 첫 프레임이
             // 렌더링되기 전에 SetFairyVisible(false)가 호출됨.
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            while (stateInfo.IsName("Interact") && stateInfo.normalizedTime < 0.7f)
+            float animationElapsed = 0f;
+            float animationTimeout = Mathf.Max(1f, interactAnimDuration * 2f);
+            while (animator.isActiveAndEnabled && stateInfo.IsName("Interact") && stateInfo.normalizedTime < 0.7f)
             {
+                animationElapsed += Time.deltaTime;
+                if (animationElapsed >= animationTimeout) break;
                 yield return null;
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
             }
@@ -212,6 +259,12 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
         else
         {
             yield return new WaitForSeconds(interactAnimDuration);
+        }
+
+        if (activePlatformInstance == null)
+        {
+            AbortRoutine();
+            yield break;
         }
 
         // 5. 애니메이션 완전히 끝난 후 정령 비활성화
@@ -235,24 +288,29 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
 
         if (activePlatformInstance != null)
         {
+            // Destroy는 프레임 끝에 반영되므로 물리 충돌부터 즉시 해제한다.
+            activePlatformInstance.SetActive(false);
             Destroy(activePlatformInstance);
             activePlatformInstance = null;
             activePlatformCollider = null;
         }
 
         activeMarker = null;
+        platformSpawned = false;
 
         SetFairyVisible(true);
 
-        if (fairyMovement != null)
+        if (ownsFollowLock && fairyMovement != null)
         {
             fairyMovement.UnlockFollow();
             fairyMovement.SyncFollowState(transform.position);
         }
+        ownsFollowLock = false;
 
         if (animator != null)
         {
             animator.SetFloat("Speed", 0f);
+            animator.ResetTrigger("Interact");
         }
 
         isTransformed = false;
@@ -279,15 +337,28 @@ public class FairyPlatformController : MonoBehaviour, IFairyPlatform
     /// <param name="platformPrefab">설치할 플랫폼 프리팹</param>
     public void RequestTransformOrReplace(Vector3 targetPosition, PlatformClickMarker marker = null)
     {
+        if (!HasValidSetup || (fairyAttack != null && !fairyAttack.CanAttack)) return;
         // 이미 변신/변신 중이면 쿨다운 없이 즉시 해제
         if (isTransformed || isTransforming)
             DoRevertCleanup();
 
-        // 공격 중이면 차단
-        if (fairyAttack != null && !fairyAttack.CanAttack) return;
-
         activeMarker = marker;
+        requestedPosition = targetPosition;
+        MarkClickHandled();
         transformRoutine = StartCoroutine(TransformRoutine(targetPosition));
+    }
+
+    private void AbortRoutine()
+    {
+        transformRoutine = null;
+        DoRevertCleanup();
+    }
+
+    private void OnDisable()
+    {
+        DoRevertCleanup();
+        wasJustReverted = false;
+        clickHandledThisFrame = false;
     }
 
     private IEnumerator ClearRevertFlag()

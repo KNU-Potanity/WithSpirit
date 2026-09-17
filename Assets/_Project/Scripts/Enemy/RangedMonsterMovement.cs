@@ -29,13 +29,30 @@ public class RangedMonsterMovement : MonoBehaviour, IMonsterMovement, IBarrierCo
 
     private bool movingRight = true;
     private Rigidbody2D rb;
+    private Collider2D col;
     private Animator animator;
     private float attackTimer = 0f;
     private Transform playerTransform;
 
+    // GroundMonsterMovement와 동일하게 Composite 경로의 월드 경계를 캐시한다.
+    private struct PlatformBounds
+    {
+        public float minX;
+        public float maxX;
+        public float topY;
+    }
+
+    private readonly System.Collections.Generic.List<PlatformBounds> platforms =
+        new System.Collections.Generic.List<PlatformBounds>();
+    private readonly System.Collections.Generic.List<Vector2> pathPoints =
+        new System.Collections.Generic.List<Vector2>();
+    private const float GroundHeightTolerance = 0.2f;
+    private const float LedgeMargin = 0.05f;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>();
         animator = GetComponentInChildren<Animator>();
         whatIsGround = LayerMask.GetMask("Ground");
 
@@ -51,6 +68,67 @@ public class RangedMonsterMovement : MonoBehaviour, IMonsterMovement, IBarrierCo
             attackDelay = monsterData.AttackAnimDelay;
             projectileSpeed = monsterData.ProjectileSpeed;
         }
+    }
+
+    private void Start()
+    {
+        BuildPlatformList();
+    }
+
+    private void BuildPlatformList()
+    {
+        platforms.Clear();
+        GameObject groundObj = GameObject.Find("Ground");
+        CompositeCollider2D groundComposite = groundObj != null
+            ? groundObj.GetComponent<CompositeCollider2D>() : null;
+
+        if (groundComposite == null)
+        {
+            Debug.LogWarning("[RangedMonster] Ground의 CompositeCollider2D가 없어 추적 이동을 중지합니다.", this);
+            return;
+        }
+
+        for (int i = 0; i < groundComposite.pathCount; i++)
+        {
+            pathPoints.Clear();
+            groundComposite.GetPath(i, pathPoints);
+            if (pathPoints.Count == 0) continue;
+
+            float minX = float.MaxValue;
+            float maxX = float.MinValue;
+            float topY = float.MinValue;
+            foreach (Vector2 localPos in pathPoints)
+            {
+                Vector2 worldPos = groundComposite.transform.TransformPoint(localPos + groundComposite.offset);
+                minX = Mathf.Min(minX, worldPos.x);
+                maxX = Mathf.Max(maxX, worldPos.x);
+                topY = Mathf.Max(topY, worldPos.y);
+            }
+
+            platforms.Add(new PlatformBounds { minX = minX, maxX = maxX, topY = topY });
+        }
+    }
+
+    private bool CanMoveOnPlatform(float horizontalSpeed)
+    {
+        Bounds bounds = col.bounds;
+        float nextLeadingX = (horizontalSpeed > 0f ? bounds.max.x : bounds.min.x)
+            + horizontalSpeed * Time.fixedDeltaTime;
+
+        foreach (PlatformBounds platform in platforms)
+        {
+            // 다른 높이나 건너편 플랫폼으로 이동 가능하다고 판단하지 않는다.
+            if (bounds.center.x < platform.minX || bounds.center.x > platform.maxX
+                || Mathf.Abs(bounds.min.y - platform.topY) > GroundHeightTolerance)
+                continue;
+
+            if (nextLeadingX >= platform.minX + LedgeMargin
+                && nextLeadingX <= platform.maxX - LedgeMargin)
+                return true;
+        }
+
+        // 발밑 플랫폼을 확인하지 못한 경우에도 수평 이동은 멈춘다.
+        return false;
     }
 
     private void FixedUpdate()
@@ -131,7 +209,10 @@ public class RangedMonsterMovement : MonoBehaviour, IMonsterMovement, IBarrierCo
                     else if (dirX < -0.1f && movingRight) Flip();
 
                     float moveDir = movingRight ? 1f : -1f;
-                    rb.linearVelocity = new Vector2(moveDir * moveSpeed, rb.linearVelocity.y);
+                    float horizontalSpeed = moveDir * moveSpeed;
+                    if (Mathf.Abs(dirX) <= 0.1f || !CanMoveOnPlatform(horizontalSpeed))
+                        horizontalSpeed = 0f;
+                    rb.linearVelocity = new Vector2(horizontalSpeed, rb.linearVelocity.y);
                 }
                 break;
 
